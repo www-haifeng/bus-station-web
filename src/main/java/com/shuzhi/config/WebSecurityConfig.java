@@ -52,11 +52,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 //退出登录
                 .logout()
-
                 .and()
                 //关闭csrf防火墙 否则无法post
                 .csrf()
-                .disable();
+                .disable()
+                //设置每个用户最大session为1  防止异地登录
+                .sessionManagement()
+                .maximumSessions(1);
     }
 
     @Bean

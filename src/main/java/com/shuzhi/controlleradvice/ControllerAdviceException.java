@@ -1,6 +1,5 @@
 package com.shuzhi.controlleradvice;
 
-import com.alibaba.fastjson.JSONObject;
 import com.shuzhi.common.utils.WrapMapper;
 import com.shuzhi.common.utils.Wrapper;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +23,6 @@ public class ControllerAdviceException {
     /**
      * @description 处理全局异常信息
      * @param e 错误信息
-     * @author zgk
-     * @date 2019-05-31 09:36
      */
     @ResponseBody
     @ExceptionHandler(value = Exception.class)

@@ -17,6 +17,7 @@ public interface RoleService extends BaseService<Role> {
      * 保存角色
      *
      * @return 保存结果
+     * @param role 角色信息
      */
-    Wrapper saveRole();
+    Wrapper saveRole(Role role);
 }

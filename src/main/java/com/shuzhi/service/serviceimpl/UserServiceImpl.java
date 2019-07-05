@@ -1,4 +1,4 @@
-package com.shuzhi.serviceimpl;
+package com.shuzhi.service.serviceimpl;
 
 import com.shuzhi.common.basemapper.BaseServiceImpl;
 import com.shuzhi.common.utils.WrapMapper;
@@ -122,7 +122,6 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
      * @date 2019-07-04 16:13
      */
     private Validation<User> validation() {
-
         User userSelect = new User();
         return o -> {
             if (StringUtils.isBlank(o.getUserName())) {

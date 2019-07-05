@@ -1,11 +1,10 @@
-package com.shuzhi.serviceimpl;
+package com.shuzhi.service.serviceimpl;
 
 import org.springframework.stereotype.Service;
 
-import com.shuzhi.entity.Menu;
-import com.shuzhi.service.MenuService;
+import com.shuzhi.entity.RoleMenu;
+import com.shuzhi.service.RoleMenuService;
 import com.shuzhi.common.basemapper.BaseServiceImpl;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -17,6 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class MenuServiceImpl extends BaseServiceImpl<Menu> implements MenuService {
+public class RoleMenuServiceImpl extends BaseServiceImpl<RoleMenu> implements RoleMenuService {
 
 }

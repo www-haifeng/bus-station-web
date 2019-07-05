@@ -32,6 +32,6 @@ public class RoleController {
      */
     @RequestMapping("/saveRole")
     public Wrapper saveRole(Role role){
-        return roleService.saveRole();
+        return roleService.saveRole(role);
     }
 }
