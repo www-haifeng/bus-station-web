@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shuzhi.mapper.MenuMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.shuzhi.entity.Menu" id="menuMap">
+        <result property="urlId" column="url_id" />
+        <result property="url" column="url" />
+        <result property="urlName" column="url_name" />
+        <result property="parentMenu" column="parent_menu" />
+        <result property="subMenu" column="sub_menu" />
+        <result property="isButton" column="is_button" />
+        <result property="creationTime" column="creation_time" />
+        <result property="updateTime" column="update_time" />
+        <result property="createUser" column="create_user" />
+    </resultMap>
+
+</mapper>
