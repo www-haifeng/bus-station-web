@@ -24,8 +24,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final RoleMenuMapper roleMenuMapper;
 
-    public WebSecurityConfig(RoleMenuMapper roleMenuMapper) {
+    private final MyAuthenticationSuccessHandler myAuthenticationSuccessHandler;
+
+    public WebSecurityConfig(RoleMenuMapper roleMenuMapper, MyAuthenticationSuccessHandler myAuthenticationSuccessHandler) {
         this.roleMenuMapper = roleMenuMapper;
+        this.myAuthenticationSuccessHandler = myAuthenticationSuccessHandler;
     }
 
     @Override
@@ -41,7 +44,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 //登录路径
                 .loginProcessingUrl("/user/login")
-                .successForwardUrl("/user/test")
+                //添加验证成功处理器
+                .successHandler(myAuthenticationSuccessHandler)
+                //登录成功跳转到哪里 不能和登录成功处理器一起配置
+              //  .successForwardUrl("/user/test")
                 //登录失败要跳转到哪里
                 .loginPage("/login/123")
                 //失败页面

@@ -101,4 +101,10 @@ public class User extends BaseEntity implements Serializable{
     @Column(name = "login_name")
     private String loginName;
 
+    /**
+     * 是否是管理员
+     */
+    @Column(name = "is_admin")
+    private String isAdmin;
+
 }

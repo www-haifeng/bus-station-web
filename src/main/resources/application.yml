@@ -3,7 +3,7 @@ server:
 
 spring:
    application:
-    name: bus-station-web
+     name: bus-station-web
    datasource:
     type: com.alibaba.druid.pool.DruidDataSource            # 当前数据源操作类型
     driver-class-name: org.postgresql.Driver              # mysql驱动包
@@ -15,17 +15,18 @@ spring:
       initial-size: 5                                       # 初始化连接数
       max-total: 5                                          # 最大连接数
       max-wait-millis: 200                                  # 等待连接获取的最大超时时间
-      rabbitmq: #RabbitMQ相关的配置
-        host: 192.168.8.150
-        port: 5672
-        username: guest
-        password: guest
-        listener:
-          simple:
-            acknowledge-mode: manual
-            concurrency: 5 #并发
-            max-concurrency: 10 #最大并发
-        connection-timeout: 15000
+   rabbitmq:
+     host: 192.168.8.150
+     port: 5672
+     username: guest
+     password: guest
+     listener:
+       simple:
+         acknowledge-mode: manual
+         concurrency: 5 #并发
+         max-concurrency: 10 #最大并发
+     connection-timeout: 15000
+
 feign:
   hystrix:
     enabled: true

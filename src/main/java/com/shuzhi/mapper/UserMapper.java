@@ -24,4 +24,11 @@ public interface UserMapper extends MyBaseMapper<User> {
      * @return 用户信息
      */
     UserDetailsVo selectByLoginName(@Param("loginName") String loginName);
+
+    /**
+     * 保存最后登录时间
+     *
+     * @param user 用户信息
+     */
+    void updateByLoginName(User user);
 }

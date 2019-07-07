@@ -13,7 +13,7 @@
         <spring-cloud.version>Dalston.SR1</spring-cloud.version>
         <boot.version>1.5.9.RELEASE</boot.version>
         <org.springframework.version>4.3.9.RELEASE</org.springframework.version>
-        <java.version>1.8</java.version>F
+        <java.version>1.8</java.version>
         <com.alibaba.version>1.0.9</com.alibaba.version>
         <fastjson.version>1.2.39</fastjson.version>
         <!-- Test -->
@@ -28,9 +28,9 @@
     </properties>
     <parent>
         <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-dependencies</artifactId>
+        <artifactId>spring-boot-starter-parent</artifactId>
         <version>1.5.9.RELEASE</version>
-
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <dependencies>
         <dependency>
@@ -110,6 +110,17 @@
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>1.2.10</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+            <version>1.5.9.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
     </dependencies>
 

@@ -114,6 +114,12 @@ public class UserDetailsVo extends BaseEntity implements Serializable, UserDetai
     private String loginName;
 
     /**
+     * 是否是管理员
+     */
+    @Column(name = "is_admin")
+    private Boolean isAdmin;
+
+    /**
      * 权限信息
      */
     private List<Role> roles;
