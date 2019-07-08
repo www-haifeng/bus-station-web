@@ -25,17 +25,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    /**
-     * @param user 用户信息
-     * @description 用户注册
-     * @author zgk
-     * @date 2019-07-04 15:25
-     */
-    @RequestMapping("/registered")
-    public Wrapper registered(User user) {
-        return userService.registered(user);
-    }
-
     @RequestMapping("/test")
     public String registered() {
         return "OK";

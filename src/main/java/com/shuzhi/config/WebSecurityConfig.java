@@ -39,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterAfter(dynamicallyUrlInterceptor(), FilterSecurityInterceptor.class)
                 .authorizeRequests()
                 //注册可以请求不拦截
-                .antMatchers("/user/registered").permitAll().anyRequest().authenticated()
+                .antMatchers("/registered","/index").permitAll().anyRequest().authenticated()
                 .and()
                 .formLogin()
                 //登录路径
@@ -47,11 +47,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //添加验证成功处理器
                 .successHandler(myAuthenticationSuccessHandler)
                 //登录成功跳转到哪里 不能和登录成功处理器一起配置
-              //  .successForwardUrl("/user/test")
+                //  .successForwardUrl("/user/test")
                 //登录失败要跳转到哪里
-                .loginPage("/login/123")
+               // .loginPage("/login/123")
                 //失败页面
-                .failureUrl("/login/error")
+               // .failureUrl("/login/error")
                 .and()
                 //记住我
                 .rememberMe()
@@ -68,7 +68,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public DynamicallyUrlInterceptor dynamicallyUrlInterceptor(){
+    public DynamicallyUrlInterceptor dynamicallyUrlInterceptor() {
         DynamicallyUrlInterceptor interceptor = new DynamicallyUrlInterceptor();
         interceptor.setSecurityMetadataSource(new MyFilterSecurityMetadataSource(roleMenuMapper));
 
@@ -84,6 +84,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
 }
