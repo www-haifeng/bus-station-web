@@ -2,13 +2,11 @@ package com.shuzhi.rabbitmq;
 
 import com.alibaba.fastjson.JSON;
 import com.rabbitmq.client.Channel;
-import com.shuzhi.entity.MqMessage;
-import com.shuzhi.mapper.MqMessageMapper;
 import com.shuzhi.websocket.WebSocketServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.*;
 import org.springframework.amqp.support.AmqpHeaders;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
@@ -27,11 +25,11 @@ public class RabbitConsumer {
 
     private final WebSocketServer webSocketServer;
 
-    private final MqMessageMapper messageMapper;
+    private final StringRedisTemplate redisTemplate;
 
-    public RabbitConsumer(WebSocketServer webSocketServer, MqMessageMapper messageMapper) {
+    public RabbitConsumer(WebSocketServer webSocketServer, StringRedisTemplate redisTemplate) {
         this.webSocketServer = webSocketServer;
-        this.messageMapper = messageMapper;
+        this.redisTemplate = redisTemplate;
     }
 
     @RabbitListener(bindings = @QueueBinding(
@@ -45,15 +43,9 @@ public class RabbitConsumer {
         log.info("--------------收到消息，开始消费------------");
         log.info("消息是 : {}" ,JSON.toJSONString(message));
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
-
-        //查出消息属于哪个通道
-        MqMessage mqMessageSelect = new MqMessage();
-        mqMessageSelect.setSubtype(message.getSubtype());
-        mqMessageSelect.setType(message.getType());
-        MqMessage mqMessage = messageMapper.selectOne(mqMessageSelect);
-
         //推送消息
-        webSocketServer.send(mqMessage.getName(),JSON.toJSONString(message));
+
+        webSocketServer.send((String) redisTemplate.opsForHash().get("web_socket_key", message.getMsgid()),JSON.toJSONString(message));
         // ACK
         channel.basicAck(deliveryTag, false);
     }

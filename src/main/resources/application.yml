@@ -26,15 +26,20 @@ spring:
          concurrency: 5 #并发
          max-concurrency: 10 #最大并发
      connection-timeout: 15000
-
+   redis:
+     host: 192.168.8.150
+     port: 6379
+     password:
 feign:
   hystrix:
     enabled: true
 eureka:
-  client:
-    register-with-eureka: false
+  client: #客户端注册进eureka服务列表内
     service-url:
-      defaultZone: http://localhost:7001/eurek/
+      defaultZone: http://192.168.8.150:7001/eureka/
+  instance:
+    instance-id: bus-station-web9100
+    prefer-ip-address: true
 
 mybatis:
   type-aliases-package: com.shuzhi.entity
