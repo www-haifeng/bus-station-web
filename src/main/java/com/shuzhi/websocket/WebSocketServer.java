@@ -4,13 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.shuzhi.rabbitmq.Message;
 import com.shuzhi.rabbitmq.RabbitProducer;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
-import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -22,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2019-07-07 16:13
  */
 @Slf4j
-@ServerEndpoint("/websocket/{token}")
+@ServerEndpoint("/websocket")
 @Component
 public class WebSocketServer {
 
@@ -32,20 +33,10 @@ public class WebSocketServer {
 
     /**
      * 连接建立成功调用的方法
-     *
-     * @param session session
-     * @param token   页面标识
      */
     @OnOpen
-    public void onOpen(Session session, @PathParam("token") String token) {
-        log.info("{}建立连接", token);
-        SESSION_MAP.put(token, session);
-        log.info("建立连接后session数量 : {}", SESSION_MAP.size());
-        //调用api 获取设备信息
-        String equipment = getEquipment(token);
-
-        //建立连接时 向前台回执设备信息
-      //  send(token, "Hello, connection opened!");
+    public void onOpen() {
+        log.info("建立连接成功");
     }
 
 
@@ -56,7 +47,13 @@ public class WebSocketServer {
      * @param session session
      */
     @OnMessage
-    public void onMessage(String message, Session session, @PathParam("token") String token) {
+    public void onMessage(String message, Session session) {
+
+        //获取模块id
+        Message message1 = JSON.parseObject(message, Message.class);
+        String token = String.valueOf(message1.getModulecode());
+        SESSION_MAP.put(token, session);
+        log.info("当前的session数量 : {}", SESSION_MAP.size());
         //noinspection LoopStatementThatDoesntLoop
         for (Map.Entry<String, Session> entry : SESSION_MAP.entrySet()) {
             log.info("session.id : {}", session.getId());
@@ -65,11 +62,25 @@ public class WebSocketServer {
             }
             break;
         }
-        log.info("接收到消息 : {}", message);
+        //判断消息类型
+       /* switch (message1.getMsgtype()) {
+            //推送
+            case "1":
+                break;
+            //请求
+            case "2":
+                break;
+            //回执
+            case "3":
+                break;
+            default:
+                throw new Exception("消息类型错误");
+        }*/
         //发送消息
         RabbitProducer rabbitProducer = ApplicationContextUtils.get(RabbitProducer.class);
         //生成一个唯一标识 并保存到redis中 然后发送消息
         rabbitProducer.sendMessage(setMsgId(message, token));
+
     }
 
     /**
@@ -90,6 +101,7 @@ public class WebSocketServer {
         //存入redis中
         redisTemplate.opsForHash().put("web_socket_key", msgId, token);
         message1.setMsgid(msgId);
+        log.info("接收到消息 : {}", JSON.toJSONString(message1));
         return message1;
     }
 
@@ -108,6 +120,11 @@ public class WebSocketServer {
             }
         });
         SESSION_MAP = map;
+        //删除缓存
+        if (redisTemplate == null) {
+            redisTemplate = ApplicationContextUtils.get(StringRedisTemplate.class);
+        }
+        redisTemplate.opsForHash().delete("web_socket_key");
         log.info("断开连接后session数量 : {}", SESSION_MAP.size());
     }
 
@@ -118,11 +135,15 @@ public class WebSocketServer {
      * @param message 要发送的信息
      */
     public void send(String token, String message) {
-        Session session = SESSION_MAP.get(token);
-        if (session != null) {
+
+        if (StringUtils.isNotBlank(token)) {
             try {
-                //推送消息
-                session.getBasicRemote().sendText(message);
+                //推送消息到页面
+                Session session = SESSION_MAP.get(token);
+                if (session != null){
+                    session.getBasicRemote().sendText(message);
+                    log.info("消息发送成功 : {} , {}", message,new Date());
+                }
                 //删除缓存
                 if (redisTemplate == null) {
                     redisTemplate = ApplicationContextUtils.get(StringRedisTemplate.class);
@@ -156,7 +177,7 @@ public class WebSocketServer {
     private String getEquipment(String token) {
 
         //判断是哪个设备
-        switch (token){
+        switch (token) {
             case "10001":
                 break;
 

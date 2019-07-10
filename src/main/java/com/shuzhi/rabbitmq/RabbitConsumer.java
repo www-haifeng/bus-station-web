@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.rabbitmq.client.Channel;
 import com.shuzhi.websocket.WebSocketServer;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.rabbit.annotation.*;
 import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -33,19 +34,25 @@ public class RabbitConsumer {
     }
 
     @RabbitListener(bindings = @QueueBinding(
-            value = @Queue(value = "lcd-lc", durable = "true"),
-            exchange = @Exchange(value = "lcd", durable = "true", type = "topic")
+            value = @Queue(value = "equip-up", durable = "true"),
+            exchange = @Exchange(value = "equip", durable = "true", type = "topic")
     ))
     @RabbitHandler
-    public void consumer(@Payload Message message, @Headers Map<String, Object> headers,
+    public void consumer(@Payload String message, @Headers Map<String, Object> headers,
                          Channel channel) throws IOException {
 
         log.info("--------------收到消息，开始消费------------");
-        log.info("消息是 : {}" ,JSON.toJSONString(message));
+        log.info("消息是 : {}", message);
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
+        Message message1 = JSON.parseObject(message, Message.class);
+        message1.setMsgtype("2");
         //推送消息
-
-        webSocketServer.send((String) redisTemplate.opsForHash().get("web_socket_key", message.getMsgid()),JSON.toJSONString(message));
+        String key = (String) redisTemplate.opsForHash().get("web_socket_key", message1.getMsgid());
+        if (StringUtils.isNotBlank(key)){
+            webSocketServer.send(key,JSON.toJSONString(message1));
+        }else {
+            log.warn("msgId不存在 : {}",message1.getMsgid());
+        }
         // ACK
         channel.basicAck(deliveryTag, false);
     }

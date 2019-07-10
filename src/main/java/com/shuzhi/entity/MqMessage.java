@@ -1,12 +1,10 @@
 package com.shuzhi.entity;
 
-import com.shuzhi.common.basemapper.BaseEntity;
 import lombok.Data;
 
-import lombok.EqualsAndHashCode;
-
-import javax.persistence.*;
-import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 
@@ -17,8 +15,7 @@ import java.io.Serializable;
 
 @Table(name = "t_mq_message")
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class MqMessage extends BaseEntity implements Serializable{
+public class MqMessage implements Serializable{
 private static final long serialVersionUID=1L;
 
     @Id

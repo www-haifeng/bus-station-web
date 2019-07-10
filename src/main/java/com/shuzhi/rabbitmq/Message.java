@@ -46,6 +46,11 @@ public class Message implements Serializable {
     private String sign;
 
     /**
+     * 模块编码
+     */
+    private Integer modulecode;
+
+    /**
      * 时间戳 “2015-03-05 17:59:00.567”
      */
     private String msgts;

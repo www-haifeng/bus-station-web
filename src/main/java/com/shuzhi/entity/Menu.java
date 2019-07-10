@@ -1,13 +1,14 @@
 package com.shuzhi.entity;
 
-import com.shuzhi.common.basemapper.BaseEntity;
 import lombok.Data;
 
-import lombok.EqualsAndHashCode;
-
-import javax.persistence.*;
-import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -17,8 +18,7 @@ import java.io.Serializable;
 
 @Table(name = "t_menu")
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class Menu extends BaseEntity implements Serializable {
+public class Menu implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
@@ -72,5 +72,11 @@ public class Menu extends BaseEntity implements Serializable {
      */
     @Column(name = "create_user")
     private Integer createUser;
+
+    /**
+     * 子目录
+     */
+    @Transient
+    private List<Menu> menuList;
 
 }

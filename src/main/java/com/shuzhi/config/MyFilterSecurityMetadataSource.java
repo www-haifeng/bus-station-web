@@ -32,7 +32,7 @@ public class MyFilterSecurityMetadataSource implements FilterInvocationSecurityM
      *
      * @param object 定义的过滤器
      * @return 权限
-     * @throws  IllegalArgumentException IllegalArgumentException
+     * @throws IllegalArgumentException IllegalArgumentException
      */
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
@@ -46,16 +46,17 @@ public class MyFilterSecurityMetadataSource implements FilterInvocationSecurityM
         //从数据库中查询权限和资源信息
         List<RoleMenuVo> roleMenuVos = roleMenuMapper.selectUrlAndRole();
         //遍历资源
-        roleMenuVos.forEach(roleMenuVo -> {
-            ArrayList<ConfigAttribute> configs = new ArrayList<>();
-            //遍历角色
-            roleMenuVo.getRoles().forEach(role -> {
-                SecurityConfig config = new SecurityConfig(role.getRoleCode());
-                configs.add(config);
-            });
-            AntPathRequestMatcher matcher = new AntPathRequestMatcher(roleMenuVo.getUrl());
-            map.put(matcher,configs);
-        });
+        roleMenuVos.stream().filter(roleMenuVo -> roleMenuVo.getUrl() != null)
+                .forEach(roleMenuVo -> {
+                    ArrayList<ConfigAttribute> configs = new ArrayList<>();
+                    //遍历角色
+                    roleMenuVo.getRoles().forEach(role -> {
+                        SecurityConfig config = new SecurityConfig(role.getRoleCode());
+                        configs.add(config);
+                    });
+                    AntPathRequestMatcher matcher = new AntPathRequestMatcher(roleMenuVo.getUrl());
+                    map.put(matcher, configs);
+                });
         for (Map.Entry<RequestMatcher, Collection<ConfigAttribute>> entry : map
                 .entrySet()) {
             if (entry.getKey().matches(request)) {

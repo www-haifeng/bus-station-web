@@ -179,7 +179,7 @@ public class WrapMapper {
 		}
 	}
 
-	public static boolean isFlag(Object result) {
+	private static boolean isFlag(Object result) {
 		boolean flag;
 		if (result instanceof Integer) {
 			flag = (Integer) result > 0;

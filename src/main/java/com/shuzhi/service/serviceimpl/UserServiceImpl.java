@@ -19,8 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.Optional;
 
-import static com.shuzhi.eum.LoginEum.*;
+import static com.shuzhi.eum.WebEum.*;
 
 
 /**
@@ -67,15 +68,15 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     @Override
     public Wrapper registered(User user) {
         //验证参数
-        if (validation().check(user) != null) {
-            return validation().check(user);
-        }
-        //初始化并保存用户信息
-        initialize(user);
-        userMapper.insertSelective(user);
-        //设置一个默认权限 ROLE_USER
-        setRule(user);
-        return WrapMapper.ok();
+       return Optional.ofNullable(validation().check(user)).orElseGet(() -> {
+            //初始化并保存用户信息
+            initialize(user);
+            userMapper.insertSelective(user);
+            //设置一个默认权限 ROLE_USER
+            setRule(user);
+            return WrapMapper.ok();
+        });
+
     }
 
 

@@ -1,6 +1,7 @@
 package com.shuzhi.config;
 
 import com.shuzhi.mapper.RoleMenuMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDecisionVoter;
@@ -26,9 +27,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final MyAuthenticationSuccessHandler myAuthenticationSuccessHandler;
 
-    public WebSecurityConfig(RoleMenuMapper roleMenuMapper, MyAuthenticationSuccessHandler myAuthenticationSuccessHandler) {
+    private final MyAuthenticationFailureHandler myAuthenticationFailureHandler;
+
+    public WebSecurityConfig(RoleMenuMapper roleMenuMapper, MyAuthenticationSuccessHandler myAuthenticationSuccessHandler, MyAuthenticationFailureHandler myAuthenticationFailureHandler) {
         this.roleMenuMapper = roleMenuMapper;
         this.myAuthenticationSuccessHandler = myAuthenticationSuccessHandler;
+        this.myAuthenticationFailureHandler = myAuthenticationFailureHandler;
     }
 
     @Override
@@ -46,6 +50,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/user/login")
                 //添加验证成功处理器
                 .successHandler(myAuthenticationSuccessHandler)
+                //添加登录失败处理器
+                .failureHandler(myAuthenticationFailureHandler)
                 //登录成功跳转到哪里 不能和登录成功处理器一起配置
                 //  .successForwardUrl("/user/test")
                 //登录失败要跳转到哪里
@@ -61,10 +67,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 //关闭csrf防火墙 否则无法post
                 .csrf()
-                .disable()
+                .disable();
                 //设置每个用户最大session为1  防止异地登录
-                .sessionManagement()
-                .maximumSessions(1);
+                //.sessionManagement()
+              //  .maximumSessions(1);
     }
 
     @Bean

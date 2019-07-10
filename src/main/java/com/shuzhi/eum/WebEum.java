@@ -5,7 +5,7 @@ package com.shuzhi.eum;
  * @description
  * @date 2019-07-04 15:31
  */
-public enum  LoginEum {
+public enum WebEum {
 
     /**
      * 注册失败
@@ -20,16 +20,39 @@ public enum  LoginEum {
 
     REGISTERED_ERROR_5(10005, "注册失败,该登录名已存在"),
 
-
+    /**
+     * 角色失败
+     */
     ROLE_ERROR_1(20001, "保存失败,角色名不能个为空"),
 
-    ROLE_ERROR_2(10002, "保存失败,角色名已存在"),
+    ROLE_ERROR_2(20002, "保存失败,角色名已存在"),
 
-    ROLE_ERROR_3(10003, "保存失败,角色编号不能为空"),
+    ROLE_ERROR_3(20003, "保存失败,角色编号不能为空"),
 
-    ROLE_ERROR_4(10004, "保存失败,角色编号已存在"),
+    ROLE_ERROR_4(20004, "保存失败,角色编号已存在"),
 
-            ;
+    ROLE_ERROR_5(20005, "删除失败,该角色已被用户或目录使用"),
+
+
+
+
+
+    /**
+     * 目录失败
+     */
+    MENU_ERROR_1(30001, "保存失败,url不能为空"),
+
+    MENU_ERROR_2(30002, "保存失败,该url已配置"),
+
+    MENU_ERROR_3(30003, "保存失败,目录名称不能为空"),
+
+    MENU_ERROR_4(30004, "保存失败,该目录名称已存在"),
+
+    MENU_ERROR_5(30005, "目录列表为空"),
+
+    MENU_ERROR_6(30006, "更新失败,要更新的目录不存在"),
+
+    ;
 
     /**
      * The Type.
@@ -40,7 +63,7 @@ public enum  LoginEum {
      */
     String msg;
 
-    LoginEum(int code, String msg) {
+    WebEum(int code, String msg) {
         this.code = code;
         this.msg = msg;
     }

@@ -1,11 +1,11 @@
 package com.shuzhi.rabbitmq;
 
+import com.alibaba.fastjson.JSON;
 import com.shuzhi.entity.MqMessage;
 import com.shuzhi.mapper.MqMessageMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,7 +36,9 @@ public class RabbitProducer {
         //查出Exchange 和topic
         MqMessage mqMessageSelect = new MqMessage();
         mqMessageSelect.setSubtype(message.getSubtype());
+        mqMessageSelect.setType(message.getType());
         MqMessage mqMessage = messageMapper.selectOne(mqMessageSelect);
-        rabbitTemplate.convertAndSend(mqMessage.getExchange(),mqMessage.getTopic() , message);
+        rabbitTemplate.convertAndSend(mqMessage.getExchange(),mqMessage.getTopic() , JSON.toJSONString(message));
+
     }
 }

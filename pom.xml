@@ -132,7 +132,11 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
             <version>1.5.13.RELEASE</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.shuzhi</groupId>
+            <artifactId>iot-msa-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
