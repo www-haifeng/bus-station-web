@@ -20,6 +20,8 @@ public enum WebEum {
 
     REGISTERED_ERROR_5(10005, "注册失败,该登录名已存在"),
 
+    REGISTERED_ERROR_6(10006, "更新失败,该用户不存在"),
+
     /**
      * 角色失败
      */

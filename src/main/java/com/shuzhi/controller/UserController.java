@@ -2,9 +2,8 @@ package com.shuzhi.controller;
 
 import com.shuzhi.common.utils.Wrapper;
 import com.shuzhi.entity.User;
-import com.shuzhi.function.Validation;
 import com.shuzhi.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,5 +27,27 @@ public class UserController {
     @RequestMapping("/test")
     public String registered() {
         return "OK";
+    }
+
+    /**
+     * 通过id删除用户 做逻辑删除将该用户锁定
+     *
+     * @param userId 用户id
+     * @return 删除结果
+     */
+    @RequestMapping("/removeUser/{userId}")
+    public Wrapper removeUser2(@PathVariable Integer userId) {
+        return userService.removeUser(userId);
+    }
+
+    /**
+     * 修改用户信息
+     *
+     * @param user 要修改的用户信息
+     * @return 修改结果
+     */
+    @RequestMapping("/updateUser")
+    public Wrapper updateUser(User user){
+        return userService.updateUser(user);
     }
 }

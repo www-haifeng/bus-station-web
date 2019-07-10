@@ -101,6 +101,18 @@ public class MenuServiceImpl extends BaseServiceImpl<Menu> implements MenuServic
         //验证参数
        return Optional.ofNullable(validation().check(menu)).orElseGet(() -> WrapMapper.handleResult(menuMapper.updateByPrimaryKey(menu)));
     }
+
+    /**
+     * 通过id查出目录的详细信息
+     *
+     * @return 查询结果
+     * @param menuId
+     */
+    @Override
+    public Wrapper findById(Integer menuId) {
+        return WrapMapper.ok(menuMapper.selectByPrimaryKey(menuId));
+    }
+
     private void recursiveRemove(Menu menu) {
         //删除父目录
         menuMapper.deleteByPrimaryKey(menu.getUrlId());

@@ -3,6 +3,7 @@ package com.shuzhi.controller;
 import com.shuzhi.common.utils.Wrapper;
 import com.shuzhi.entity.Menu;
 import com.shuzhi.service.MenuService;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,6 +43,16 @@ public class MenuController {
     @RequestMapping("/findAll")
     public Wrapper findAll(){
         return menuService.findAll();
+    }
+
+    /**
+     * 通过id查出目录的详细信息
+     *
+     * @return 查询结果
+     */
+    @RequestMapping("/findById/{menuId}")
+    public Wrapper findById(@PathVariable Integer menuId){
+        return menuService.findById(menuId);
     }
 
     /**

@@ -5,7 +5,6 @@ import com.shuzhi.common.utils.Wrapper;
 import com.shuzhi.entity.Menu;
 
 
-
 /**
  * @author shuzhi
  * @date 2019-07-04 15:04:42
@@ -43,4 +42,12 @@ public interface MenuService extends BaseService<Menu> {
      * @return 更新结果
      */
     Wrapper updateMenu(Menu menu);
+
+    /**
+     * 通过id查出目录的详细信息
+     *
+     * @return 查询结果
+     * @param menuId
+     */
+    Wrapper findById(Integer menuId);
 }

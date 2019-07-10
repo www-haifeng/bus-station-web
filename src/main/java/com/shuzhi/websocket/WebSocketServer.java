@@ -11,15 +11,12 @@ import org.springframework.stereotype.Component;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author zgk
- * @description
+ * @description websocket
  * @date 2019-07-07 16:13
  */
 @Slf4j
@@ -54,14 +51,8 @@ public class WebSocketServer {
         String token = String.valueOf(message1.getModulecode());
         SESSION_MAP.put(token, session);
         log.info("当前的session数量 : {}", SESSION_MAP.size());
-        //noinspection LoopStatementThatDoesntLoop
-        for (Map.Entry<String, Session> entry : SESSION_MAP.entrySet()) {
-            log.info("session.id : {}", session.getId());
-            if (session.getId().equals(entry.getValue().getId())) {
-                log.info("{}发来消息", entry.getKey());
-            }
-            break;
-        }
+        SESSION_MAP.entrySet().stream().filter(stringSessionEntry -> session.getId().equals(stringSessionEntry.getValue().getId()))
+                .forEach(stringSessionEntry -> log.info("{} 发来消息", stringSessionEntry.getKey()));
         //判断消息类型
        /* switch (message1.getMsgtype()) {
             //推送
@@ -92,9 +83,8 @@ public class WebSocketServer {
      */
     private Message setMsgId(String message, String token) {
 
-        if (redisTemplate == null) {
-            redisTemplate = ApplicationContextUtils.get(StringRedisTemplate.class);
-        }
+        //获取redisTemplate对象
+        Optional.ofNullable(redisTemplate).orElseGet(() -> redisTemplate = ApplicationContextUtils.get(StringRedisTemplate.class));
         //获取随机UUID
         Message message1 = JSON.parseObject(message, Message.class);
         String msgId = UUID.randomUUID().toString();
@@ -121,9 +111,7 @@ public class WebSocketServer {
         });
         SESSION_MAP = map;
         //删除缓存
-        if (redisTemplate == null) {
-            redisTemplate = ApplicationContextUtils.get(StringRedisTemplate.class);
-        }
+        Optional.ofNullable(redisTemplate).orElseGet(() -> redisTemplate = ApplicationContextUtils.get(StringRedisTemplate.class));
         redisTemplate.opsForHash().delete("web_socket_key");
         log.info("断开连接后session数量 : {}", SESSION_MAP.size());
     }
@@ -137,22 +125,21 @@ public class WebSocketServer {
     public void send(String token, String message) {
 
         if (StringUtils.isNotBlank(token)) {
-            try {
-                //推送消息到页面
-                Session session = SESSION_MAP.get(token);
-                if (session != null){
+            //推送消息到页面
+            Optional.ofNullable(SESSION_MAP.get(token)).ifPresent(session -> {
+                try {
                     session.getBasicRemote().sendText(message);
-                    log.info("消息发送成功 : {} , {}", message,new Date());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    log.error("消息推送失败 : {}",e.getMessage());
                 }
-                //删除缓存
-                if (redisTemplate == null) {
-                    redisTemplate = ApplicationContextUtils.get(StringRedisTemplate.class);
-                }
-                redisTemplate.opsForHash().delete("web_socket_key", JSON.parseObject(message, Message.class).getMsgid());
-            } catch (IOException e) {
-                log.error("发送信息错误 : {}", e.getMessage());
-                e.printStackTrace();
+            });
+            log.info("消息发送成功 : {} , {}", message,new Date());
+            //删除缓存
+            if (redisTemplate == null) {
+                redisTemplate = ApplicationContextUtils.get(StringRedisTemplate.class);
             }
+            redisTemplate.opsForHash().delete("web_socket_key", JSON.parseObject(message, Message.class).getMsgid());
         }
     }
 
