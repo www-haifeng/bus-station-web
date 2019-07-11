@@ -52,7 +52,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
     @Override
     public Wrapper saveRole(Role role) {
         //验证参数并保存
-        return Optional.ofNullable(validation().check(role)).orElseGet(() -> WrapMapper.handleResult( roleMapper.insertSelective(role)));
+        return Optional.ofNullable(validation().check(role)).orElseGet(() -> WrapMapper.handleResult(roleMapper.insertSelective(role)));
     }
 
     /**
@@ -94,7 +94,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
     @Override
     public Wrapper updateRole(Role role) {
         //判断并更新
-       return Optional.ofNullable(validation().check(role)).orElseGet(() -> WrapMapper.handleResult(roleMapper.updateByPrimaryKey(role)));
+        return Optional.ofNullable(validation().check(role)).orElseGet(() -> WrapMapper.handleResult(roleMapper.updateByPrimaryKey(role)));
     }
 
     private Validation<Integer> validationDelete() {
@@ -117,12 +117,18 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
      * @return 验证结果
      */
     private Validation<Role> validation() {
+        String roleWith = "ROLE_";
         Role roleSelect = new Role();
         return role -> {
             //判断角色名是否重复
             roleSelect.setRoleName(role.getRoleName());
             if (StringUtils.isBlank(role.getRoleName())) {
                 return WrapMapper.wrap(ROLE_ERROR_1.getCode(), ROLE_ERROR_1.getMsg());
+            } else {
+                if (!role.getRoleName().startsWith(roleWith)) {
+                    role.setRoleName(roleWith + role.getRoleName());
+                }
+
             }
             if (roleMapper.selectOne(roleSelect) != null) {
                 return WrapMapper.wrap(ROLE_ERROR_2.getCode(), ROLE_ERROR_2.getMsg());
