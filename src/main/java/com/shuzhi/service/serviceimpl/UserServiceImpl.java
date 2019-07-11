@@ -155,28 +155,28 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
                 if (userMapper.selectByPrimaryKey(o.getUserId()) == null) {
                     return WrapMapper.wrap(REGISTERED_ERROR_6.getCode(), REGISTERED_ERROR_6.getMsg());
                 }
-                if (StringUtils.isBlank(o.getUserName())) {
-                    return WrapMapper.wrap(REGISTERED_ERROR_1.getCode(), REGISTERED_ERROR_1.getMsg());
-                } else {
-                    //判断该用户名是否存在
-                    userSelect.setUserName(o.getUserName());
-                    if (userMapper.selectCount(userSelect) != 0) {
-                        return WrapMapper.wrap(REGISTERED_ERROR_3.getCode(), REGISTERED_ERROR_3.getMsg());
-                    }
+            }
+            if (StringUtils.isBlank(o.getUserName())) {
+                return WrapMapper.wrap(REGISTERED_ERROR_1.getCode(), REGISTERED_ERROR_1.getMsg());
+            } else {
+                //判断该用户名是否存在
+                userSelect.setUserName(o.getUserName());
+                if (userMapper.selectCount(userSelect) != 0) {
+                    return WrapMapper.wrap(REGISTERED_ERROR_3.getCode(), REGISTERED_ERROR_3.getMsg());
                 }
-                if (StringUtils.isBlank(o.getLoginName())) {
+            }
+            if (StringUtils.isBlank(o.getLoginName())) {
+                return WrapMapper.wrap(REGISTERED_ERROR_5.getCode(), REGISTERED_ERROR_5.getMsg());
+            } else {
+                //判断该登录名是否存在
+                userSelect.setUserName(null);
+                userSelect.setLoginName(o.getLoginName());
+                if (userMapper.selectCount(userSelect) != 0) {
                     return WrapMapper.wrap(REGISTERED_ERROR_5.getCode(), REGISTERED_ERROR_5.getMsg());
-                } else {
-                    //判断该登录名是否存在
-                    userSelect.setUserName(null);
-                    userSelect.setLoginName(o.getLoginName());
-                    if (userMapper.selectCount(userSelect) != 0) {
-                        return WrapMapper.wrap(REGISTERED_ERROR_5.getCode(), REGISTERED_ERROR_5.getMsg());
-                    }
-                    //验证密码是否输入
-                    if (StringUtils.isBlank(o.getPassword())) {
-                        return WrapMapper.wrap(REGISTERED_ERROR_2.getCode(), REGISTERED_ERROR_2.getMsg());
-                    }
+                }
+                //验证密码是否输入
+                if (StringUtils.isBlank(o.getPassword())) {
+                    return WrapMapper.wrap(REGISTERED_ERROR_2.getCode(), REGISTERED_ERROR_2.getMsg());
                 }
             }
             return null;
