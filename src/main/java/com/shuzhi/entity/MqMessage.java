@@ -50,5 +50,11 @@ private static final long serialVersionUID=1L;
      */
     @Column(name = "name")
     private String name;
+
+    /**
+     * 消息名称
+     */
+    @Column(name = "modulecode")
+    private Integer modulecode;
     
 }

@@ -3,6 +3,7 @@ package com.shuzhi.websocket;
 import com.alibaba.fastjson.JSON;
 import com.shuzhi.rabbitmq.Message;
 import com.shuzhi.rabbitmq.RabbitProducer;
+import com.shuzhi.websocket.socketvo.ReceiptHandleVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -32,8 +33,17 @@ public class WebSocketServer {
      * 连接建立成功调用的方法
      */
     @OnOpen
-    public void onOpen() {
-        log.info("建立连接成功");
+    public void onOpen(Session session) {
+
+        //推送消息到页面
+        Optional.ofNullable(session).ifPresent(session1 -> {
+            try {
+                session1.getBasicRemote().sendText("连接建立成功");
+            } catch (IOException e) {
+                e.printStackTrace();
+                log.error("连接建立失败 sessionId : {}", session1.getId());
+            }
+        });
     }
 
 
@@ -44,7 +54,7 @@ public class WebSocketServer {
      * @param session session
      */
     @OnMessage
-    public void onMessage(String message, Session session) {
+    public void onMessage(String message, Session session) throws Exception {
 
         //获取模块id
         Message message1 = JSON.parseObject(message, Message.class);
@@ -54,23 +64,64 @@ public class WebSocketServer {
         SESSION_MAP.entrySet().stream().filter(stringSessionEntry -> session.getId().equals(stringSessionEntry.getValue().getId()))
                 .forEach(stringSessionEntry -> log.info("{} 发来消息", stringSessionEntry.getKey()));
         //判断消息类型
-       /* switch (message1.getMsgtype()) {
-            //推送
-            case "1":
-                break;
+        switch (message1.getMsgtype()) {
             //请求
             case "2":
+                restHandle(message1);
                 break;
             //回执
             case "3":
+                receiptHandle(message1);
                 break;
             default:
                 throw new Exception("消息类型错误");
-        }*/
+        }
+    }
+
+    /**
+     * 处理回执消息
+     *
+     * @param message 消息
+     */
+    private void receiptHandle(Message message) {
+
+        //
+
+    }
+
+    /**
+     * 处理响应消息
+     *
+     * @param message 消息
+     */
+    private void restHandle(Message message) {
+
+        Integer modulecode = message.getModulecode();
+        //判断消息编码
+        switch (message.getMsgcode()) {
+            case 200001:
+                break;
+            //首次建立连接
+            case 200000:
+                ReceiptHandleVo receiptHandleVo = new ReceiptHandleVo(message.getMsgid(), modulecode, new Date());
+                send(String.valueOf(modulecode), JSON.toJSONString(receiptHandleVo));
+
+            default:
+        }
+
+    }
+
+    /**
+     * 处理推送消息
+     *
+     * @param message 消息
+     */
+    private void pushHandle(String message) {
+
         //发送消息
         RabbitProducer rabbitProducer = ApplicationContextUtils.get(RabbitProducer.class);
         //生成一个唯一标识 并保存到redis中 然后发送消息
-        rabbitProducer.sendMessage(setMsgId(message, token));
+        rabbitProducer.sendMessage(setMsgId(message));
 
     }
 
@@ -78,10 +129,9 @@ public class WebSocketServer {
      * 生成唯一标识 并保存在redis中
      *
      * @param message 接收到的数据
-     * @param token   页面标识
      * @return 要发送的对象
      */
-    private Message setMsgId(String message, String token) {
+    private Message setMsgId(String message) {
 
         //获取redisTemplate对象
         Optional.ofNullable(redisTemplate).orElseGet(() -> redisTemplate = ApplicationContextUtils.get(StringRedisTemplate.class));
@@ -89,7 +139,7 @@ public class WebSocketServer {
         Message message1 = JSON.parseObject(message, Message.class);
         String msgId = UUID.randomUUID().toString();
         //存入redis中
-        redisTemplate.opsForHash().put("web_socket_key", msgId, token);
+        redisTemplate.opsForHash().put("web_socket_key", msgId, message1.getModulecode());
         message1.setMsgid(msgId);
         log.info("接收到消息 : {}", JSON.toJSONString(message1));
         return message1;
@@ -131,10 +181,10 @@ public class WebSocketServer {
                     session.getBasicRemote().sendText(message);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    log.error("消息推送失败 : {}",e.getMessage());
+                    log.error("消息推送失败 : {}", e.getMessage());
                 }
             });
-            log.info("消息发送成功 : {} , {}", message,new Date());
+            log.info("消息发送成功 : {} , {}", message, new Date());
             //删除缓存
             if (redisTemplate == null) {
                 redisTemplate = ApplicationContextUtils.get(StringRedisTemplate.class);

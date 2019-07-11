@@ -56,5 +56,4 @@ public class RabbitConsumer {
         // ACK
         channel.basicAck(deliveryTag, false);
     }
-
 }

@@ -27,6 +27,11 @@ public class Message implements Serializable {
     private String msgtype;
 
     /**
+     * 消息编码
+     */
+    private Integer msgcode;
+
+    /**
      * 系统类型 应用网关 使能平台
      */
     private String systype;

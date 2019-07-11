@@ -30,6 +30,6 @@ public class ControllerAdviceException {
         log.error("服务器异常,请联系管理员 {} {} :", new Date(),e.getMessage());
         //返回全局异常处理
         e.printStackTrace();
-        return WrapMapper.error(e.getMessage());
+        return WrapMapper.wrap(500,"服务器异常,请联系管理员",e.getMessage());
     }
 }

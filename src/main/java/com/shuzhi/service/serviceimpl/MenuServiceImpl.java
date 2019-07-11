@@ -106,7 +106,7 @@ public class MenuServiceImpl extends BaseServiceImpl<Menu> implements MenuServic
      * 通过id查出目录的详细信息
      *
      * @return 查询结果
-     * @param menuId
+     * @param menuId 目录ID
      */
     @Override
     public Wrapper findById(Integer menuId) {
