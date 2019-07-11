@@ -125,10 +125,10 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
             if (StringUtils.isBlank(role.getRoleName())) {
                 return WrapMapper.wrap(ROLE_ERROR_1.getCode(), ROLE_ERROR_1.getMsg());
             } else {
+                //判断是否是ROLE_开头 不是就加上
                 if (!role.getRoleName().startsWith(roleWith)) {
                     role.setRoleName(roleWith + role.getRoleName());
                 }
-
             }
             if (roleMapper.selectOne(roleSelect) != null) {
                 return WrapMapper.wrap(ROLE_ERROR_2.getCode(), ROLE_ERROR_2.getMsg());
