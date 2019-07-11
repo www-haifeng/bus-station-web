@@ -125,7 +125,6 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         userRole.setUserId(user1.getUserId());
         userRole.setCreationTime(date);
         userRoleMapper.insertSelective(userRole);
-
     }
 
 
