@@ -121,7 +121,7 @@ public class WebSocketServer {
         //发送消息
         RabbitProducer rabbitProducer = ApplicationContextUtils.get(RabbitProducer.class);
         //生成一个唯一标识 并保存到redis中 然后发送消息
-        rabbitProducer.sendMessage(setMsgId(message));
+        //rabbitProducer.sendMessage(setMsgId(message));
 
     }
 

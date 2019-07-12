@@ -1,9 +1,12 @@
 package com.shuzhi.websocket;
 
+import com.alibaba.fastjson.JSON;
 import com.shuzhi.common.utils.WrapMapper;
 import com.shuzhi.entity.MqMessage;
 import com.shuzhi.mapper.MqMessageMapper;
+import com.shuzhi.rabbitmq.RabbitProducer;
 import com.shuzhi.websocket.socketvo.MessageVo;
+import com.shuzhi.websocket.socketvo.SimpleProtocolVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,12 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/webSocket")
-public class WebSocketController {
+public class WebSocketController{
 
     private final MqMessageMapper messageMapper;
 
-    public WebSocketController(MqMessageMapper messageMapper) {
+    private final RabbitProducer rabbitProducer;
+
+    public WebSocketController(MqMessageMapper messageMapper, RabbitProducer rabbitProducer) {
         this.messageMapper = messageMapper;
+        this.rabbitProducer = rabbitProducer;
     }
 
     /**
@@ -31,11 +37,36 @@ public class WebSocketController {
      */
     @RequestMapping("/command")
     public WrapMapper command(MessageVo messageVo){
-        //通过模块编码查出遥望哪里发送
-        MqMessage mqMessageSelect = new MqMessage();
-        mqMessageSelect.setModulecode(messageVo.getModulecode());
-        MqMessage mqMessage = messageMapper.selectOne(mqMessageSelect);
+
+        //拼装数据并发送
+        withMessage(messageVo);
 
         return null;
     }
+
+    /**
+     * 拼装消息并发送
+     *
+     * @param messageVo 未处理前的消息
+     */
+    private void withMessage(MessageVo messageVo) {
+
+        SimpleProtocolVo message = new SimpleProtocolVo();
+
+        message = JSON.parseObject("{\n" +
+                "    \"did\": \"867725032979092\",\n" +
+                "    \"cmdid \": \"10001\",\n" +
+                "    \"msgid\": \"f04d8ecc-565f-4a3a-bc0b-a583a990bd87\",\n" +
+                "    \"data\": {\n" +
+                "        \"cmdid\": \"10001\"\n" +
+                "    }\n" +
+                "}", SimpleProtocolVo.class);
+
+        //发送简易协议
+        SynSend synSend = new SynSend(rabbitProducer,message,200001);
+        synSend.start();
+
+
+    }
+
 }

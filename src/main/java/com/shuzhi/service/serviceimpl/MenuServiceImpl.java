@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.shuzhi.eum.WebEum.*;
 
@@ -77,15 +78,14 @@ public class MenuServiceImpl extends BaseServiceImpl<Menu> implements MenuServic
     @Override
     public Wrapper removeMenu(Integer[] urlIds) {
         //记录删除了多少条
-        int delete = 0;
+        AtomicInteger delete = new AtomicInteger();
         //遍历查询
         for (Integer urlId : urlIds) {
-            Menu menu = menuMapper.selectByPrimaryKey(urlId);
-            if (menu != null) {
-                delete++;
+            Optional.ofNullable(menuMapper.selectByPrimaryKey(urlId)).ifPresent(menu -> {
+                delete.getAndIncrement();
                 //递归删除
                 recursiveRemove(menu);
-            }
+            });
         }
         return WrapMapper.handleResult(delete);
     }
