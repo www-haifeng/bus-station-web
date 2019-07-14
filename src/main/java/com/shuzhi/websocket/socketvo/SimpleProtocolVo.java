@@ -2,8 +2,6 @@ package com.shuzhi.websocket.socketvo;
 
 import lombok.Data;
 
-import java.util.UUID;
-
 /**
  * @author zgk
  * @description 封装简易协议
@@ -28,23 +26,14 @@ public class SimpleProtocolVo {
     private Integer code;
 
     /**
+     * 命令id，统一分配
+     */
+    private String cmdid;
+
+    /**
      * 命令参数
      */
     private Object data;
 
-    /**
-     * 将原始数据转换为简易协议
-     *
-     * @param messageVo 原始数据
-     */
-    public SimpleProtocolVo(MessageVo messageVo) {
 
-        this.msgid = messageVo.getMsgid();
-      //  this.did = messageVo.getModulecode();
-        //
-    }
-
-
-    public SimpleProtocolVo() {
-    }
 }

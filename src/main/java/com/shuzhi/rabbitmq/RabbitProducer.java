@@ -71,7 +71,7 @@ public class RabbitProducer {
         MqMessage mqMessage = messageMapper.selectOne(mqMessageSelect);
         //发送消息并等待
         messageWait(message, condition, mqMessage);
-        //等待5秒 或被唤醒后查看map中有没有 没有则代表收到了回执结束方法 有责再发一次
+        //等待指定秒数 或被唤醒后查看map中有没有 没有则代表收到了回执结束方法 有责再发一次
         for (int i = 0; i < count; i++){
             if (conditionHashtable.get(message.getMsgid()) != null){
                 //重新发送

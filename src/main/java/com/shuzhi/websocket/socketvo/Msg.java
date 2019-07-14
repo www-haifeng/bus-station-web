@@ -10,7 +10,7 @@ import java.util.List;
  * @date 2019-07-11 13:32
  */
 @Data
-class Msg {
+public class Msg {
 
     /**
      * 命令类型：1-开启；2-关闭；3-重启；4-调光；5-音量
@@ -30,11 +30,17 @@ class Msg {
     /**
      * lcd数组 屏id
      */
-    private List<Integer> lcds;
+    private List<String> lcds;
 
     /**
      * led数组 屏id
      */
-    private List<Integer> leds;
+    private List<String> leds;
+
+    /**
+     * led数组 屏id
+     */
+    private List<String> lights;
+
 
 }

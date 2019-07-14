@@ -1,6 +1,5 @@
 package com.shuzhi.websocket;
 
-import com.shuzhi.rabbitmq.Message;
 import com.shuzhi.rabbitmq.RabbitProducer;
 import com.shuzhi.websocket.socketvo.SimpleProtocolVo;
 
