@@ -184,7 +184,7 @@ public class WebSocketServer {
                     log.error("消息推送失败 : {}", e.getMessage());
                 }
             });
-            log.info("消息发送成功 : {} , {}", message, new Date());
+            log.info("消息向前端发送成功 : {} , {}", message, new Date());
             //删除缓存
             if (redisTemplate == null) {
                 redisTemplate = ApplicationContextUtils.get(StringRedisTemplate.class);
@@ -205,27 +205,4 @@ public class WebSocketServer {
         error.printStackTrace();
     }
 
-    /**
-     * 获取设备信息
-     *
-     * @param token 页面标识
-     * @return 设备信息的json
-     */
-    private String getEquipment(String token) {
-
-        //判断是哪个设备
-        switch (token) {
-            case "10001":
-                break;
-
-            case "10002":
-                break;
-
-            case "10003":
-                break;
-
-            default:
-        }
-        return null;
-    }
 }

@@ -2,6 +2,7 @@ package com.shuzhi.websocket;
 
 import com.shuzhi.rabbitmq.RabbitProducer;
 import com.shuzhi.websocket.socketvo.SimpleProtocolVo;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 /**
  * @author zgk
@@ -16,15 +17,19 @@ public class SynSend extends Thread {
 
     private Integer modulecode;
 
-    SynSend(RabbitProducer rabbitProducer, SimpleProtocolVo message ,Integer modulecode) {
+    private StringRedisTemplate redisTemplate;
+
+    SynSend(RabbitProducer rabbitProducer, SimpleProtocolVo message, Integer modulecode, StringRedisTemplate redisTemplate) {
         this.rabbitProducer = rabbitProducer;
         this.message = message;
         this.modulecode = modulecode;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
     public void run() {
         super.run();
+        redisTemplate.opsForHash().put("web_socket_key", message.getMsgid(), String.valueOf(modulecode));
         rabbitProducer.sendMessage(message,modulecode);
     }
 }

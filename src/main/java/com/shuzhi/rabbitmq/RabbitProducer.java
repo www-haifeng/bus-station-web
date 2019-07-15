@@ -50,7 +50,7 @@ public class RabbitProducer {
     private Integer runTime;
 
 
-    private ReentrantLock lock = new ReentrantLock();
+    static ReentrantLock lock = new ReentrantLock();
 
     static Hashtable<String,Condition> conditionHashtable = new Hashtable<>();
 
@@ -64,12 +64,12 @@ public class RabbitProducer {
         //线程等待
         Condition condition = lock.newCondition();
         conditionHashtable.put(message.getMsgid(),condition);
-        lock.lock();
         //查出Exchange 和topic
         MqMessage mqMessageSelect = new MqMessage();
         mqMessageSelect.setModulecode(modulecode);
         MqMessage mqMessage = messageMapper.selectOne(mqMessageSelect);
         //发送消息并等待
+        lock.lock();
         messageWait(message, condition, mqMessage);
         //等待指定秒数 或被唤醒后查看map中有没有 没有则代表收到了回执结束方法 有责再发一次
         for (int i = 0; i < count; i++){
@@ -87,14 +87,17 @@ public class RabbitProducer {
         //清除redis缓存
         redisTemplate.opsForHash().delete("web_socket_key", message.getMsgid());
         //清除map
-        RabbitProducer.conditionHashtable.remove(message.getMsgid());
+        conditionHashtable.remove(message.getMsgid());
+        lock.unlock();
     }
 
     private void messageWait(SimpleProtocolVo message, Condition condition, MqMessage mqMessage) {
         rabbitTemplate.convertAndSend(mqMessage.getExchange(), mqMessage.getTopic(), JSON.toJSONString(message));
+        log.info("发送消息 : {} 线程 : {}", JSON.toJSONString(message), Thread.currentThread().getName());
         //线程等待
         try {
             condition.await(runTime, SECONDS);
+            log.info("线程唤醒 {}", Thread.currentThread().getName());
         } catch (InterruptedException e) {
             e.printStackTrace();
             lock.unlock();

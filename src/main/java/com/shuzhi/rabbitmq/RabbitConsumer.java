@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author zgk
@@ -44,22 +45,26 @@ public class RabbitConsumer {
 
         log.info("--------------收到消息，开始消费------------");
         log.info("消息是 : {}", message);
+        ReentrantLock lock = new ReentrantLock();
+
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
         Message message1 = JSON.parseObject(message, Message.class);
         message1.setMsgtype("2");
         //推送消息
         String key = (String) redisTemplate.opsForHash().get("web_socket_key", message1.getMsgid());
+
         if (StringUtils.isNotBlank(key)){
             webSocketServer.send(key,JSON.toJSONString(message1));
             //唤醒线程
             Condition condition = RabbitProducer.conditionHashtable.get(message1.getMsgid());
             if (condition != null){
                 log.info("唤醒线程 msgId : {}",message1.getMsgid());
+                RabbitProducer.lock.lock();
                 condition.signalAll();
                 RabbitProducer.conditionHashtable.remove(message1.getMsgid());
+                RabbitProducer.lock.unlock();
             }
             //删除map中的数据
-
         }else {
             log.warn("msgId不存在 : {}",message1.getMsgid());
         }

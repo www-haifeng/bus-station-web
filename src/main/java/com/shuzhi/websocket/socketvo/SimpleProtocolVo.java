@@ -2,6 +2,8 @@ package com.shuzhi.websocket.socketvo;
 
 import lombok.Data;
 
+import java.util.Map;
+
 /**
  * @author zgk
  * @description 封装简易协议

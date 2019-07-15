@@ -53,6 +53,6 @@ logging:
 
 send:
   #超时时间 单位: 秒
-  run-time: 5
+  run-time: 20
   #重试次数
-  count: 1
+  count: 2
