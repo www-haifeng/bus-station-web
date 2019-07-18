@@ -1,7 +1,9 @@
 package com.shuzhi.websocket;
 
+import com.alibaba.fastjson.JSON;
 import com.shuzhi.common.utils.WrapMapper;
 import com.shuzhi.common.utils.Wrapper;
+import com.shuzhi.config.entities.MsgCode;
 import com.shuzhi.config.service.MsgCodeService;
 import com.shuzhi.entity.DeviceLoop;
 import com.shuzhi.rabbitmq.RabbitProducer;
@@ -10,7 +12,6 @@ import com.shuzhi.websocket.socketvo.MessageVo;
 import com.shuzhi.websocket.socketvo.Msg;
 import com.shuzhi.websocket.socketvo.SimpleProtocolVo;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +27,7 @@ import java.util.*;
 @SuppressWarnings("AlibabaUndefineMagicConstant")
 @Slf4j
 @RestController
-@RequestMapping("/webSocket")
+@RequestMapping("/websocket")
 public class WebSocketController {
 
     private final RabbitProducer rabbitProducer;
@@ -69,7 +70,7 @@ public class WebSocketController {
     private List<SimpleProtocolVo> assemble(MessageVo messageVo) {
         //判断是led 还是lcd 还是 照明
         List<SimpleProtocolVo> simpleProtocolVos = new ArrayList<>();
-        Msg msg = messageVo.getMsg();
+        Msg msg = JSON.parseObject(JSON.toJSONString(messageVo.getMsg()),Msg.class);
         //lcd设备
         lcdEquip(simpleProtocolVos, msg);
         //led设备
@@ -85,11 +86,11 @@ public class WebSocketController {
     /**
      * 照明设备封装简易协议 提取重复代码
      *
-     * @param msg              报文数据
+     * @param msg 报文数据
      */
     private void light(List<SimpleProtocolVo> simpleProtocolVos, Msg msg) {
         Optional.ofNullable(msg.getLights()).ifPresent(lights -> {
-            log.info("接收到照明设备的命令 {} , {}", msg , new Date());
+            log.info("接收到照明设备的命令 {} , {}", msg, new Date());
             DeviceLoop deviceLoopSelect = new DeviceLoop();
             lights.forEach(light -> {
                 SimpleProtocolVo simpleProtocolVo = new SimpleProtocolVo();
@@ -101,13 +102,9 @@ public class WebSocketController {
                 HashMap<String, Object> data = new HashMap<>(3);
                 //msgId
                 simpleProtocolVo.setMsgid(UUID.randomUUID().toString());
-                //开灯
-                if (msg.getCmdtype() == 1){
-                    data.put("cmdid", "10001");
-                }else {
-                    //关灯
-                    data.put("cmdid", "10002");
-                }
+
+                MsgCode thingsMsgKey = msgCodeService.findThingsMsgKey("light-shuncom-10002");
+                data.put("cmdid", thingsMsgKey.getMsgCode());
                 //回路
                 data.put("loop", deviceLoop.getLoop());
                 //是否闭合
@@ -125,11 +122,11 @@ public class WebSocketController {
     /**
      * led设备封装简易协议 提取重复代码
      *
-     * @param msg              报文数据
+     * @param msg 报文数据
      */
     private void ledEquip(List<SimpleProtocolVo> simpleProtocolVos, Msg msg) {
         Optional.ofNullable(msg.getLeds()).ifPresent(leds -> {
-            log.info("接收到led设备的命令 {} , {}", msg , new Date());
+            log.info("接收到led设备的命令 {} , {}", msg, new Date());
             //拼装数据
             leds.forEach(led -> {
                 SimpleProtocolVo simpleProtocolVo = new SimpleProtocolVo();
@@ -140,29 +137,30 @@ public class WebSocketController {
                 //亮度和音量 重启操作没有亮度和音量
                 if (msg.getCmdtype() != 3) {
                     HashMap<String, Object> hashMap = new HashMap<>(1);
+
                     switch (msg.getCmdtype()) {
                         //开灯
                         case 1:
-                            simpleProtocolVo.setCmdid("10001");
+                            simpleProtocolVo.setCmdid(msgCodeService.findThingsMsgKey("led-tecnon-10002").getMsgCode());
                             hashMap.put("arg1", 1);
                             simpleProtocolVo.setData(hashMap);
                             break;
                         //关灯
                         case 2:
-                            simpleProtocolVo.setCmdid("10002");
-                            hashMap.put("arg1", 1);
+                            simpleProtocolVo.setCmdid(msgCodeService.findThingsMsgKey("led-tecnon-10002").getMsgCode());
+                            hashMap.put("arg1", 0);
                             simpleProtocolVo.setData(hashMap);
                             break;
                         //调光
                         case 4:
-                            simpleProtocolVo.setCmdid("10003");
-                            hashMap.put("arg1", 1);
+                            simpleProtocolVo.setCmdid(msgCodeService.findThingsMsgKey("led-tecnon-10006").getMsgCode());
+                            hashMap.put("arg1", msg.getLight());
                             simpleProtocolVo.setData(hashMap);
                             break;
                         //音量
                         case 5:
-                            simpleProtocolVo.setCmdid("10004");
-                            hashMap.put("arg1", 1);
+                            simpleProtocolVo.setCmdid(msgCodeService.findThingsMsgKey("led-tecnon-10006").getMsgCode());
+                            hashMap.put("arg1", msg.getVolume());
                             simpleProtocolVo.setData(hashMap);
                             break;
                         default:
@@ -179,11 +177,11 @@ public class WebSocketController {
     /**
      * lcd设备封装简易协议 提取重复代码
      *
-     * @param msg              报文数据
+     * @param msg 报文数据
      */
     private void lcdEquip(List<SimpleProtocolVo> simpleProtocolVos, Msg msg) {
         Optional.ofNullable(msg.getLcds()).ifPresent(lcds -> {
-            log.info("接收到lcd设备的命令 {} , {}", msg , new Date());
+            log.info("接收到lcd设备的命令 {} , {}", msg, new Date());
             //拼装数据
             lcds.forEach(lcd -> {
                 SimpleProtocolVo simpleProtocolVo = new SimpleProtocolVo();
@@ -199,19 +197,19 @@ public class WebSocketController {
                     switch (msg.getCmdtype()) {
                         //开灯
                         case 1:
-                            simpleProtocolVo.setCmdid("10001");
+                            simpleProtocolVo.setCmdid(msgCodeService.findThingsMsgKey("lcd-hobovar-10003").getMsgCode());
                             break;
                         //关灯
                         case 2:
-                            simpleProtocolVo.setCmdid("10002");
+                            simpleProtocolVo.setCmdid(msgCodeService.findThingsMsgKey("lcd-hobovar-10004").getMsgCode());
                             break;
                         //重启
                         case 3:
-                            simpleProtocolVo.setCmdid("10004");
+                            simpleProtocolVo.setCmdid(msgCodeService.findThingsMsgKey("lcd-hobovar-10002").getMsgCode());
                             break;
                         //音量
                         case 5:
-                            simpleProtocolVo.setCmdid("10005");
+                            simpleProtocolVo.setCmdid(msgCodeService.findThingsMsgKey("lcd-hobovar-10006").getMsgCode());
                             hashMap.put("vol", msg.getVolume());
                             simpleProtocolVo.setData(hashMap);
                             break;

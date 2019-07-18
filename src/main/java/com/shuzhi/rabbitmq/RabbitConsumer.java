@@ -2,6 +2,8 @@ package com.shuzhi.rabbitmq;
 
 import com.alibaba.fastjson.JSON;
 import com.rabbitmq.client.Channel;
+import com.shuzhi.entity.MqMessage;
+import com.shuzhi.service.MqMessageService;
 import com.shuzhi.websocket.WebSocketServer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -15,7 +17,6 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author zgk
@@ -30,9 +31,12 @@ public class RabbitConsumer {
 
     private final StringRedisTemplate redisTemplate;
 
-    public RabbitConsumer(WebSocketServer webSocketServer, StringRedisTemplate redisTemplate) {
+    private final MqMessageService mqMessageService;
+
+    public RabbitConsumer(WebSocketServer webSocketServer, StringRedisTemplate redisTemplate, MqMessageService mqMessageService) {
         this.webSocketServer = webSocketServer;
         this.redisTemplate = redisTemplate;
+        this.mqMessageService = mqMessageService;
     }
 
     @RabbitListener(bindings = @QueueBinding(
@@ -45,7 +49,6 @@ public class RabbitConsumer {
 
         log.info("--------------收到消息，开始消费------------");
         log.info("消息是 : {}", message);
-        ReentrantLock lock = new ReentrantLock();
 
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
         Message message1 = JSON.parseObject(message, Message.class);
@@ -54,7 +57,8 @@ public class RabbitConsumer {
         String key = (String) redisTemplate.opsForHash().get("web_socket_key", message1.getMsgid());
 
         if (StringUtils.isNotBlank(key)){
-            webSocketServer.send(key,JSON.toJSONString(message1));
+            //判断要调用哪个方法 并调用
+            isEquip(key);
             //唤醒线程
             Condition condition = RabbitProducer.conditionHashtable.get(message1.getMsgid());
             if (condition != null){
@@ -70,5 +74,32 @@ public class RabbitConsumer {
         }
         // ACK
         channel.basicAck(deliveryTag, false);
+    }
+
+    /**
+     * 判断是哪个设备发来的的消息  并触发对应的定时任务
+     *
+     * @param key modulecode
+     */
+    private void isEquip(String key) {
+
+        MqMessage mqMessageSelect = new MqMessage();
+        mqMessageSelect.setModulecode(Integer.valueOf(key));
+        MqMessage mqMessage = mqMessageService.selectOne(mqMessageSelect);
+
+        switch (mqMessage.getExchange()){
+            case "lcd" :
+                //调用lcd设备的信息
+                webSocketServer.lcd();
+                break;
+            case "led" :
+                webSocketServer.led();
+                break;
+            case "light" :
+                webSocketServer.light();
+                break;
+            default:
+        }
+
     }
 }

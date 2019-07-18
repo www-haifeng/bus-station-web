@@ -56,3 +56,8 @@ send:
   run-time: 20
   #重试次数
   count: 2
+  #定时取数据的ceon
+  led-cron: "*/5 * * * * ?"
+  light-ceon: "*/5 * * * * ?"
+  lcd-cron: "*/5 * * * * ?"
+
