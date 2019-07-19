@@ -8,8 +8,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication
 @MapperScan("com.shuzhi.mapper")
-@EnableEurekaClient
-@EnableFeignClients
+@EnableFeignClients(basePackages= {"com.shuzhi"})
 public class BusStationWebApplication {
 
     public static void main(String[] args) {
