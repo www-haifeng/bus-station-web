@@ -7,7 +7,7 @@ spring:
    datasource:
     type: com.alibaba.druid.pool.DruidDataSource            # 当前数据源操作类型
     driver-class-name: org.postgresql.Driver              # mysql驱动包
-    url: jdbc:postgresql://192.168.8.150:5432/bus-station-web?currentSchema=public&autoReconnect=true              # 数据库名称
+    url: jdbc:postgresql://192.168.7.68:5432/bus-station-web?currentSchema=public&autoReconnect=true              # 数据库名称
     username: postgres
     password: 123456
     dbcp2:
@@ -16,7 +16,7 @@ spring:
       max-total: 5                                          # 最大连接数
       max-wait-millis: 200                                  # 等待连接获取的最大超时时间
    rabbitmq:
-     host: 192.168.8.150
+     host: 192.168.7.68
      port: 5672
      username: guest
      password: guest
@@ -27,7 +27,7 @@ spring:
          max-concurrency: 10 #最大并发
      connection-timeout: 15000
    redis:
-     host: 192.168.8.150
+     host: 192.168.7.68
      port: 6379
      password:
 feign:
@@ -36,7 +36,7 @@ feign:
 eureka:
   client: #客户端注册进eureka服务列表内
     service-url:
-      defaultZone: http://192.168.8.150:7001/eureka/
+      defaultZone: http://192.168.7.68:7001/eureka/
   instance:
     instance-id: bus-station-web9100
     prefer-ip-address: true
@@ -58,6 +58,6 @@ send:
   count: 2
   #定时取数据的ceon
   led-cron: "*/5 * * * * ?"
-  light-ceon: "*/5 * * * * ?"
+  light-cron: "*/5 * * * * ?"
   lcd-cron: "*/5 * * * * ?"
 

@@ -2,16 +2,16 @@ package com.shuzhi.websocket;
 
 import com.alibaba.fastjson.JSON;
 import com.shuzhi.entity.MqMessage;
+import com.shuzhi.lcd.entities.IotLcdStatus;
+import com.shuzhi.lcd.service.IotLcdsStatusService;
+import com.shuzhi.lcd.service.IotLcdsStatusService;
 import com.shuzhi.led.entities.TStatusDto;
 import com.shuzhi.led.service.TStatusService;
 import com.shuzhi.light.entities.TLoopStateDto;
 import com.shuzhi.light.service.LoopStatusServiceApi;
 import com.shuzhi.rabbitmq.Message;
 import com.shuzhi.service.MqMessageService;
-import com.shuzhi.websocket.socketvo.LedMsg;
-import com.shuzhi.websocket.socketvo.Leds;
-import com.shuzhi.websocket.socketvo.MessageVo;
-import com.shuzhi.websocket.socketvo.ReceiptHandleVo;
+import com.shuzhi.websocket.socketvo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -42,6 +42,8 @@ public class WebSocketServer {
     private TStatusService tStatusService;
 
     private LoopStatusServiceApi loopStatusServiceApi;
+
+    private IotLcdsStatusService iotLcdStatusService;
 
     private static Map<String, Session> SESSION_MAP = new ConcurrentHashMap<>();
 
@@ -142,6 +144,7 @@ public class WebSocketServer {
         switch (mqMessage.getExchange()) {
             case "lcd":
                 //调用lcd设备的信息
+                lcd();
                 break;
             case "led":
                 led();
@@ -160,10 +163,20 @@ public class WebSocketServer {
     public void light() {
         Integer modulecode = getModuleCode("light");
         if (SESSION_MAP.get(String.valueOf(modulecode)) != null) {
-            setMessageVo(modulecode);
+            MessageVo messageVo = setMessageVo(modulecode);
             //调用接口 获取当前照明状态
             Optional.ofNullable(loopStatusServiceApi).orElseGet(() -> loopStatusServiceApi = ApplicationContextUtils.get(LoopStatusServiceApi.class));
             List<TLoopStateDto> loopStatus = loopStatusServiceApi.findLoopStatus();
+            List<LightMsg> lightMsgList = new ArrayList<>();
+            if(loopStatus != null && loopStatus.size() != 0){
+                loopStatus.forEach(tLoopStateDto -> {
+                    LightMsg lightMsg = new LightMsg(new Lights(tLoopStateDto));
+                    lightMsgList.add(lightMsg);
+                });
+                messageVo.setMsg(lightMsgList);
+                send(String.valueOf(modulecode), JSON.toJSONString(messageVo));
+                log.info("照明定时任务时间 : {}", messageVo.getTimestamp());
+            }
 
         }
     }
@@ -171,8 +184,21 @@ public class WebSocketServer {
     /**
      * lcd首次连接信息 也需要定时向前台推送
      */
+    @Scheduled(cron = "${send.lcd-cron}")
     public void lcd() {
-
+        //查出led的 moduleCode
+        Integer modulecode = getModuleCode("lcd");
+        if (SESSION_MAP.get(String.valueOf(modulecode)) != null) {
+            MessageVo messageVo = setMessageVo(modulecode);
+            //调用接口
+            Optional.ofNullable(iotLcdStatusService).orElseGet(() -> iotLcdStatusService = ApplicationContextUtils.get(IotLcdsStatusService.class));
+            List<IotLcdStatus> allStatusByRedis = iotLcdStatusService.findAllStatusByRedis();
+            Lcds lcds = new Lcds(allStatusByRedis);
+            LcdMsg lcdMsg = new LcdMsg(lcds);
+            messageVo.setMsg(lcdMsg);
+            send(String.valueOf(modulecode), JSON.toJSONString(messageVo));
+            log.info("lcd定时任务时间 : {}", messageVo.getTimestamp());
+        }
     }
 
     /**

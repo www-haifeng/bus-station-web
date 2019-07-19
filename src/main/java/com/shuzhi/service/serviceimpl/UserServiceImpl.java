@@ -56,7 +56,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         if (StringUtils.isNotBlank(loginName)) {
             return userMapper.selectByLoginName(loginName);
         }
-        return null;
+        throw new IllegalStateException("请先登录");
     }
 
     /**
