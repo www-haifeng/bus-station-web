@@ -41,18 +41,20 @@ public class Statistics {
      * @param statisticsVo
      * @return
      */
-    @RequestMapping(value = "findStatistics",method = RequestMethod.GET)
+    @RequestMapping(value = "findStatistics",method = RequestMethod.POST)
     public List<Float> findStatistics(@RequestBody StatisticsVo statisticsVo) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // HH:mm:ss
             //设置当前月份时间
             Date date = new Date();
-            statisticsVo.setStartTime(sdf.format(date));
+            //statisticsVo.setStartTime(sdf.format(date));
+            statisticsVo.setEndTime(sdf.format(date));
             //上个月第一天和上个月最后一天
             Map<String, String> map = Statistics.getFirstday_Lastday_Month(date);
             //取出上个月最后一天
             String day_last = map.get("last");
             Date date1 = sdf.parse(day_last);
-            statisticsVo.setEndTime(sdf.format(date1));
+            //statisticsVo.setEndTime(sdf.format(date1));
+            statisticsVo.setStartTime(sdf.format(date1));
             //获取本月能耗所有信息
             List<TElectricQuantity> electricQuantityNowMonth = loopStatusServiceApi.findElectricQuantity(statisticsVo);
             //获取最新能耗值
@@ -66,8 +68,10 @@ public class Statistics {
             //取出上个月第一天
             String day_first = map.get("first");
             Date date2 = sdf.parse(day_first);
-            statisticsVo.setStartTime(sdf.format(date1));
-            statisticsVo.setEndTime(sdf.format(date2));
+            //statisticsVo.setStartTime(sdf.format(date1));
+            statisticsVo.setStartTime(sdf.format(date2));
+            //statisticsVo.setEndTime(sdf.format(date2));
+            statisticsVo.setEndTime(sdf.format(date1));
             //获取上月月能耗所有信息
             List<TElectricQuantity> electricQuantityLastMonth = loopStatusServiceApi.findElectricQuantity(statisticsVo);
             //获取上月第一天能耗值
@@ -79,8 +83,11 @@ public class Statistics {
             //取出本年第一天
             String newYear = map.get("year");
             Date date3 = sdf.parse(newYear);
-            statisticsVo.setStartTime(sdf.format(date));
-            statisticsVo.setEndTime(sdf.format(date3));
+            //statisticsVo.setStartTime(sdf.format(date));
+            statisticsVo.setStartTime(sdf.format(date3));
+
+            //statisticsVo.setEndTime(sdf.format(date3));
+            statisticsVo.setEndTime(sdf.format(date));
             //获取上月月能耗所有信息
             List<TElectricQuantity> electricQuantityYear = loopStatusServiceApi.findElectricQuantity(statisticsVo);
             //获取本年第一天能耗值
