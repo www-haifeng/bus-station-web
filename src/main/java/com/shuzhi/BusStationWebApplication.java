@@ -9,8 +9,8 @@ import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication
 @MapperScan("com.shuzhi.mapper")
+@EnableFeignClients(basePackages= {"com.shuzhi"})
 @EnableEurekaClient
-@EnableFeignClients
 @EnableScheduling
 public class BusStationWebApplication {
 
