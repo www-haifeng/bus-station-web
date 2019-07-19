@@ -1,12 +1,14 @@
 package com.shuzhi.websocket;
 
+import com.shuzhi.light.entities.StatisticsVo;
 import com.shuzhi.light.entities.TElectricQuantity;
 import com.shuzhi.light.entities.TLoopStateDto;
 import com.shuzhi.light.service.LoopStatusServiceApi;
-import com.shuzhi.websocket.socketvo.StatisticsVo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -39,21 +41,20 @@ public class Statistics {
      * @param statisticsVo
      * @return
      */
-    public List<TElectricQuantity> findStatistics(@RequestBody StatisticsVo statisticsVo){
-
-        //设置当前月份时间
-        Date date = new Date();
-        statisticsVo.setStartTime(date);
-        //上个月第一天和上个月最后一天
-        Map<String, String> map = Statistics.getFirstday_Lastday_Month(date);
-        try {
+    @RequestMapping(value = "findStatistics",method = RequestMethod.GET)
+    public List<Float> findStatistics(@RequestBody StatisticsVo statisticsVo) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            //设置当前月份时间
+            Date date = new Date();
+            statisticsVo.setStartTime(sdf.format(date));
+            //上个月第一天和上个月最后一天
+            Map<String, String> map = Statistics.getFirstday_Lastday_Month(date);
             //取出上个月最后一天
             String day_last = map.get("last");
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date1 = sdf.parse(day_last);
-            statisticsVo.setEndTime(date1);
+            statisticsVo.setEndTime(sdf.format(date1));
             //获取本月能耗所有信息
-            List<TElectricQuantity> electricQuantityNowMonth = loopStatusServiceApi.findElectricQuantity(statisticsVo.getDid(),statisticsVo.getHid());
+            List<TElectricQuantity> electricQuantityNowMonth = loopStatusServiceApi.findElectricQuantity(statisticsVo);
             //获取最新能耗值
             float activepowerNow = electricQuantityNowMonth.get(0).getActivepower();
             //获取上月最后一天能耗值
@@ -64,26 +65,34 @@ public class Statistics {
             //获取上月能耗
             //取出上个月第一天
             String day_first = map.get("first");
-            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date2 = sdf1.parse(day_first);
-            statisticsVo.setStartTime(date1);
-            statisticsVo.setEndTime(date2);
+            Date date2 = sdf.parse(day_first);
+            statisticsVo.setStartTime(sdf.format(date1));
+            statisticsVo.setEndTime(sdf.format(date2));
             //获取上月月能耗所有信息
-            List<TElectricQuantity> electricQuantityLastMonth = loopStatusServiceApi.findElectricQuantity(statisticsVo.getDid(),statisticsVo.getHid());
+            List<TElectricQuantity> electricQuantityLastMonth = loopStatusServiceApi.findElectricQuantity(statisticsVo);
             //获取上月第一天能耗值
             float activepowerFirstDay = electricQuantityLastMonth.get(0).getActivepower();
             //上月能耗
             float activepowerLastMonth = activepowerLastDay-activepowerFirstDay;
 
             //获取本年能耗
+            //取出本年第一天
+            String newYear = map.get("year");
+            Date date3 = sdf.parse(newYear);
+            statisticsVo.setStartTime(sdf.format(date));
+            statisticsVo.setEndTime(sdf.format(date3));
+            //获取上月月能耗所有信息
+            List<TElectricQuantity> electricQuantityYear = loopStatusServiceApi.findElectricQuantity(statisticsVo);
+            //获取本年第一天能耗值
+            float activepowerFirstYearDay = electricQuantityYear.get(electricQuantityYear.size()-1).getActivepower();
+            //本年能耗
+            float activepowerYear = activepowerNow - activepowerFirstYearDay;
 
-
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        return null;
+            List<Float> list = new ArrayList<Float>();
+            list.add(activepowerNowMonth);
+            list.add(activepowerLastMonth);
+            list.add(activepowerYear);
+        return list;
     }
 
 
@@ -114,12 +123,15 @@ public class Statistics {
         StringBuffer endStr = new StringBuffer().append(day_last).append(" 23:59:59");
         day_last = endStr.toString();
 
-        //获取当前年份第一天
-
+        //获取本年第一天
+        String year = new SimpleDateFormat("yyyy").format(date);
+        StringBuffer yearFirstDay = new StringBuffer().append(year).append("-01-01 00:00:00");
+        String newYear = yearFirstDay.toString();
 
         Map<String, String> map = new HashMap<String, String > ();
         map.put("first",day_first);
         map.put("last",day_last);
+        map.put("year",newYear);
         return map;
     }
 
