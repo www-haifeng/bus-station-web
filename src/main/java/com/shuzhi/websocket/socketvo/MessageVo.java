@@ -38,6 +38,6 @@ public class MessageVo {
     /**
      * 报文数据信息
      */
-    private Msg msg;
+    private Object msg;
 
 }

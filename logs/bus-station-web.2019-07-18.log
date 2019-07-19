@@ -1,0 +1,459 @@
+2019-07-18 15:23:58.074 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 5.3.6.Final
+2019-07-18 15:23:58.161 [main] INFO  o.s.c.a.AnnotationConfigApplicationContext - Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@16ce702d: startup date [Thu Jul 18 15:23:58 CST 2019]; root of context hierarchy
+2019-07-18 15:23:58.806 [main] INFO  o.s.b.f.a.AutowiredAnnotationBeanPostProcessor - JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2019-07-18 15:23:58.864 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'configurationPropertiesRebinderAutoConfiguration' of type [org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$5c52640e] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:24:03.633 [main] INFO  o.s.c.c.client.ConfigServicePropertySourceLocator - Fetching config from server at: http://localhost:8888
+2019-07-18 15:24:06.668 [main] WARN  o.s.c.c.client.ConfigServicePropertySourceLocator - Could not locate PropertySource: I/O error on GET request for "http://localhost:8888/bus-station-web/default": Connection refused: connect; nested exception is java.net.ConnectException: Connection refused: connect
+2019-07-18 15:24:06.877 [main] INFO  com.shuzhi.BusStationWebApplication - No active profile set, falling back to default profiles: default
+2019-07-18 15:24:10.241 [main] INFO  o.s.b.c.e.AnnotationConfigEmbeddedWebApplicationContext - Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@7f5eae0f: startup date [Thu Jul 18 15:24:10 CST 2019]; parent: org.springframework.context.annotation.AnnotationConfigApplicationContext@16ce702d
+2019-07-18 15:24:28.178 [main] WARN  org.mybatis.spring.mapper.ClassPathMapperScanner - No MyBatis mapper was found in '[com.shuzhi]' package. Please check your configuration.
+2019-07-18 15:24:28.513 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode!
+2019-07-18 15:24:29.930 [main] INFO  o.springframework.cloud.context.scope.GenericScope - BeanFactory id=c81af4e7-629b-3d27-8616-c5d2ddc06e07
+2019-07-18 15:24:29.966 [main] INFO  o.s.b.f.a.AutowiredAnnotationBeanPostProcessor - JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2019-07-18 15:24:30.038 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.config.service.MsgCodeService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:24:30.040 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.config.service.ThingsService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:24:30.043 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.frt.service.DataClientService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:24:30.045 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.frt.service.DeviceClientService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:24:30.048 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.lcd.service.LcdClientService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:24:30.055 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.led.service.LedClientService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:24:30.056 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.led.service.TStatusService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:24:30.059 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.light.service.LightClientService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:24:30.060 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.light.service.LoopStatusServiceApi' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:24:30.062 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.log.service.LogService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:24:30.249 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.amqp.rabbit.annotation.RabbitBootstrapConfiguration' of type [org.springframework.amqp.rabbit.annotation.RabbitBootstrapConfiguration$$EnhancerBySpringCGLIB$$6a41f3f] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:24:30.604 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$40386111] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:24:30.694 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration' of type [org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$5c52640e] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:24:32.102 [main] INFO  o.s.b.c.e.tomcat.TomcatEmbeddedServletContainer - Tomcat initialized with port(s): 9100 (http)
+2019-07-18 15:24:32.138 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2019-07-18 15:24:32.140 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet Engine: Apache Tomcat/8.5.23
+2019-07-18 15:24:32.563 [localhost-startStop-1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2019-07-18 15:24:32.563 [localhost-startStop-1] INFO  org.springframework.web.context.ContextLoader - Root WebApplicationContext: initialization completed in 22322 ms
+2019-07-18 15:24:35.177 [localhost-startStop-1] WARN  com.shuzhi.config.DynamicallyUrlInterceptor - Could not validate configuration attributes as the SecurityMetadataSource did not return any attributes from getAllConfigAttributes()
+2019-07-18 15:24:35.328 [localhost-startStop-1] INFO  o.s.boot.web.servlet.FilterRegistrationBean - Mapping filter: 'characterEncodingFilter' to: [/*]
+2019-07-18 15:24:35.333 [localhost-startStop-1] INFO  o.s.boot.web.servlet.FilterRegistrationBean - Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2019-07-18 15:24:35.333 [localhost-startStop-1] INFO  o.s.boot.web.servlet.FilterRegistrationBean - Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2019-07-18 15:24:35.333 [localhost-startStop-1] INFO  o.s.boot.web.servlet.FilterRegistrationBean - Mapping filter: 'requestContextFilter' to: [/*]
+2019-07-18 15:24:35.342 [localhost-startStop-1] INFO  o.s.b.w.s.DelegatingFilterProxyRegistrationBean - Mapping filter: 'springSecurityFilterChain' to: [/*]
+2019-07-18 15:24:35.342 [localhost-startStop-1] INFO  o.s.boot.web.servlet.FilterRegistrationBean - Mapping filter: 'dynamicallyUrlInterceptor' to: [/*]
+2019-07-18 15:24:35.343 [localhost-startStop-1] INFO  o.s.boot.web.servlet.ServletRegistrationBean - Mapping servlet: 'dispatcherServlet' to [/]
+2019-07-18 15:24:37.009 [main] INFO  o.s.c.a.AnnotationConfigApplicationContext - Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@72f3f14c: startup date [Thu Jul 18 15:24:37 CST 2019]; parent: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@7f5eae0f
+2019-07-18 15:24:37.086 [main] INFO  o.s.b.f.a.AutowiredAnnotationBeanPostProcessor - JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2019-07-18 15:24:37.529 [main] INFO  o.s.c.a.AnnotationConfigApplicationContext - Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@53e28097: startup date [Thu Jul 18 15:24:37 CST 2019]; parent: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@7f5eae0f
+2019-07-18 15:24:37.558 [main] INFO  o.s.b.f.a.AutowiredAnnotationBeanPostProcessor - JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2019-07-18 15:24:38.352 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerAdapter - Looking for @ControllerAdvice: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@7f5eae0f: startup date [Thu Jul 18 15:24:10 CST 2019]; parent: org.springframework.context.annotation.AnnotationConfigApplicationContext@16ce702d
+2019-07-18 15:24:38.503 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/menu/findAll]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.MenuController.findAll()
+2019-07-18 15:24:38.504 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/menu/removeMenu]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.MenuController.removeMenu(java.lang.Integer[])
+2019-07-18 15:24:38.505 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/menu/updateMenu]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.MenuController.updateMenu(com.shuzhi.entity.Menu)
+2019-07-18 15:24:38.505 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/menu/findById/{menuId}]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.MenuController.findById(java.lang.Integer)
+2019-07-18 15:24:38.505 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/menu/saveMenu]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.MenuController.saveMenu(com.shuzhi.entity.Menu)
+2019-07-18 15:24:38.505 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/registered]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.RegisteredController.registered(com.shuzhi.entity.User)
+2019-07-18 15:24:38.510 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/role/saveRole]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.RoleController.saveRole(com.shuzhi.entity.Role)
+2019-07-18 15:24:38.511 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/role/removerRoleById/{roleId}]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.RoleController.removerRoleById(java.lang.Integer)
+2019-07-18 15:24:38.511 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/role/updateRole]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.RoleController.updateRole(com.shuzhi.entity.Role)
+2019-07-18 15:24:38.511 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/role/findRole]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.RoleController.findRole(com.shuzhi.entity.Role)
+2019-07-18 15:24:38.513 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/index]}" onto public java.lang.String com.shuzhi.controller.test.index(java.util.Map<java.lang.String, java.lang.Object>)
+2019-07-18 15:24:38.514 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/user/test]}" onto public java.lang.String com.shuzhi.controller.UserController.registered()
+2019-07-18 15:24:38.515 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/user/updateUser]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.UserController.updateUser(com.shuzhi.entity.User)
+2019-07-18 15:24:38.515 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/user/removeUser/{userId}]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.UserController.removeUser2(java.lang.Integer)
+2019-07-18 15:24:38.516 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/findLoop],methods=[GET]}" onto public java.util.List<com.shuzhi.light.entities.TLoopStateDto> com.shuzhi.websocket.Statistics.findLoop()
+2019-07-18 15:24:38.518 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/webSocket/command]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.websocket.WebSocketController.command(com.shuzhi.websocket.socketvo.MessageVo)
+2019-07-18 15:24:38.526 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/error]}" onto public org.springframework.http.ResponseEntity<java.util.Map<java.lang.String, java.lang.Object>> org.springframework.boot.autoconfigure.web.BasicErrorController.error(javax.servlet.http.HttpServletRequest)
+2019-07-18 15:24:38.526 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/error],produces=[text/html]}" onto public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+2019-07-18 15:24:38.701 [main] INFO  o.s.web.servlet.handler.SimpleUrlHandlerMapping - Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2019-07-18 15:24:38.701 [main] INFO  o.s.web.servlet.handler.SimpleUrlHandlerMapping - Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2019-07-18 15:24:38.741 [main] INFO  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Detected @ExceptionHandler methods in controllerAdviceException
+2019-07-18 15:24:38.815 [main] INFO  o.s.web.servlet.handler.SimpleUrlHandlerMapping - Mapped URL path [/**/favicon.ico] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2019-07-18 15:24:39.890 [main] INFO  t.mybatis.mapper.autoconfigure.MapperCacheDisabler - Clear tk.mybatis.mapper.util.MsUtil CLASS_CACHE cache.
+2019-07-18 15:24:39.892 [main] INFO  t.mybatis.mapper.autoconfigure.MapperCacheDisabler - Clear tk.mybatis.mapper.genid.GenIdUtil CACHE cache.
+2019-07-18 15:24:39.893 [main] INFO  t.mybatis.mapper.autoconfigure.MapperCacheDisabler - Clear tk.mybatis.mapper.version.VersionUtil CACHE cache.
+2019-07-18 15:24:39.893 [main] INFO  t.mybatis.mapper.autoconfigure.MapperCacheDisabler - Clear EntityHelper entityTableMap cache.
+2019-07-18 15:24:41.506 [main] INFO  o.s.security.web.DefaultSecurityFilterChain - Creating filter chain: OrRequestMatcher [requestMatchers=[Ant [pattern='/css/**'], Ant [pattern='/js/**'], Ant [pattern='/images/**'], Ant [pattern='/webjars/**'], Ant [pattern='/**/favicon.ico'], Ant [pattern='/error']]], []
+2019-07-18 15:24:41.707 [main] INFO  o.s.security.web.DefaultSecurityFilterChain - Creating filter chain: org.springframework.security.web.util.matcher.AnyRequestMatcher@1, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3a45308f, org.springframework.security.web.context.SecurityContextPersistenceFilter@457b8fc3, org.springframework.security.web.header.HeaderWriterFilter@67fd2e17, org.springframework.security.web.authentication.logout.LogoutFilter@4219a4cc, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@52b891de, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@3d3a28b5, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@11ca8f71, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@746f8520, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@42734b71, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@70e54ec3, org.springframework.security.web.session.SessionManagementFilter@5e9f1a4c, org.springframework.security.web.access.ExceptionTranslationFilter@79c849c7, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@67cd84f9, com.shuzhi.config.DynamicallyUrlInterceptor@54a02d0f]
+2019-07-18 15:24:41.754 [main] INFO  o.s.security.web.DefaultSecurityFilterChain - Creating filter chain: OrRequestMatcher [requestMatchers=[Ant [pattern='/**']]], [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2e7e84f8, org.springframework.security.web.context.SecurityContextPersistenceFilter@c86c486, org.springframework.security.web.header.HeaderWriterFilter@32f14274, org.springframework.security.web.authentication.logout.LogoutFilter@3d73cd78, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@45cf0c15, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@67ceaa9, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3ea6faf0, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@22ab1b8a, org.springframework.security.web.session.SessionManagementFilter@7af56b26, org.springframework.security.web.access.ExceptionTranslationFilter@508b4f70, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@1f8d42d1]
+2019-07-18 15:24:43.695 [main] INFO  org.springframework.cloud.commons.util.InetUtils - Cannot determine local hostname
+2019-07-18 15:24:44.031 [main] WARN  com.netflix.config.sources.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
+2019-07-18 15:24:44.031 [main] INFO  com.netflix.config.sources.URLConfigurationSource - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2019-07-18 15:24:44.049 [main] WARN  com.netflix.config.sources.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
+2019-07-18 15:24:44.049 [main] INFO  com.netflix.config.sources.URLConfigurationSource - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2019-07-18 15:24:44.517 [main] INFO  o.s.w.s.server.standard.ServerEndpointExporter - Registering @ServerEndpoint class: class com.shuzhi.websocket.WebSocketServer
+2019-07-18 15:24:44.619 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Registering beans for JMX exposure on startup
+2019-07-18 15:24:44.622 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Bean with name 'dataSource' has been autodetected for JMX exposure
+2019-07-18 15:24:44.634 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Bean with name 'environmentManager' has been autodetected for JMX exposure
+2019-07-18 15:24:44.634 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Bean with name 'rabbitConnectionFactory' has been autodetected for JMX exposure
+2019-07-18 15:24:44.636 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Bean with name 'configurationPropertiesRebinder' has been autodetected for JMX exposure
+2019-07-18 15:24:44.637 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Bean with name 'refreshScope' has been autodetected for JMX exposure
+2019-07-18 15:24:44.643 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Located managed bean 'environmentManager': registering with JMX server as MBean [org.springframework.cloud.context.environment:name=environmentManager,type=EnvironmentManager]
+2019-07-18 15:24:44.667 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Located managed bean 'refreshScope': registering with JMX server as MBean [org.springframework.cloud.context.scope.refresh:name=refreshScope,type=RefreshScope]
+2019-07-18 15:24:44.687 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Located managed bean 'configurationPropertiesRebinder': registering with JMX server as MBean [org.springframework.cloud.context.properties:name=configurationPropertiesRebinder,context=7f5eae0f,type=ConfigurationPropertiesRebinder]
+2019-07-18 15:24:44.698 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Located MBean 'dataSource': registering with JMX server as MBean [com.alibaba.druid.pool:name=dataSource,type=DruidDataSource]
+2019-07-18 15:24:44.702 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Located managed bean 'rabbitConnectionFactory': registering with JMX server as MBean [org.springframework.amqp.rabbit.connection:name=rabbitConnectionFactory,type=CachingConnectionFactory]
+2019-07-18 15:24:45.070 [main] INFO  o.s.context.support.DefaultLifecycleProcessor - Starting beans in phase 2147483647
+2019-07-18 15:25:00.181 [SimpleAsyncTaskExecutor-1] ERROR o.s.a.r.listener.SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+org.springframework.amqp.AmqpIOException: java.net.SocketTimeoutException: connect timed out
+	at org.springframework.amqp.rabbit.support.RabbitExceptionTranslator.convertRabbitAccessException(RabbitExceptionTranslator.java:71)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:368)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createConnection(CachingConnectionFactory.java:573)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.doExecute(RabbitTemplate.java:1430)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:1411)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:1387)
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueProperties(RabbitAdmin.java:336)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer.redeclareElementsIfNecessary(SimpleMessageListenerContainer.java:1171)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1422)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.net.SocketTimeoutException: connect timed out
+	at java.net.DualStackPlainSocketImpl.waitForConnect(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:85)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at com.rabbitmq.client.impl.SocketFrameHandlerFactory.create(SocketFrameHandlerFactory.java:50)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:907)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:859)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:799)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:352)
+	... 8 common frames omitted
+2019-07-18 15:25:15.182 [SimpleAsyncTaskExecutor-3] ERROR o.s.a.r.listener.SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+org.springframework.amqp.AmqpIOException: java.net.SocketTimeoutException: connect timed out
+	at org.springframework.amqp.rabbit.support.RabbitExceptionTranslator.convertRabbitAccessException(RabbitExceptionTranslator.java:71)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:368)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createConnection(CachingConnectionFactory.java:573)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.doExecute(RabbitTemplate.java:1430)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:1411)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:1387)
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueProperties(RabbitAdmin.java:336)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer.redeclareElementsIfNecessary(SimpleMessageListenerContainer.java:1171)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1422)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.net.SocketTimeoutException: connect timed out
+	at java.net.DualStackPlainSocketImpl.waitForConnect(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:85)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at com.rabbitmq.client.impl.SocketFrameHandlerFactory.create(SocketFrameHandlerFactory.java:50)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:907)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:859)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:799)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:352)
+	... 8 common frames omitted
+2019-07-18 15:26:19.763 [main] INFO  o.s.c.a.AnnotationConfigApplicationContext - Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@16ce702d: startup date [Thu Jul 18 15:26:19 CST 2019]; root of context hierarchy
+2019-07-18 15:26:19.769 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 5.3.6.Final
+2019-07-18 15:26:20.276 [main] INFO  o.s.b.f.a.AutowiredAnnotationBeanPostProcessor - JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2019-07-18 15:26:20.337 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'configurationPropertiesRebinderAutoConfiguration' of type [org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$3b5cc1b1] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:26:22.341 [main] INFO  o.s.c.c.client.ConfigServicePropertySourceLocator - Fetching config from server at: http://localhost:8888
+2019-07-18 15:26:23.514 [main] WARN  o.s.c.c.client.ConfigServicePropertySourceLocator - Could not locate PropertySource: I/O error on GET request for "http://localhost:8888/bus-station-web/default": Connection refused: connect; nested exception is java.net.ConnectException: Connection refused: connect
+2019-07-18 15:26:23.516 [main] INFO  com.shuzhi.BusStationWebApplication - No active profile set, falling back to default profiles: default
+2019-07-18 15:26:23.544 [main] INFO  o.s.b.c.e.AnnotationConfigEmbeddedWebApplicationContext - Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@50d951e7: startup date [Thu Jul 18 15:26:23 CST 2019]; parent: org.springframework.context.annotation.AnnotationConfigApplicationContext@16ce702d
+2019-07-18 15:26:25.167 [main] WARN  org.mybatis.spring.mapper.ClassPathMapperScanner - No MyBatis mapper was found in '[com.shuzhi]' package. Please check your configuration.
+2019-07-18 15:26:25.270 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode!
+2019-07-18 15:26:26.258 [main] INFO  o.springframework.cloud.context.scope.GenericScope - BeanFactory id=c81af4e7-629b-3d27-8616-c5d2ddc06e07
+2019-07-18 15:26:26.298 [main] INFO  o.s.b.f.a.AutowiredAnnotationBeanPostProcessor - JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2019-07-18 15:26:26.367 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.config.service.MsgCodeService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:26:26.369 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.config.service.ThingsService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:26:26.371 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.frt.service.DataClientService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:26:26.374 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.frt.service.DeviceClientService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:26:26.376 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.lcd.service.LcdClientService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:26:26.379 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.led.service.LedClientService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:26:26.381 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.led.service.TStatusService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:26:26.386 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.light.service.LightClientService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:26:26.388 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.light.service.LoopStatusServiceApi' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:26:26.391 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.log.service.LogService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:26:26.458 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.amqp.rabbit.annotation.RabbitBootstrapConfiguration' of type [org.springframework.amqp.rabbit.annotation.RabbitBootstrapConfiguration$$EnhancerBySpringCGLIB$$e5ae7ce2] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:26:26.756 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$1f42beb4] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:26:26.846 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration' of type [org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$3b5cc1b1] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:26:27.834 [main] INFO  o.s.b.c.e.tomcat.TomcatEmbeddedServletContainer - Tomcat initialized with port(s): 9100 (http)
+2019-07-18 15:26:27.854 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2019-07-18 15:26:27.855 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet Engine: Apache Tomcat/8.5.23
+2019-07-18 15:26:28.205 [localhost-startStop-1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2019-07-18 15:26:28.206 [localhost-startStop-1] INFO  org.springframework.web.context.ContextLoader - Root WebApplicationContext: initialization completed in 4661 ms
+2019-07-18 15:26:30.273 [localhost-startStop-1] WARN  com.shuzhi.config.DynamicallyUrlInterceptor - Could not validate configuration attributes as the SecurityMetadataSource did not return any attributes from getAllConfigAttributes()
+2019-07-18 15:26:30.417 [localhost-startStop-1] INFO  o.s.boot.web.servlet.FilterRegistrationBean - Mapping filter: 'characterEncodingFilter' to: [/*]
+2019-07-18 15:26:30.418 [localhost-startStop-1] INFO  o.s.boot.web.servlet.FilterRegistrationBean - Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2019-07-18 15:26:30.419 [localhost-startStop-1] INFO  o.s.boot.web.servlet.FilterRegistrationBean - Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2019-07-18 15:26:30.419 [localhost-startStop-1] INFO  o.s.boot.web.servlet.FilterRegistrationBean - Mapping filter: 'requestContextFilter' to: [/*]
+2019-07-18 15:26:30.420 [localhost-startStop-1] INFO  o.s.b.w.s.DelegatingFilterProxyRegistrationBean - Mapping filter: 'springSecurityFilterChain' to: [/*]
+2019-07-18 15:26:30.421 [localhost-startStop-1] INFO  o.s.boot.web.servlet.FilterRegistrationBean - Mapping filter: 'dynamicallyUrlInterceptor' to: [/*]
+2019-07-18 15:26:30.421 [localhost-startStop-1] INFO  o.s.boot.web.servlet.ServletRegistrationBean - Mapping servlet: 'dispatcherServlet' to [/]
+2019-07-18 15:26:31.710 [main] INFO  o.s.c.a.AnnotationConfigApplicationContext - Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@4e2109fe: startup date [Thu Jul 18 15:26:31 CST 2019]; parent: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@50d951e7
+2019-07-18 15:26:31.744 [main] INFO  o.s.b.f.a.AutowiredAnnotationBeanPostProcessor - JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2019-07-18 15:26:32.077 [main] INFO  o.s.c.a.AnnotationConfigApplicationContext - Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@7b3085a3: startup date [Thu Jul 18 15:26:32 CST 2019]; parent: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@50d951e7
+2019-07-18 15:26:32.102 [main] INFO  o.s.b.f.a.AutowiredAnnotationBeanPostProcessor - JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2019-07-18 15:26:32.784 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerAdapter - Looking for @ControllerAdvice: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@50d951e7: startup date [Thu Jul 18 15:26:23 CST 2019]; parent: org.springframework.context.annotation.AnnotationConfigApplicationContext@16ce702d
+2019-07-18 15:26:32.927 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/menu/findAll]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.MenuController.findAll()
+2019-07-18 15:26:32.929 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/menu/updateMenu]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.MenuController.updateMenu(com.shuzhi.entity.Menu)
+2019-07-18 15:26:32.929 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/menu/saveMenu]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.MenuController.saveMenu(com.shuzhi.entity.Menu)
+2019-07-18 15:26:32.930 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/menu/findById/{menuId}]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.MenuController.findById(java.lang.Integer)
+2019-07-18 15:26:32.930 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/menu/removeMenu]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.MenuController.removeMenu(java.lang.Integer[])
+2019-07-18 15:26:32.930 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/registered]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.RegisteredController.registered(com.shuzhi.entity.User)
+2019-07-18 15:26:32.934 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/role/findRole]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.RoleController.findRole(com.shuzhi.entity.Role)
+2019-07-18 15:26:32.934 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/role/saveRole]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.RoleController.saveRole(com.shuzhi.entity.Role)
+2019-07-18 15:26:32.935 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/role/updateRole]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.RoleController.updateRole(com.shuzhi.entity.Role)
+2019-07-18 15:26:32.935 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/role/removerRoleById/{roleId}]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.RoleController.removerRoleById(java.lang.Integer)
+2019-07-18 15:26:32.936 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/index]}" onto public java.lang.String com.shuzhi.controller.test.index(java.util.Map<java.lang.String, java.lang.Object>)
+2019-07-18 15:26:32.937 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/user/removeUser/{userId}]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.UserController.removeUser2(java.lang.Integer)
+2019-07-18 15:26:32.937 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/user/test]}" onto public java.lang.String com.shuzhi.controller.UserController.registered()
+2019-07-18 15:26:32.937 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/user/updateUser]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.UserController.updateUser(com.shuzhi.entity.User)
+2019-07-18 15:26:32.938 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/findLoop],methods=[GET]}" onto public java.util.List<com.shuzhi.light.entities.TLoopStateDto> com.shuzhi.websocket.Statistics.findLoop()
+2019-07-18 15:26:32.940 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/webSocket/command]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.websocket.WebSocketController.command(com.shuzhi.websocket.socketvo.MessageVo)
+2019-07-18 15:26:32.950 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/error]}" onto public org.springframework.http.ResponseEntity<java.util.Map<java.lang.String, java.lang.Object>> org.springframework.boot.autoconfigure.web.BasicErrorController.error(javax.servlet.http.HttpServletRequest)
+2019-07-18 15:26:32.951 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/error],produces=[text/html]}" onto public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+2019-07-18 15:26:33.120 [main] INFO  o.s.web.servlet.handler.SimpleUrlHandlerMapping - Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2019-07-18 15:26:33.120 [main] INFO  o.s.web.servlet.handler.SimpleUrlHandlerMapping - Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2019-07-18 15:26:33.159 [main] INFO  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Detected @ExceptionHandler methods in controllerAdviceException
+2019-07-18 15:26:33.237 [main] INFO  o.s.web.servlet.handler.SimpleUrlHandlerMapping - Mapped URL path [/**/favicon.ico] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2019-07-18 15:26:34.017 [main] INFO  t.mybatis.mapper.autoconfigure.MapperCacheDisabler - Clear tk.mybatis.mapper.util.MsUtil CLASS_CACHE cache.
+2019-07-18 15:26:34.018 [main] INFO  t.mybatis.mapper.autoconfigure.MapperCacheDisabler - Clear tk.mybatis.mapper.genid.GenIdUtil CACHE cache.
+2019-07-18 15:26:34.019 [main] INFO  t.mybatis.mapper.autoconfigure.MapperCacheDisabler - Clear tk.mybatis.mapper.version.VersionUtil CACHE cache.
+2019-07-18 15:26:34.019 [main] INFO  t.mybatis.mapper.autoconfigure.MapperCacheDisabler - Clear EntityHelper entityTableMap cache.
+2019-07-18 15:26:35.343 [main] INFO  o.s.security.web.DefaultSecurityFilterChain - Creating filter chain: OrRequestMatcher [requestMatchers=[Ant [pattern='/css/**'], Ant [pattern='/js/**'], Ant [pattern='/images/**'], Ant [pattern='/webjars/**'], Ant [pattern='/**/favicon.ico'], Ant [pattern='/error']]], []
+2019-07-18 15:26:35.614 [main] INFO  o.s.security.web.DefaultSecurityFilterChain - Creating filter chain: org.springframework.security.web.util.matcher.AnyRequestMatcher@1, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@52bc6fcf, org.springframework.security.web.context.SecurityContextPersistenceFilter@4abdd5e, org.springframework.security.web.header.HeaderWriterFilter@39403943, org.springframework.security.web.authentication.logout.LogoutFilter@54530644, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@28654aff, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@2b06681c, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7b9fea11, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@52ccf197, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@7978550b, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1942a36e, org.springframework.security.web.session.SessionManagementFilter@49338f3, org.springframework.security.web.access.ExceptionTranslationFilter@4aea57dc, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@126d8659, com.shuzhi.config.DynamicallyUrlInterceptor@51a0167]
+2019-07-18 15:26:35.647 [main] INFO  o.s.security.web.DefaultSecurityFilterChain - Creating filter chain: OrRequestMatcher [requestMatchers=[Ant [pattern='/**']]], [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7f02b2d4, org.springframework.security.web.context.SecurityContextPersistenceFilter@73e25780, org.springframework.security.web.header.HeaderWriterFilter@75784062, org.springframework.security.web.authentication.logout.LogoutFilter@4da9da6c, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@543ba2e1, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1f4cb17b, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@280099a0, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@780dbed7, org.springframework.security.web.session.SessionManagementFilter@5730b513, org.springframework.security.web.access.ExceptionTranslationFilter@56d742ad, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@55a66bbf]
+2019-07-18 15:26:37.394 [main] INFO  org.springframework.cloud.commons.util.InetUtils - Cannot determine local hostname
+2019-07-18 15:26:37.705 [main] WARN  com.netflix.config.sources.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
+2019-07-18 15:26:37.706 [main] INFO  com.netflix.config.sources.URLConfigurationSource - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2019-07-18 15:26:37.718 [main] WARN  com.netflix.config.sources.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
+2019-07-18 15:26:37.718 [main] INFO  com.netflix.config.sources.URLConfigurationSource - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2019-07-18 15:26:38.152 [main] INFO  o.s.w.s.server.standard.ServerEndpointExporter - Registering @ServerEndpoint class: class com.shuzhi.websocket.WebSocketServer
+2019-07-18 15:26:38.182 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Registering beans for JMX exposure on startup
+2019-07-18 15:26:38.184 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Bean with name 'dataSource' has been autodetected for JMX exposure
+2019-07-18 15:26:38.199 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Bean with name 'environmentManager' has been autodetected for JMX exposure
+2019-07-18 15:26:38.200 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Bean with name 'rabbitConnectionFactory' has been autodetected for JMX exposure
+2019-07-18 15:26:38.202 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Bean with name 'configurationPropertiesRebinder' has been autodetected for JMX exposure
+2019-07-18 15:26:38.203 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Bean with name 'refreshScope' has been autodetected for JMX exposure
+2019-07-18 15:26:38.207 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Located managed bean 'environmentManager': registering with JMX server as MBean [org.springframework.cloud.context.environment:name=environmentManager,type=EnvironmentManager]
+2019-07-18 15:26:38.284 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Located managed bean 'refreshScope': registering with JMX server as MBean [org.springframework.cloud.context.scope.refresh:name=refreshScope,type=RefreshScope]
+2019-07-18 15:26:38.306 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Located managed bean 'configurationPropertiesRebinder': registering with JMX server as MBean [org.springframework.cloud.context.properties:name=configurationPropertiesRebinder,context=50d951e7,type=ConfigurationPropertiesRebinder]
+2019-07-18 15:26:38.317 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Located MBean 'dataSource': registering with JMX server as MBean [com.alibaba.druid.pool:name=dataSource,type=DruidDataSource]
+2019-07-18 15:26:38.324 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Located managed bean 'rabbitConnectionFactory': registering with JMX server as MBean [org.springframework.amqp.rabbit.connection:name=rabbitConnectionFactory,type=CachingConnectionFactory]
+2019-07-18 15:26:38.690 [main] INFO  o.s.context.support.DefaultLifecycleProcessor - Starting beans in phase 2147483647
+2019-07-18 15:26:53.722 [SimpleAsyncTaskExecutor-1] ERROR o.s.a.r.listener.SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+org.springframework.amqp.AmqpIOException: java.net.SocketTimeoutException: connect timed out
+	at org.springframework.amqp.rabbit.support.RabbitExceptionTranslator.convertRabbitAccessException(RabbitExceptionTranslator.java:71)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:368)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createConnection(CachingConnectionFactory.java:573)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.doExecute(RabbitTemplate.java:1430)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:1411)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:1387)
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueProperties(RabbitAdmin.java:336)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer.redeclareElementsIfNecessary(SimpleMessageListenerContainer.java:1171)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1422)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.net.SocketTimeoutException: connect timed out
+	at java.net.DualStackPlainSocketImpl.waitForConnect(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:85)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at com.rabbitmq.client.impl.SocketFrameHandlerFactory.create(SocketFrameHandlerFactory.java:50)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:907)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:859)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:799)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:352)
+	... 8 common frames omitted
+2019-07-18 15:27:08.725 [SimpleAsyncTaskExecutor-3] ERROR o.s.a.r.listener.SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+org.springframework.amqp.AmqpIOException: java.net.SocketTimeoutException: connect timed out
+	at org.springframework.amqp.rabbit.support.RabbitExceptionTranslator.convertRabbitAccessException(RabbitExceptionTranslator.java:71)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:368)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createConnection(CachingConnectionFactory.java:573)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.doExecute(RabbitTemplate.java:1430)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:1411)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:1387)
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueProperties(RabbitAdmin.java:336)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer.redeclareElementsIfNecessary(SimpleMessageListenerContainer.java:1171)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1422)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.net.SocketTimeoutException: connect timed out
+	at java.net.DualStackPlainSocketImpl.waitForConnect(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:85)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at com.rabbitmq.client.impl.SocketFrameHandlerFactory.create(SocketFrameHandlerFactory.java:50)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:907)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:859)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:799)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:352)
+	... 8 common frames omitted
+2019-07-18 15:27:38.727 [SimpleAsyncTaskExecutor-4] ERROR o.s.a.r.listener.SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+org.springframework.amqp.AmqpIOException: java.net.SocketTimeoutException: connect timed out
+	at org.springframework.amqp.rabbit.support.RabbitExceptionTranslator.convertRabbitAccessException(RabbitExceptionTranslator.java:71)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:368)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createConnection(CachingConnectionFactory.java:573)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.doExecute(RabbitTemplate.java:1430)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:1411)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:1387)
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueProperties(RabbitAdmin.java:336)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer.redeclareElementsIfNecessary(SimpleMessageListenerContainer.java:1171)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1422)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.net.SocketTimeoutException: connect timed out
+	at java.net.DualStackPlainSocketImpl.waitForConnect(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:85)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at com.rabbitmq.client.impl.SocketFrameHandlerFactory.create(SocketFrameHandlerFactory.java:50)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:907)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:859)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:799)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:352)
+	... 8 common frames omitted
+2019-07-18 15:28:45.999 [main] INFO  o.s.c.a.AnnotationConfigApplicationContext - Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@16ce702d: startup date [Thu Jul 18 15:28:45 CST 2019]; root of context hierarchy
+2019-07-18 15:28:46.032 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 5.3.6.Final
+2019-07-18 15:28:46.558 [main] INFO  o.s.b.f.a.AutowiredAnnotationBeanPostProcessor - JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2019-07-18 15:28:46.623 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'configurationPropertiesRebinderAutoConfiguration' of type [org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$d933befc] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:28:48.588 [main] INFO  o.s.c.c.client.ConfigServicePropertySourceLocator - Fetching config from server at: http://localhost:8888
+2019-07-18 15:28:49.774 [main] WARN  o.s.c.c.client.ConfigServicePropertySourceLocator - Could not locate PropertySource: I/O error on GET request for "http://localhost:8888/bus-station-web/default": Connection refused: connect; nested exception is java.net.ConnectException: Connection refused: connect
+2019-07-18 15:28:49.777 [main] INFO  com.shuzhi.BusStationWebApplication - No active profile set, falling back to default profiles: default
+2019-07-18 15:28:49.801 [main] INFO  o.s.b.c.e.AnnotationConfigEmbeddedWebApplicationContext - Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@2b59501e: startup date [Thu Jul 18 15:28:49 CST 2019]; parent: org.springframework.context.annotation.AnnotationConfigApplicationContext@16ce702d
+2019-07-18 15:28:51.419 [main] WARN  org.mybatis.spring.mapper.ClassPathMapperScanner - No MyBatis mapper was found in '[com.shuzhi]' package. Please check your configuration.
+2019-07-18 15:28:51.518 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode!
+2019-07-18 15:28:52.557 [main] INFO  o.springframework.cloud.context.scope.GenericScope - BeanFactory id=c81af4e7-629b-3d27-8616-c5d2ddc06e07
+2019-07-18 15:28:52.598 [main] INFO  o.s.b.f.a.AutowiredAnnotationBeanPostProcessor - JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2019-07-18 15:28:52.674 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.config.service.MsgCodeService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:28:52.676 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.config.service.ThingsService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:28:52.678 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.frt.service.DataClientService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:28:52.682 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.frt.service.DeviceClientService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:28:52.684 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.lcd.service.LcdClientService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:28:52.686 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.led.service.LedClientService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:28:52.688 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.led.service.TStatusService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:28:52.690 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.light.service.LightClientService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:28:52.696 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.light.service.LoopStatusServiceApi' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:28:52.699 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.shuzhi.log.service.LogService' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:28:52.890 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.amqp.rabbit.annotation.RabbitBootstrapConfiguration' of type [org.springframework.amqp.rabbit.annotation.RabbitBootstrapConfiguration$$EnhancerBySpringCGLIB$$83857a2d] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:28:53.086 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$bd19bbff] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:28:53.176 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration' of type [org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$d933befc] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-18 15:28:54.116 [main] INFO  o.s.b.c.e.tomcat.TomcatEmbeddedServletContainer - Tomcat initialized with port(s): 9100 (http)
+2019-07-18 15:28:54.136 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2019-07-18 15:28:54.138 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet Engine: Apache Tomcat/8.5.23
+2019-07-18 15:28:54.475 [localhost-startStop-1] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2019-07-18 15:28:54.476 [localhost-startStop-1] INFO  org.springframework.web.context.ContextLoader - Root WebApplicationContext: initialization completed in 4674 ms
+2019-07-18 15:28:56.435 [localhost-startStop-1] WARN  com.shuzhi.config.DynamicallyUrlInterceptor - Could not validate configuration attributes as the SecurityMetadataSource did not return any attributes from getAllConfigAttributes()
+2019-07-18 15:28:56.594 [localhost-startStop-1] INFO  o.s.boot.web.servlet.FilterRegistrationBean - Mapping filter: 'characterEncodingFilter' to: [/*]
+2019-07-18 15:28:56.595 [localhost-startStop-1] INFO  o.s.boot.web.servlet.FilterRegistrationBean - Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2019-07-18 15:28:56.595 [localhost-startStop-1] INFO  o.s.boot.web.servlet.FilterRegistrationBean - Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2019-07-18 15:28:56.595 [localhost-startStop-1] INFO  o.s.boot.web.servlet.FilterRegistrationBean - Mapping filter: 'requestContextFilter' to: [/*]
+2019-07-18 15:28:56.596 [localhost-startStop-1] INFO  o.s.b.w.s.DelegatingFilterProxyRegistrationBean - Mapping filter: 'springSecurityFilterChain' to: [/*]
+2019-07-18 15:28:56.597 [localhost-startStop-1] INFO  o.s.boot.web.servlet.FilterRegistrationBean - Mapping filter: 'dynamicallyUrlInterceptor' to: [/*]
+2019-07-18 15:28:56.597 [localhost-startStop-1] INFO  o.s.boot.web.servlet.ServletRegistrationBean - Mapping servlet: 'dispatcherServlet' to [/]
+2019-07-18 15:28:57.913 [main] INFO  o.s.c.a.AnnotationConfigApplicationContext - Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@6ec3d8e4: startup date [Thu Jul 18 15:28:57 CST 2019]; parent: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@2b59501e
+2019-07-18 15:28:57.948 [main] INFO  o.s.b.f.a.AutowiredAnnotationBeanPostProcessor - JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2019-07-18 15:28:58.343 [main] INFO  o.s.c.a.AnnotationConfigApplicationContext - Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@186481d4: startup date [Thu Jul 18 15:28:58 CST 2019]; parent: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@2b59501e
+2019-07-18 15:28:58.373 [main] INFO  o.s.b.f.a.AutowiredAnnotationBeanPostProcessor - JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2019-07-18 15:28:59.047 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerAdapter - Looking for @ControllerAdvice: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@2b59501e: startup date [Thu Jul 18 15:28:49 CST 2019]; parent: org.springframework.context.annotation.AnnotationConfigApplicationContext@16ce702d
+2019-07-18 15:28:59.195 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/menu/findAll]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.MenuController.findAll()
+2019-07-18 15:28:59.197 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/menu/findById/{menuId}]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.MenuController.findById(java.lang.Integer)
+2019-07-18 15:28:59.198 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/menu/updateMenu]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.MenuController.updateMenu(com.shuzhi.entity.Menu)
+2019-07-18 15:28:59.198 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/menu/removeMenu]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.MenuController.removeMenu(java.lang.Integer[])
+2019-07-18 15:28:59.198 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/menu/saveMenu]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.MenuController.saveMenu(com.shuzhi.entity.Menu)
+2019-07-18 15:28:59.199 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/registered]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.RegisteredController.registered(com.shuzhi.entity.User)
+2019-07-18 15:28:59.202 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/role/saveRole]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.RoleController.saveRole(com.shuzhi.entity.Role)
+2019-07-18 15:28:59.203 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/role/updateRole]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.RoleController.updateRole(com.shuzhi.entity.Role)
+2019-07-18 15:28:59.203 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/role/findRole]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.RoleController.findRole(com.shuzhi.entity.Role)
+2019-07-18 15:28:59.203 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/role/removerRoleById/{roleId}]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.RoleController.removerRoleById(java.lang.Integer)
+2019-07-18 15:28:59.204 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/index]}" onto public java.lang.String com.shuzhi.controller.test.index(java.util.Map<java.lang.String, java.lang.Object>)
+2019-07-18 15:28:59.206 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/user/test]}" onto public java.lang.String com.shuzhi.controller.UserController.registered()
+2019-07-18 15:28:59.206 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/user/updateUser]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.UserController.updateUser(com.shuzhi.entity.User)
+2019-07-18 15:28:59.206 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/user/removeUser/{userId}]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.controller.UserController.removeUser2(java.lang.Integer)
+2019-07-18 15:28:59.208 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/findLoop],methods=[GET]}" onto public java.util.List<com.shuzhi.light.entities.TLoopStateDto> com.shuzhi.websocket.Statistics.findLoop()
+2019-07-18 15:28:59.212 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/webSocket/command]}" onto public com.shuzhi.common.utils.Wrapper com.shuzhi.websocket.WebSocketController.command(com.shuzhi.websocket.socketvo.MessageVo)
+2019-07-18 15:28:59.223 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/error]}" onto public org.springframework.http.ResponseEntity<java.util.Map<java.lang.String, java.lang.Object>> org.springframework.boot.autoconfigure.web.BasicErrorController.error(javax.servlet.http.HttpServletRequest)
+2019-07-18 15:28:59.224 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped "{[/error],produces=[text/html]}" onto public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+2019-07-18 15:28:59.452 [main] INFO  o.s.web.servlet.handler.SimpleUrlHandlerMapping - Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2019-07-18 15:28:59.453 [main] INFO  o.s.web.servlet.handler.SimpleUrlHandlerMapping - Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2019-07-18 15:28:59.496 [main] INFO  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Detected @ExceptionHandler methods in controllerAdviceException
+2019-07-18 15:28:59.555 [main] INFO  o.s.web.servlet.handler.SimpleUrlHandlerMapping - Mapped URL path [/**/favicon.ico] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2019-07-18 15:29:00.387 [main] INFO  t.mybatis.mapper.autoconfigure.MapperCacheDisabler - Clear tk.mybatis.mapper.util.MsUtil CLASS_CACHE cache.
+2019-07-18 15:29:00.388 [main] INFO  t.mybatis.mapper.autoconfigure.MapperCacheDisabler - Clear tk.mybatis.mapper.genid.GenIdUtil CACHE cache.
+2019-07-18 15:29:00.390 [main] INFO  t.mybatis.mapper.autoconfigure.MapperCacheDisabler - Clear tk.mybatis.mapper.version.VersionUtil CACHE cache.
+2019-07-18 15:29:00.390 [main] INFO  t.mybatis.mapper.autoconfigure.MapperCacheDisabler - Clear EntityHelper entityTableMap cache.
+2019-07-18 15:29:01.726 [main] INFO  o.s.security.web.DefaultSecurityFilterChain - Creating filter chain: OrRequestMatcher [requestMatchers=[Ant [pattern='/css/**'], Ant [pattern='/js/**'], Ant [pattern='/images/**'], Ant [pattern='/webjars/**'], Ant [pattern='/**/favicon.ico'], Ant [pattern='/error']]], []
+2019-07-18 15:29:02.137 [main] INFO  o.s.security.web.DefaultSecurityFilterChain - Creating filter chain: org.springframework.security.web.util.matcher.AnyRequestMatcher@1, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@42536da6, org.springframework.security.web.context.SecurityContextPersistenceFilter@23ea3853, org.springframework.security.web.header.HeaderWriterFilter@3f71ae7f, org.springframework.security.web.authentication.logout.LogoutFilter@3921e96f, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@1c23e369, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@6eadd342, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@e4348c0, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2e64ae1a, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@58b5d5fc, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7591cbd1, org.springframework.security.web.session.SessionManagementFilter@d1d85d0, org.springframework.security.web.access.ExceptionTranslationFilter@7e451790, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@c7269ad, com.shuzhi.config.DynamicallyUrlInterceptor@5a80a2f8]
+2019-07-18 15:29:02.180 [main] INFO  o.s.security.web.DefaultSecurityFilterChain - Creating filter chain: OrRequestMatcher [requestMatchers=[Ant [pattern='/**']]], [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@71f4aeb6, org.springframework.security.web.context.SecurityContextPersistenceFilter@102aa5fc, org.springframework.security.web.header.HeaderWriterFilter@1ad9d5be, org.springframework.security.web.authentication.logout.LogoutFilter@58a7ca42, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@1f6e6f50, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@36885319, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@62a81453, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@56976b8b, org.springframework.security.web.session.SessionManagementFilter@46fdfaeb, org.springframework.security.web.access.ExceptionTranslationFilter@5847010, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@b548f51]
+2019-07-18 15:29:03.861 [main] INFO  org.springframework.cloud.commons.util.InetUtils - Cannot determine local hostname
+2019-07-18 15:29:04.060 [main] WARN  com.netflix.config.sources.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
+2019-07-18 15:29:04.060 [main] INFO  com.netflix.config.sources.URLConfigurationSource - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2019-07-18 15:29:04.077 [main] WARN  com.netflix.config.sources.URLConfigurationSource - No URLs will be polled as dynamic configuration sources.
+2019-07-18 15:29:04.078 [main] INFO  com.netflix.config.sources.URLConfigurationSource - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2019-07-18 15:29:04.497 [main] INFO  o.s.w.s.server.standard.ServerEndpointExporter - Registering @ServerEndpoint class: class com.shuzhi.websocket.WebSocketServer
+2019-07-18 15:29:04.517 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Registering beans for JMX exposure on startup
+2019-07-18 15:29:04.522 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Bean with name 'dataSource' has been autodetected for JMX exposure
+2019-07-18 15:29:04.533 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Bean with name 'environmentManager' has been autodetected for JMX exposure
+2019-07-18 15:29:04.533 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Bean with name 'rabbitConnectionFactory' has been autodetected for JMX exposure
+2019-07-18 15:29:04.535 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Bean with name 'configurationPropertiesRebinder' has been autodetected for JMX exposure
+2019-07-18 15:29:04.537 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Bean with name 'refreshScope' has been autodetected for JMX exposure
+2019-07-18 15:29:04.541 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Located managed bean 'environmentManager': registering with JMX server as MBean [org.springframework.cloud.context.environment:name=environmentManager,type=EnvironmentManager]
+2019-07-18 15:29:04.562 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Located managed bean 'refreshScope': registering with JMX server as MBean [org.springframework.cloud.context.scope.refresh:name=refreshScope,type=RefreshScope]
+2019-07-18 15:29:04.582 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Located managed bean 'configurationPropertiesRebinder': registering with JMX server as MBean [org.springframework.cloud.context.properties:name=configurationPropertiesRebinder,context=2b59501e,type=ConfigurationPropertiesRebinder]
+2019-07-18 15:29:04.597 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Located MBean 'dataSource': registering with JMX server as MBean [com.alibaba.druid.pool:name=dataSource,type=DruidDataSource]
+2019-07-18 15:29:04.604 [main] INFO  o.s.jmx.export.annotation.AnnotationMBeanExporter - Located managed bean 'rabbitConnectionFactory': registering with JMX server as MBean [org.springframework.amqp.rabbit.connection:name=rabbitConnectionFactory,type=CachingConnectionFactory]
+2019-07-18 15:29:04.945 [main] INFO  o.s.context.support.DefaultLifecycleProcessor - Starting beans in phase 2147483647
+2019-07-18 15:29:19.979 [SimpleAsyncTaskExecutor-1] ERROR o.s.a.r.listener.SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+org.springframework.amqp.AmqpIOException: java.net.SocketTimeoutException: connect timed out
+	at org.springframework.amqp.rabbit.support.RabbitExceptionTranslator.convertRabbitAccessException(RabbitExceptionTranslator.java:71)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:368)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createConnection(CachingConnectionFactory.java:573)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.doExecute(RabbitTemplate.java:1430)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:1411)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:1387)
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueProperties(RabbitAdmin.java:336)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer.redeclareElementsIfNecessary(SimpleMessageListenerContainer.java:1171)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1422)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.net.SocketTimeoutException: connect timed out
+	at java.net.DualStackPlainSocketImpl.waitForConnect(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:85)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at com.rabbitmq.client.impl.SocketFrameHandlerFactory.create(SocketFrameHandlerFactory.java:50)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:907)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:859)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:799)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:352)
+	... 8 common frames omitted
+2019-07-18 15:29:34.981 [SimpleAsyncTaskExecutor-3] ERROR o.s.a.r.listener.SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+org.springframework.amqp.AmqpIOException: java.net.SocketTimeoutException: connect timed out
+	at org.springframework.amqp.rabbit.support.RabbitExceptionTranslator.convertRabbitAccessException(RabbitExceptionTranslator.java:71)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:368)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createConnection(CachingConnectionFactory.java:573)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.doExecute(RabbitTemplate.java:1430)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:1411)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:1387)
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueProperties(RabbitAdmin.java:336)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer.redeclareElementsIfNecessary(SimpleMessageListenerContainer.java:1171)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1422)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.net.SocketTimeoutException: connect timed out
+	at java.net.DualStackPlainSocketImpl.waitForConnect(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:85)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at com.rabbitmq.client.impl.SocketFrameHandlerFactory.create(SocketFrameHandlerFactory.java:50)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:907)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:859)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:799)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:352)
+	... 8 common frames omitted
