@@ -26,19 +26,6 @@ public class Statistics {
     @Autowired
     private LoopStatusServiceApi loopStatusServiceApi;
 
-    //private LightClientService lightClientService;
-
-    /**
-     * 查询回路状态信息
-     *
-     * @return
-     */
-    @RequestMapping(value = "findLoop", method = RequestMethod.GET)
-    public List<TLoopStateDto> findLoop() {
-        List<TLoopStateDto> loopStatus = loopStatusServiceApi.findLoopStatus();
-        return loopStatus;
-    }
-
     /**
      * 查询回路能耗
      *
@@ -73,7 +60,6 @@ public class Statistics {
             //本月能耗
             activepowerNowMonth = activepowerNow - activepowerLastDay;
         }
-
         //获取上月能耗
         //取出上个月第一天
         String day_first = map.get("first");
@@ -92,7 +78,6 @@ public class Statistics {
             //上月能耗
             activepowerLastMonth = activepowerLastDay1 - activepowerFirstDay;
         }
-
         //获取本年能耗
         //取出本年第一天
         String newYear = map.get("year");
@@ -117,7 +102,6 @@ public class Statistics {
 
     /**
      * 根据当前时间得到上个月的第一天和最后一天
-     *
      * @param date
      * @return
      */
