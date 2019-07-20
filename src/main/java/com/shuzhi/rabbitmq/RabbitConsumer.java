@@ -15,6 +15,9 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.Condition;
 
@@ -45,7 +48,7 @@ public class RabbitConsumer {
     ))
     @RabbitHandler
     public void consumer(@Payload String message, @Headers Map<String, Object> headers,
-                         Channel channel) throws IOException {
+                         Channel channel) throws IOException, ParseException {
 
         log.info("--------------收到消息，开始消费------------");
         log.info("消息是 : {}", message);
@@ -81,7 +84,7 @@ public class RabbitConsumer {
      *
      * @param key modulecode
      */
-    private void isEquip(String key) {
+    private void isEquip(String key) throws ParseException {
 
         MqMessage mqMessageSelect = new MqMessage();
         mqMessageSelect.setModulecode(Integer.valueOf(key));

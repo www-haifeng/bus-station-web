@@ -83,20 +83,20 @@ public class Lights {
         //TODO 现在还不知道设备对应的编号
         switch (deviceLoop.getTypecode()){
             //灯箱
-            case "100001" :
-                this.lamphouseid = tLoopStateDto.getId();
+            case "1" :
+                this.lamphouseid = deviceLoop.getDeviceDid();
                 this.lamphouseonoff = tLoopStateDto.getState();
                 this.lamphouseline = tLoopStateDto.getState();
                 break;
             //顶棚
-            case "100002" :
-                this.platfondid = tLoopStateDto.getId();
+            case "2" :
+                this.platfondid = deviceLoop.getDeviceDid();
                 this.platfondline = tLoopStateDto.getState();
                 this.platfondonoff = tLoopStateDto.getState();
                 break;
             //log
-            case "100003" :
-                this.logoid = tLoopStateDto.getId();
+            case "3" :
+                this.logoid = deviceLoop.getDeviceDid();
                 this.logoline = tLoopStateDto.getState();
                 this.logoonoff = tLoopStateDto.getState();
             default:

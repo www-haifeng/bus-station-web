@@ -1,15 +1,17 @@
 package com.shuzhi.websocket;
 
 import com.alibaba.fastjson.JSON;
+import com.shuzhi.entity.DeviceLoop;
 import com.shuzhi.entity.MqMessage;
 import com.shuzhi.lcd.entities.IotLcdStatus;
 import com.shuzhi.lcd.service.IotLcdsStatusService;
-import com.shuzhi.lcd.service.IotLcdsStatusService;
 import com.shuzhi.led.entities.TStatusDto;
 import com.shuzhi.led.service.TStatusService;
+import com.shuzhi.light.entities.StatisticsVo;
 import com.shuzhi.light.entities.TLoopStateDto;
 import com.shuzhi.light.service.LoopStatusServiceApi;
 import com.shuzhi.rabbitmq.Message;
+import com.shuzhi.service.DeviceLoopService;
 import com.shuzhi.service.MqMessageService;
 import com.shuzhi.websocket.socketvo.*;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Component;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -44,6 +47,8 @@ public class WebSocketServer {
     private LoopStatusServiceApi loopStatusServiceApi;
 
     private IotLcdsStatusService iotLcdStatusService;
+
+    private DeviceLoopService deviceLoopService;
 
     private static Map<String, Session> SESSION_MAP = new ConcurrentHashMap<>();
 
@@ -112,7 +117,7 @@ public class WebSocketServer {
      *
      * @param message 消息
      */
-    private void restHandle(Message message) {
+    private void restHandle(Message message) throws ParseException {
 
         Integer modulecode = message.getModulecode();
         //判断消息编码
@@ -135,7 +140,7 @@ public class WebSocketServer {
      *
      * @param message 前端协议
      */
-    private void assemble(Message message) {
+    private void assemble(Message message) throws ParseException {
         //判断是什么设备
         Optional.ofNullable(mqMessageService).orElseGet(() -> mqMessageService = ApplicationContextUtils.get(MqMessageService.class));
         MqMessage mqMessageSelect = new MqMessage();
@@ -160,7 +165,7 @@ public class WebSocketServer {
      * 照明首次连接 同时也定时推送
      */
     @Scheduled(cron = "${send.light-cron}")
-    public void light() {
+    public void light() throws ParseException {
         Integer modulecode = getModuleCode("light");
         if (SESSION_MAP.get(String.valueOf(modulecode)) != null) {
             MessageVo messageVo = setMessageVo(modulecode);
@@ -168,12 +173,17 @@ public class WebSocketServer {
             Optional.ofNullable(loopStatusServiceApi).orElseGet(() -> loopStatusServiceApi = ApplicationContextUtils.get(LoopStatusServiceApi.class));
             List<TLoopStateDto> loopStatus = loopStatusServiceApi.findLoopStatus();
             List<LightMsg> lightMsgList = new ArrayList<>();
-            if(loopStatus != null && loopStatus.size() != 0){
+            if (loopStatus != null && loopStatus.size() != 0) {
                 loopStatus.forEach(tLoopStateDto -> {
+                    //判断这个回路下是什么设备
                     LightMsg lightMsg = new LightMsg(new Lights(tLoopStateDto));
                     lightMsgList.add(lightMsg);
                 });
                 messageVo.setMsg(lightMsgList);
+                send(String.valueOf(modulecode), JSON.toJSONString(messageVo));
+                //推送统计信息
+                StatisticsMsgVo statisticsMsgVo = lightStatis(loopStatus);
+                messageVo.setMsg(statisticsMsgVo);
                 send(String.valueOf(modulecode), JSON.toJSONString(messageVo));
                 log.info("照明定时任务时间 : {}", messageVo.getTimestamp());
             }
@@ -182,10 +192,34 @@ public class WebSocketServer {
     }
 
     /**
+     * 照明设备统计信息
+     *
+     * @param loopStatus 照明设备信息
+     * @return 统计信息
+     */
+    private StatisticsMsgVo lightStatis(List<TLoopStateDto> loopStatus) throws ParseException {
+
+        List<String> dids = new ArrayList<>();
+        //取出所有的did
+        loopStatus.forEach(loopStateDto -> {
+            //通过回路号查询这个是什么设备
+            DeviceLoopService deviceLoopService = ApplicationContextUtils.get(DeviceLoopService.class);
+            DeviceLoop deviceLoopSelect = new DeviceLoop();
+            deviceLoopSelect.setLoop(loopStateDto.getLoop());
+            DeviceLoop deviceLoop = deviceLoopService.selectOne(deviceLoopSelect);
+            dids.add(String.valueOf(deviceLoop.getDeviceDid()));
+
+        });
+        //统计
+        return equipStatis(dids);
+    }
+
+
+    /**
      * lcd首次连接信息 也需要定时向前台推送
      */
     @Scheduled(cron = "${send.lcd-cron}")
-    public void lcd() {
+    public void lcd() throws ParseException {
         //查出led的 moduleCode
         Integer modulecode = getModuleCode("lcd");
         if (SESSION_MAP.get(String.valueOf(modulecode)) != null) {
@@ -197,15 +231,35 @@ public class WebSocketServer {
             LcdMsg lcdMsg = new LcdMsg(lcds);
             messageVo.setMsg(lcdMsg);
             send(String.valueOf(modulecode), JSON.toJSONString(messageVo));
+            //推送统计信息
+            StatisticsMsgVo statisticsMsgVo = lcdStatis(allStatusByRedis);
+            messageVo.setMsg(statisticsMsgVo);
+            send(String.valueOf(modulecode), JSON.toJSONString(messageVo));
+            //推送lcd设备统计信息
             log.info("lcd定时任务时间 : {}", messageVo.getTimestamp());
         }
+    }
+
+    /**
+     * lcd设备统计信息
+     *
+     * @param allStatusByRedis 设备did
+     * @return 能耗信息
+     */
+    private StatisticsMsgVo lcdStatis(List<IotLcdStatus> allStatusByRedis) throws ParseException {
+
+        List<String> dids = new ArrayList<>();
+        //取出所有的did
+        allStatusByRedis.forEach(iotLcdStatus -> dids.add(iotLcdStatus.getDid()));
+        //统计
+        return equipStatis(dids);
     }
 
     /**
      * led首次连接信息 也需要定时向前台推送
      */
     @Scheduled(cron = "${send.led-cron}")
-    public void led() {
+    public void led() throws ParseException {
         //查出led的 moduleCode
         Integer modulecode = getModuleCode("led");
         if (SESSION_MAP.get(String.valueOf(modulecode)) != null) {
@@ -217,20 +271,30 @@ public class WebSocketServer {
             LedMsg ledMsg = new LedMsg(leds);
             messageVo.setMsg(ledMsg);
             send(String.valueOf(modulecode), JSON.toJSONString(messageVo));
+            //推送统计信息
+            StatisticsMsgVo statisticsMsgVo = ledStatis(allStatus);
+            messageVo.setMsg(statisticsMsgVo);
+            send(String.valueOf(modulecode), JSON.toJSONString(messageVo));
             log.info("led定时任务时间 : {}", messageVo.getTimestamp());
         }
     }
 
     /**
-     * 提取重复代码 获取Modulecode
-     * @return Modulecode
+     * led设备统计信息
+     *
+     * @param allStatus led信息
+     * @return 统计信息
      */
-    private Integer getModuleCode(String equipment) {
-        Optional.ofNullable(mqMessageService).orElseGet(() -> mqMessageService = ApplicationContextUtils.get(MqMessageService.class));
-        MqMessage mqMessageSelect = new MqMessage();
-        mqMessageSelect.setExchange(equipment);
-        return mqMessageService.selectOne(mqMessageSelect).getModulecode();
+    private StatisticsMsgVo ledStatis(List<TStatusDto> allStatus) throws ParseException {
+
+        List<String> dids = new ArrayList<>();
+        //取出所有的did
+        allStatus.forEach(tStatusDto -> dids.add(tStatusDto.getDid()));
+        //统计
+        return equipStatis(dids);
+
     }
+
 
     /**
      * 关闭连接的方法
@@ -298,7 +362,6 @@ public class WebSocketServer {
     private String dateFormat(Date date) {
 
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(date);
-
     }
 
     /**
@@ -319,5 +382,48 @@ public class WebSocketServer {
         return messageVo;
     }
 
+    /**
+     * 提取重复代码 获取Modulecode
+     *
+     * @return Modulecode
+     */
+    private Integer getModuleCode(String equipment) {
+        Optional.ofNullable(mqMessageService).orElseGet(() -> mqMessageService = ApplicationContextUtils.get(MqMessageService.class));
+        MqMessage mqMessageSelect = new MqMessage();
+        mqMessageSelect.setExchange(equipment);
+        return mqMessageService.selectOne(mqMessageSelect).getModulecode();
+    }
 
+    /**
+     * 提取重复代码
+     *
+     * @param dids 设备did
+     * @return 统计信息
+     * @throws ParseException 时间格式化异常
+     */
+    private StatisticsMsgVo equipStatis(List<String> dids) throws ParseException {
+
+        Optional.ofNullable(deviceLoopService).orElseGet(() -> deviceLoopService = ApplicationContextUtils.get(DeviceLoopService.class));
+        //遍历通过did查出回路
+        DeviceLoop deviceLoopSelect = new DeviceLoop();
+        //本月
+        float currentmonth = 0;
+        //上月
+        float lastmonth = 0;
+        //本年
+        float thisyear = 0;
+        for (String did : dids) {
+            deviceLoopSelect.setDeviceDid(Integer.valueOf(did));
+            DeviceLoop deviceLoop = deviceLoopService.selectOne(deviceLoopSelect);
+            //查出单个设备的统计信息
+            StatisticsVo statisticsVoSelect = new StatisticsVo();
+            statisticsVoSelect.setDid(String.valueOf(deviceLoop.getDeviceDid()));
+            statisticsVoSelect.setLoop(deviceLoop.getLoop());
+            StatisticsMsgVo statistics = Statistics.findStatistics(statisticsVoSelect);
+            currentmonth = currentmonth + statistics.getCurrentmonth();
+            lastmonth = lastmonth + statistics.getLastmonth();
+            thisyear = thisyear + statistics.getThisyear();
+        }
+        return new StatisticsMsgVo(currentmonth, lastmonth, thisyear);
+    }
 }

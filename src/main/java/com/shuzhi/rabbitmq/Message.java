@@ -63,7 +63,7 @@ public class Message implements Serializable {
     /**
      * 报文数据信息
      */
-    private Map<String, Object> msg;
+    private Object msg;
 
     //第二层结构
     /**
@@ -113,7 +113,7 @@ public class Message implements Serializable {
 
     //第三层结构
 
-    private Map<String, Object> data;
+    private Object data;
 
 
 }

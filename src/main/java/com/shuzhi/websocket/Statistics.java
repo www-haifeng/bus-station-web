@@ -5,6 +5,7 @@ import com.shuzhi.light.entities.TElectricQuantity;
 import com.shuzhi.light.entities.TLoopStateDto;
 import com.shuzhi.light.service.LoopStatusServiceApi;
 
+import com.shuzhi.service.DeviceLoopService;
 import com.shuzhi.websocket.socketvo.StatisticsMsgVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +21,10 @@ import java.util.*;
  * @Author: 陈鑫晖
  * @Date: 2019/7/15 15:12
  */
-@RestController
+
 public class Statistics {
 
-    @Autowired
-    private LoopStatusServiceApi loopStatusServiceApi;
+    private static LoopStatusServiceApi loopStatusServiceApi;
 
     /**
      * 查询回路能耗
@@ -33,7 +33,10 @@ public class Statistics {
      * @return
      */
     @RequestMapping(value = "findStatistics", method = RequestMethod.POST)
-    public StatisticsMsgVo findStatistics(@RequestBody StatisticsVo statisticsVo) throws ParseException {
+    public static StatisticsMsgVo findStatistics(@RequestBody StatisticsVo statisticsVo) throws ParseException {
+
+        Optional.ofNullable(loopStatusServiceApi).orElseGet(() -> loopStatusServiceApi = ApplicationContextUtils.get(LoopStatusServiceApi.class));
+
         float activepowerNowMonth;//本月能耗
         float activepowerLastMonth;//上月能耗
         float activepowerYear;//本年能耗
