@@ -53,7 +53,7 @@ public class Statistics {
         statisticsVo.setStartTime(sdf.format(date1));
         //获取本月能耗所有信息
         List<TElectricQuantity> electricQuantityNowMonth = loopStatusServiceApi.findElectricQuantity(statisticsVo);
-        if(electricQuantityNowMonth.size()==0){
+        if(electricQuantityNowMonth == null || electricQuantityNowMonth.size()==0){
              activepowerNowMonth = 0.0f;
         }else {
             //获取最新能耗值
@@ -71,7 +71,7 @@ public class Statistics {
         statisticsVo.setEndTime(sdf.format(date1));
         //获取上月月能耗所有信息
         List<TElectricQuantity> electricQuantityLastMonth = loopStatusServiceApi.findElectricQuantity(statisticsVo);
-        if(electricQuantityLastMonth.size()==0){
+        if(electricQuantityLastMonth == null || electricQuantityLastMonth.size()==0){
             activepowerLastMonth = 0.0f;
         }else {
             //获取上月第一天能耗值
@@ -89,7 +89,7 @@ public class Statistics {
         statisticsVo.setEndTime(sdf.format(date));
         //获取上月月能耗所有信息
         List<TElectricQuantity> electricQuantityYear = loopStatusServiceApi.findElectricQuantity(statisticsVo);
-        if(electricQuantityYear.size()==0){
+        if( electricQuantityLastMonth == null || electricQuantityYear.size()==0){
             activepowerYear = 0.0f;
         }else {
             //获取本年第一天能耗值

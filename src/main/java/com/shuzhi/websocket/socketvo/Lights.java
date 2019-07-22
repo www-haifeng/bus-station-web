@@ -27,6 +27,11 @@ public class Lights {
     private String stationname;
 
     /**
+     * 设备名称
+     */
+    private String name;
+
+    /**
      * 灯箱id
      */
     private Integer lamphouseid;
@@ -71,6 +76,11 @@ public class Lights {
      */
     private Integer logoline;
 
+    /**
+     * id
+     */
+    private Integer id;
+
 
     public Lights(TLoopStateDto tLoopStateDto) {
 
@@ -83,25 +93,27 @@ public class Lights {
         //TODO 现在还不知道设备对应的编号
         switch (deviceLoop.getTypecode()){
             //灯箱
-            case "1" :
+            case "3" :
                 this.lamphouseid = deviceLoop.getDeviceDid();
                 this.lamphouseonoff = tLoopStateDto.getState();
                 this.lamphouseline = tLoopStateDto.getState();
+
                 break;
             //顶棚
-            case "2" :
+            case "1" :
                 this.platfondid = deviceLoop.getDeviceDid();
                 this.platfondline = tLoopStateDto.getState();
                 this.platfondonoff = tLoopStateDto.getState();
                 break;
             //log
-            case "3" :
+            case "2" :
                 this.logoid = deviceLoop.getDeviceDid();
                 this.logoline = tLoopStateDto.getState();
                 this.logoonoff = tLoopStateDto.getState();
             default:
-
         }
+        this.name = deviceLoop.getDeviceName();
+        this.id = deviceLoop.getDeviceDid();
         this.stationid = Integer.valueOf(tLoopStateDto.getGatewayId());
     }
 }
