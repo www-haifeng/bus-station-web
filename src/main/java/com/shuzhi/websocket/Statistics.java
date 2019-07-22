@@ -95,6 +95,7 @@ public class Statistics {
             //获取本年第一天能耗值
             float activepowerFirstYearDay = electricQuantityYear.get(electricQuantityYear.size() - 1).getActivepower();
             //获取最新能耗值
+            assert electricQuantityNowMonth != null;
             activepowerNow = electricQuantityNowMonth.get(0).getActivepower();
             //本年能耗
             activepowerYear = activepowerNow - activepowerFirstYearDay;
