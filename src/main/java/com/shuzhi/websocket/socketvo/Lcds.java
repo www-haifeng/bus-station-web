@@ -1,6 +1,7 @@
 package com.shuzhi.websocket.socketvo;
 
 import com.shuzhi.lcd.entities.IotLcdStatus;
+import com.shuzhi.lcd.entities.IotLcdStatusTwo;
 import lombok.Data;
 
 import java.util.List;
@@ -13,9 +14,9 @@ import java.util.List;
 @Data
 public class Lcds {
 
-    private List<IotLcdStatus> allStatusByRedis;
+    private List<IotLcdStatusTwo> allStatusByRedis;
 
-    public Lcds(List<IotLcdStatus> allStatusByRedis) {
+    public Lcds(List<IotLcdStatusTwo> allStatusByRedis) {
         this.allStatusByRedis = allStatusByRedis;
     }
 }

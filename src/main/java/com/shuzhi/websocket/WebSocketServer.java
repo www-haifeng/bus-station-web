@@ -2,8 +2,10 @@ package com.shuzhi.websocket;
 
 import com.alibaba.fastjson.JSON;
 import com.shuzhi.entity.DeviceLoop;
+import com.shuzhi.entity.DeviceStation;
 import com.shuzhi.entity.MqMessage;
-import com.shuzhi.lcd.entities.IotLcdStatus;
+import com.shuzhi.entity.Station;
+import com.shuzhi.lcd.entities.IotLcdStatusTwo;
 import com.shuzhi.lcd.service.IotLcdsStatusService;
 import com.shuzhi.led.entities.TStatusDto;
 import com.shuzhi.led.service.TStatusService;
@@ -12,7 +14,9 @@ import com.shuzhi.light.entities.TLoopStateDto;
 import com.shuzhi.light.service.LoopStatusServiceApi;
 import com.shuzhi.rabbitmq.Message;
 import com.shuzhi.service.DeviceLoopService;
+import com.shuzhi.service.DeviceStationService;
 import com.shuzhi.service.MqMessageService;
+import com.shuzhi.service.StationService;
 import com.shuzhi.websocket.socketvo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -50,7 +54,27 @@ public class WebSocketServer {
 
     private DeviceLoopService deviceLoopService;
 
+    private DeviceStationService deviceStationService;
+
+    private StationService stationService;
+
     private static Map<String, Session> SESSION_MAP = new ConcurrentHashMap<>();
+
+    /**
+     * lcd设备状态
+     */
+    private List<IotLcdStatusTwo> allStatusByRedis;
+
+    /**
+     * led设备状态
+     */
+    private List<TStatusDto> allStatus;
+
+    /**
+     * 照明设备状态
+     */
+    private List<TLoopStateDto> loopStatus;
+
 
     /**
      * 连接建立成功调用的方法
@@ -107,7 +131,6 @@ public class WebSocketServer {
      * @param message 消息
      */
     private void receiptHandle(Message message) {
-
         //
 
     }
@@ -152,13 +175,228 @@ public class WebSocketServer {
                 lcd();
                 break;
             case "led":
+                //调用led设备信息
                 led();
                 break;
             case "light":
+                //调用照明设备信息
                 light();
+                break;
+            case "platform":
+                //调用照明设备信息
+                platform();
                 break;
             default:
         }
+    }
+
+    /**
+     * 拼装并发送站台管理信息
+     */
+    @Scheduled(cron = "${send.platform-cron}")
+    private void platform() throws ParseException {
+        //查出led的 moduleCode
+        Integer modulecode = getModuleCode("platform");
+        if (SESSION_MAP.get(String.valueOf(modulecode)) != null) {
+            MessageVo messageVo = setMessageVo(modulecode);
+            messageVo.setMsgcode(202001);
+            List<DevicesMsg> lights = new ArrayList<>();
+            //判断是什么设备
+            Optional.ofNullable(stationService).orElseGet(() -> stationService = ApplicationContextUtils.get(StationService.class));
+            //查询所有的公交站
+            DeviceStationService deviceLoopService = ApplicationContextUtils.get(DeviceStationService.class);
+            List<DeviceStation> deviceLoops = deviceLoopService.selectAll();
+            if (deviceLoops != null) {
+                deviceLoops.stream().map(DeviceStation::getStationid).forEach(stationid -> {
+                    DevicesMsg devicesMsg = new DevicesMsg();
+                    devicesMsg.setStationid(stationid);
+                    devicesMsg.setStationname(stationService.selectByPrimaryKey(stationid).getStationName());
+                    //添加lcd设备
+                    List<Devices> devices = new ArrayList<>();
+                    try {
+                        setLcdDevices(devices, stationid);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        log.error("站台管理 获取lcd设备信息失败");
+                    }
+                    //添加led设备
+                    try {
+                        setLedDevices(devices, stationid);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        log.error("站台管理 获取led设备信息失败");
+                    }
+                    //添加照明设备
+                    try {
+                        setLightDevices(devicesMsg, devices, stationid);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        log.error("站台管理 获取照明设备信息失败");
+                    }
+                    lights.add(devicesMsg);
+                });
+                messageVo.setMsg(lights);
+                send(String.valueOf(modulecode), JSON.toJSONString(messageVo));
+                //拼装并发送站台统计信息
+                messageVo.setMsgcode(202001);
+                send(String.valueOf(modulecode), platformStatis(messageVo));
+                log.info("站台定时任务时间 : {}", messageVo.getTimestamp());
+            }
+        }
+    }
+
+    /**
+     * 拼装站台统计信息
+     *
+     * @param messageVo 要拼装的消息
+     * @return 拼装好的消息
+     */
+    @SuppressWarnings("Duplicates")
+    private String platformStatis(MessageVo messageVo) throws ParseException {
+
+        platformStatisVo platformStatisVo = new platformStatisVo();
+        Optional.ofNullable(deviceLoopService).orElseGet(() -> deviceLoopService = ApplicationContextUtils.get(DeviceLoopService.class));
+        DeviceLoop deviceLoopSelect = new DeviceLoop();
+        StatisticsVo statisticsVo = new StatisticsVo();
+        //本月
+        float currentmonth = 0;
+        //上月
+        float lastmonth = 0;
+        //本年
+        float thisyear = 0;
+
+        //获得lcd设备的统计信息
+        if (allStatusByRedis != null) {
+            platformStatisVo.setLcdtotal(allStatusByRedis.size());
+            platformStatisVo.setLcdonline((int) allStatusByRedis.stream().filter(iotLcdStatusTwo -> "1".equals(iotLcdStatusTwo.getStatus())).count());
+            platformStatisVo.setLcdoffline((int) allStatusByRedis.stream().filter(iotLcdStatusTwo -> "0".equals(iotLcdStatusTwo.getStatus())).count());
+            //能耗信息
+            //查出设备的回路号
+            for (IotLcdStatusTwo iotLcdStatusTwo : allStatusByRedis) {
+                deviceLoopSelect.setDeviceDid(Integer.valueOf(iotLcdStatusTwo.getId()));
+                statisticsVo.setLoop(deviceLoopService.selectOne(deviceLoopSelect).getLoop());
+                statisticsVo.setDid(iotLcdStatusTwo.getId());
+                StatisticsMsgVo statistics = Statistics.findStatistics(statisticsVo);
+                currentmonth = currentmonth + statistics.getCurrentmonth();
+                lastmonth = lastmonth + statistics.getLastmonth();
+                thisyear = thisyear + statistics.getThisyear();
+            }
+        }
+        //获得led设备统计信息
+        if (allStatus != null) {
+            platformStatisVo.setLedtotal(allStatus.size());
+            platformStatisVo.setLedtotal((int) allStatus.stream().filter(tStatusDto -> 1 == (tStatusDto.getState())).count());
+            platformStatisVo.setLedtotal((int) allStatus.stream().filter(tStatusDto -> 0 == (tStatusDto.getState())).count());
+            //能耗信息
+            //查出设备的回路号
+            for (TStatusDto status : allStatus) {
+                deviceLoopSelect.setDeviceDid(Integer.valueOf(status.getId()));
+                statisticsVo.setLoop(deviceLoopService.selectOne(deviceLoopSelect).getLoop());
+                statisticsVo.setDid(status.getId());
+                StatisticsMsgVo statistics = Statistics.findStatistics(statisticsVo);
+                currentmonth = currentmonth + statistics.getCurrentmonth();
+                lastmonth = lastmonth + statistics.getLastmonth();
+                thisyear = thisyear + statistics.getThisyear();
+            }
+        }
+        //获得照明设备统计信息
+        if (loopStatus != null) {
+            platformStatisVo.setLighttotal(loopStatus.size());
+            platformStatisVo.setLightonline((int) loopStatus.stream().filter(loopStateDto -> 1 == (loopStateDto.getState())).count());
+            platformStatisVo.setLightoffline((int) loopStatus.stream().filter(loopStateDto -> 0 == (loopStateDto.getState())).count());
+            //能耗信息
+            //查出设备的回路号
+            for (TLoopStateDto status : loopStatus) {
+                statisticsVo.setLoop(status.getLoop());
+                statisticsVo.setDid(String.valueOf(status.getId()));
+                StatisticsMsgVo statistics = Statistics.findStatistics(statisticsVo);
+                currentmonth = currentmonth + statistics.getCurrentmonth();
+                lastmonth = lastmonth + statistics.getLastmonth();
+                thisyear = thisyear + statistics.getThisyear();
+            }
+        }
+        platformStatisVo.setCurrentmonth(currentmonth);
+        platformStatisVo.setLastmonth(lastmonth);
+        platformStatisVo.setThisyear(thisyear);
+        messageVo.setMsg(platformStatisVo);
+        return JSON.toJSONString(messageVo);
+    }
+
+    /**
+     * 封装照明设备信息
+     *
+     * @param devicesMsg 总设备信息
+     * @param devices    照明设备信息
+     * @param stationid  站台id
+     */
+    private void setLightDevices(DevicesMsg devicesMsg, List<Devices> devices, Integer stationid) {
+
+        //判断照明设备是否为空
+        Optional.ofNullable(loopStatus).orElseGet(() -> {
+            Optional.ofNullable(loopStatusServiceApi).orElseGet(() -> loopStatusServiceApi = ApplicationContextUtils.get(LoopStatusServiceApi.class));
+            loopStatus = loopStatusServiceApi.findLoopStatus();
+            return loopStatus;
+        });
+        //判断该设备是否在该网关下
+        DeviceStation deviceStationSelect = new DeviceStation();
+        loopStatus.forEach(loopStateDto -> {
+            //通过回路id查出设备id
+            DeviceLoop deviceLoop = deviceLoopService.selectOne(new DeviceLoop(loopStateDto.getLoop()));
+            deviceStationSelect.setDeviceDid(deviceLoop.getDeviceDid());
+            DeviceStation deviceStation = deviceStationService.selectOne(deviceStationSelect);
+            if (stationid.equals(deviceStation.getStationid())) {
+                Devices device = new Devices(loopStateDto);
+                devices.add(device);
+            }
+        });
+
+        devicesMsg.setDevices(devices);
+    }
+
+    /**
+     * 站台管理 添加led设备
+     *
+     * @param devices   所有设备信息
+     * @param stationid 站台id
+     */
+    private void setLedDevices(List<Devices> devices, Integer stationid) {
+
+        //判断led设备是否为空
+        Optional.ofNullable(allStatus).orElseGet(() -> {
+            Optional.ofNullable(tStatusService).orElseGet(() -> tStatusService = ApplicationContextUtils.get(TStatusService.class));
+            return tStatusService.findAllStatusByRedis();
+        });
+        //判断该设备是否在该网关下
+        allStatus.stream().filter(iotLedStatus -> stationid.equals(deviceStationService.selectOne(new DeviceStation(iotLedStatus.getDid())).getStationid()))
+                .forEach(iotLcdStatus -> {
+                    Devices device = new Devices(iotLcdStatus);
+                    devices.add(device);
+                });
+
+    }
+
+    /**
+     * 站台管理添加lcd设备
+     *
+     * @param devices   所有设备信息
+     * @param stationid 站台id
+     */
+    private void setLcdDevices(List<Devices> devices, Integer stationid) {
+
+        Optional.ofNullable(deviceStationService).orElseGet(() -> deviceStationService = ApplicationContextUtils.get(DeviceStationService.class));
+        Optional.ofNullable(iotLcdStatusService).orElseGet(() -> iotLcdStatusService = ApplicationContextUtils.get(IotLcdsStatusService.class));
+        //判断lcd设备是否为空 如果为空就去查询
+        Optional.ofNullable(allStatusByRedis).orElseGet(() -> {
+            Optional.ofNullable(loopStatusServiceApi).orElseGet(() -> loopStatusServiceApi = ApplicationContextUtils.get(LoopStatusServiceApi.class));
+            allStatusByRedis = iotLcdStatusService.findAllStatusByRedis();
+            return allStatusByRedis;
+        });
+        //判断该设备是否在该站台下
+        allStatusByRedis.stream().filter(iotLcdStatus -> stationid.equals(deviceStationService.selectOne(new DeviceStation(iotLcdStatus.getId())).getStationid()))
+                .forEach(iotLcdStatus -> {
+                    Devices device = new Devices(iotLcdStatus);
+                    devices.add(device);
+                });
     }
 
     /**
@@ -172,7 +410,7 @@ public class WebSocketServer {
             messageVo.setMsgcode(203001);
             //调用接口 获取当前照明状态
             Optional.ofNullable(loopStatusServiceApi).orElseGet(() -> loopStatusServiceApi = ApplicationContextUtils.get(LoopStatusServiceApi.class));
-            List<TLoopStateDto> loopStatus = loopStatusServiceApi.findLoopStatus();
+            loopStatus = loopStatusServiceApi.findLoopStatus();
             List<LightMsg> lightMsgList = new ArrayList<>();
             //保存设备状态信息
             LightMsgState lightMsgState = new LightMsgState();
@@ -188,13 +426,13 @@ public class WebSocketServer {
                     LightMsg lightMsg = new LightMsg(new Lights(tLoopStateDto));
                     lightMsgList.add(lightMsg);
                     //判断这是什么设备
-                    if (lightMsg.getLights().getLamphouseid() != null){
+                    if (lightMsg.getLights().getLamphouseid() != null) {
                         lamphouses.add(lightMsg.getLights());
                     }
-                    if (lightMsg.getLights().getPlatfondid() != null){
+                    if (lightMsg.getLights().getPlatfondid() != null) {
                         platfonds.add(lightMsg.getLights());
                     }
-                    if (lightMsg.getLights().getLogoid() != null){
+                    if (lightMsg.getLights().getLogoid() != null) {
                         logos.add(lightMsg.getLights());
                     }
                 });
@@ -254,8 +492,8 @@ public class WebSocketServer {
             //调用接口 获得所有站屏的设备状态
             messageVo.setMsgcode(204001);
             Optional.ofNullable(iotLcdStatusService).orElseGet(() -> iotLcdStatusService = ApplicationContextUtils.get(IotLcdsStatusService.class));
-            List<IotLcdStatus> allStatusByRedis = iotLcdStatusService.findAllStatusByRedis();
-            if (!allStatusByRedis.isEmpty()){
+            this.allStatusByRedis = iotLcdStatusService.findAllStatusByRedis();
+            if (!allStatusByRedis.isEmpty()) {
                 Lcds lcds = new Lcds(allStatusByRedis);
                 LcdMsg lcdMsg = new LcdMsg(lcds);
                 messageVo.setMsg(lcdMsg);
@@ -266,7 +504,7 @@ public class WebSocketServer {
                 Lcds lcds2 = new Lcds(allStatusByRedis);
                 LcdMsg lcdMsg2 = new LcdMsg(lcds2);
                 messageVo.setMsg(lcdMsg2);
-                messageVo.setModulecode(204004);
+                messageVo.setMsgcode(204004);
                 send(String.valueOf(modulecode), JSON.toJSONString(messageVo));
 
                 //推送统计信息
@@ -287,11 +525,11 @@ public class WebSocketServer {
      * @param allStatusByRedis 设备did
      * @return 能耗信息
      */
-    private StatisticsMsgVo lcdStatis(List<IotLcdStatus> allStatusByRedis) throws ParseException {
+    private StatisticsMsgVo lcdStatis(List<IotLcdStatusTwo> allStatusByRedis) throws ParseException {
 
         List<String> dids = new ArrayList<>();
         //取出所有的did
-        allStatusByRedis.forEach(iotLcdStatus -> dids.add(iotLcdStatus.getDid()));
+        allStatusByRedis.forEach(iotLcdStatus -> dids.add(iotLcdStatus.getId()));
         //统计
         return equipStatis(dids);
     }
@@ -308,8 +546,8 @@ public class WebSocketServer {
             messageVo.setMsgcode(205001);
             //调用接口
             Optional.ofNullable(tStatusService).orElseGet(() -> tStatusService = ApplicationContextUtils.get(TStatusService.class));
-            List<TStatusDto> allStatus = tStatusService.findAllStatusByRedis();
-            if (!allStatus.isEmpty()){
+            allStatus = tStatusService.findAllStatusByRedis();
+            if (!allStatus.isEmpty()) {
                 Leds leds = new Leds(allStatus);
                 LedMsg ledMsg = new LedMsg(leds);
                 messageVo.setMsg(ledMsg);

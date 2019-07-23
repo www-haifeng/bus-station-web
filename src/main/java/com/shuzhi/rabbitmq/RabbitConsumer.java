@@ -57,8 +57,12 @@ public class RabbitConsumer {
         Message message1 = JSON.parseObject(message, Message.class);
         message1.setMsgtype("2");
         //推送消息
-        String key = (String) redisTemplate.opsForHash().get("web_socket_key", message1.getMsgid());
-
+        String key = null;
+        try {
+            key = (String) redisTemplate.opsForHash().get("web_socket_key", message1.getMsgid());
+        }catch (Exception e){
+            log.warn("消息类型错误 : {}",message);
+        }
         if (StringUtils.isNotBlank(key)){
             //判断要调用哪个方法 并调用
             isEquip(key);

@@ -32,8 +32,7 @@ public class Statistics {
      * @param statisticsVo
      * @return
      */
-    @RequestMapping(value = "findStatistics", method = RequestMethod.POST)
-    public static StatisticsMsgVo findStatistics(@RequestBody StatisticsVo statisticsVo) throws ParseException {
+    public static StatisticsMsgVo findStatistics(StatisticsVo statisticsVo) throws ParseException {
 
         Optional.ofNullable(loopStatusServiceApi).orElseGet(() -> loopStatusServiceApi = ApplicationContextUtils.get(LoopStatusServiceApi.class));
 
@@ -41,7 +40,8 @@ public class Statistics {
         float activepowerLastMonth;//上月能耗
         float activepowerYear;//本年能耗
         float activepowerNow;//当前最新能耗
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // HH:mm:ss
+        // HH:mm:ss
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //设置当前月份时间
         Date date = new Date();
         statisticsVo.setEndTime(sdf.format(date));

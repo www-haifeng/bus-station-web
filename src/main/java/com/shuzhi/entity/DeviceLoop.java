@@ -54,5 +54,15 @@ private static final long serialVersionUID=1L;
      */
     @Column(name = "gateway_did")
     private Integer gatewayDid;
-    
+
+    public DeviceLoop(Integer id) {
+        this.loop = id;
+    }
+    public DeviceLoop() {
+
+    }
+
+    public DeviceLoop(String did) {
+        this.deviceDid = Integer.valueOf(did);
+    }
 }
