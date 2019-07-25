@@ -12,7 +12,9 @@ import com.shuzhi.websocket.socketvo.MessageVo;
 import com.shuzhi.websocket.socketvo.Msg;
 import com.shuzhi.websocket.socketvo.SimpleProtocolVo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,12 +56,31 @@ public class WebSocketController {
     @RequestMapping("/command")
     public Wrapper command(@RequestBody MessageVo messageVo) {
 
+        if (messageVo.getModulecode() == null){
+            return WrapMapper.wrap(500, "Modulecode不能为空");
+        }
         //拼装消息
         List<SimpleProtocolVo> messageList = assemble(messageVo);
         //遍历并发送简易协议
         Objects.requireNonNull(messageList).forEach(message -> new SynSend(rabbitProducer, message, messageVo.getModulecode(), redisTemplate).start());
         return WrapMapper.ok();
     }
+
+    /**
+     * 关闭session 从session中移除
+     *
+     * @param sessionId 要关闭的sessionId
+     * @return 操作结果
+     */
+    @RequestMapping("/onClose/{sessionId}")
+    public synchronized Wrapper onClose(@PathVariable String sessionId) {
+        //从集合中将session移除
+        WebSocketServer.SESSION_MAP.forEach((key, value) -> value.stream().filter(session -> StringUtils.equals(sessionId, session.getId()))
+                .forEach(WebSocketServer::onClose));
+        return WrapMapper.ok();
+    }
+
+
 
     /**
      * 拼装简易协议
@@ -95,7 +116,7 @@ public class WebSocketController {
             lights.forEach(light -> {
                 SimpleProtocolVo simpleProtocolVo = new SimpleProtocolVo();
                 //通过设备id查出回路和网关id
-                deviceLoopSelect.setDeviceDid(Integer.valueOf(light));
+                deviceLoopSelect.setDeviceDid(light);
                 DeviceLoop deviceLoop = deviceLoopService.selectOne(deviceLoopSelect);
                 //网关id
                 simpleProtocolVo.setDid(String.valueOf(deviceLoop.getGatewayDid()));

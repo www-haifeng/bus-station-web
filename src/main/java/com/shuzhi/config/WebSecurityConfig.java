@@ -50,7 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterAfter(dynamicallyUrlInterceptor(), FilterSecurityInterceptor.class)
                 .authorizeRequests()
                 //注册可以请求不拦截
-                .antMatchers("/registered","/index").permitAll().anyRequest().authenticated()
+                .antMatchers("/websocket/**","/registered","/index","/websocket").permitAll().anyRequest().authenticated()
                 .and()
                 .formLogin()
                 //登录路径

@@ -35,7 +35,7 @@ private static final long serialVersionUID=1L;
      * 设备did
      */
     @Column(name = "device_did")
-    private Integer deviceDid;
+    private String deviceDid;
         
     /**
      * 设备名称
@@ -53,7 +53,7 @@ private static final long serialVersionUID=1L;
      * 网关设备did
      */
     @Column(name = "gateway_did")
-    private Integer gatewayDid;
+    private String gatewayDid;
 
     public DeviceLoop(Integer id) {
         this.loop = id;
@@ -63,6 +63,6 @@ private static final long serialVersionUID=1L;
     }
 
     public DeviceLoop(String did) {
-        this.deviceDid = Integer.valueOf(did);
+        this.deviceDid = did;
     }
 }

@@ -2,6 +2,8 @@ package com.shuzhi.websocket.socketvo;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @author zgk
  * @description 照明首次连接数据
@@ -10,9 +12,9 @@ import lombok.Data;
 @Data
 public class LightMsg {
 
-    private Lights lights;
+    private List<Lights> lights;
 
-    public LightMsg(Lights lights) {
+    public LightMsg(List<Lights> lights) {
         this.lights = lights;
     }
 }

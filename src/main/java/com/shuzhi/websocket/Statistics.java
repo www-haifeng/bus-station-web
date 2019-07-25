@@ -7,6 +7,7 @@ import com.shuzhi.light.service.LoopStatusServiceApi;
 
 import com.shuzhi.service.DeviceLoopService;
 import com.shuzhi.websocket.socketvo.StatisticsMsgVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ import java.util.*;
  * @Author: 陈鑫晖
  * @Date: 2019/7/15 15:12
  */
-
+@Slf4j
 public class Statistics {
 
     private static LoopStatusServiceApi loopStatusServiceApi;
@@ -36,10 +37,10 @@ public class Statistics {
 
         Optional.ofNullable(loopStatusServiceApi).orElseGet(() -> loopStatusServiceApi = ApplicationContextUtils.get(LoopStatusServiceApi.class));
 
-        float activepowerNowMonth;//本月能耗
-        float activepowerLastMonth;//上月能耗
-        float activepowerYear;//本年能耗
-        float activepowerNow;//当前最新能耗
+        float activepowerNowMonth = 0;//本月能耗
+        float activepowerLastMonth = 0;//上月能耗
+        float activepowerYear = 0;//本年能耗
+        float activepowerNow = 0;//当前最新能耗
         // HH:mm:ss
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //设置当前月份时间
@@ -89,16 +90,21 @@ public class Statistics {
         statisticsVo.setEndTime(sdf.format(date));
         //获取上月月能耗所有信息
         List<TElectricQuantity> electricQuantityYear = loopStatusServiceApi.findElectricQuantity(statisticsVo);
-        if( electricQuantityLastMonth == null || electricQuantityYear.size()==0){
+        if( electricQuantityLastMonth == null || electricQuantityYear == null){
             activepowerYear = 0.0f;
         }else {
             //获取本年第一天能耗值
             float activepowerFirstYearDay = electricQuantityYear.get(electricQuantityYear.size() - 1).getActivepower();
             //获取最新能耗值
             assert electricQuantityNowMonth != null;
-            activepowerNow = electricQuantityNowMonth.get(0).getActivepower();
-            //本年能耗
-            activepowerYear = activepowerNow - activepowerFirstYearDay;
+            try {
+                activepowerNow = electricQuantityNowMonth.get(0).getActivepower();
+                //本年能耗
+                activepowerYear = activepowerNow - activepowerFirstYearDay;
+            }catch (Exception e){
+                log.error("能耗统计发生错误 : {} ", e.getMessage());
+            }
+
         }
         return new StatisticsMsgVo(activepowerNowMonth, activepowerLastMonth, activepowerYear);
     }

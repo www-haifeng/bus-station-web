@@ -35,7 +35,7 @@ public class DeviceStation extends BaseEntity implements Serializable {
      * 设备did
      */
     @Column(name = "device_did")
-    private Integer deviceDid;
+    private String deviceDid;
 
     /**
      * 设备名称
@@ -45,7 +45,7 @@ public class DeviceStation extends BaseEntity implements Serializable {
 
     public DeviceStation(String id) {
 
-        this.deviceDid = Integer.valueOf(id);
+        this.deviceDid = id;
 
     }
 

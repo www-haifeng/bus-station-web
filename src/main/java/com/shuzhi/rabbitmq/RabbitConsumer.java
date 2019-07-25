@@ -69,11 +69,11 @@ public class RabbitConsumer {
             //唤醒线程
             Condition condition = RabbitProducer.conditionHashtable.get(message1.getMsgid());
             if (condition != null){
-                log.info("唤醒线程 msgId : {}",message1.getMsgid());
                 RabbitProducer.lock.lock();
                 condition.signalAll();
                 RabbitProducer.conditionHashtable.remove(message1.getMsgid());
                 RabbitProducer.lock.unlock();
+                log.info("唤醒线程 msgId : {}",message1.getMsgid());
             }
             //删除map中的数据
         }else {
