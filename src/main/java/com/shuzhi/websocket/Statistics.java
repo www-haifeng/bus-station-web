@@ -90,7 +90,7 @@ public class Statistics {
         statisticsVo.setEndTime(sdf.format(date));
         //获取上月月能耗所有信息
         List<TElectricQuantity> electricQuantityYear = loopStatusServiceApi.findElectricQuantity(statisticsVo);
-        if( electricQuantityLastMonth == null || electricQuantityYear == null){
+        if( electricQuantityLastMonth == null || electricQuantityYear == null || electricQuantityYear.size() == 0){
             activepowerYear = 0.0f;
         }else {
             //获取本年第一天能耗值

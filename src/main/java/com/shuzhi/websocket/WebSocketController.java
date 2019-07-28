@@ -75,8 +75,7 @@ public class WebSocketController {
     @RequestMapping("/onClose/{sessionId}")
     public synchronized Wrapper onClose(@PathVariable String sessionId) {
         //从集合中将session移除
-        WebSocketServer.SESSION_MAP.forEach((key, value) -> value.stream().filter(session -> StringUtils.equals(sessionId, session.getId()))
-                .forEach(WebSocketServer::onClose));
+        WebSocketServer.SESSION_ID_LIST.removeIf(s -> StringUtils.equals(sessionId,s));
         return WrapMapper.ok();
     }
 
