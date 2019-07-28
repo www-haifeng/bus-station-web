@@ -607,7 +607,7 @@ public class WebSocketServer {
 
                 allStatus.forEach(tStatusDto -> {
                     tStatusDto.setVolume(null);
-                    tStatusDto.setLighteness(null);
+                    tStatusDto.setLight(null);
                 });
                 Leds leds2 = new Leds(allStatus);
                 LedMsg ledMsg2 = new LedMsg(leds2);

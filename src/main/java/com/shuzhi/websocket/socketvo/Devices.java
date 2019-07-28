@@ -1,7 +1,6 @@
 package com.shuzhi.websocket.socketvo;
 
 import com.shuzhi.entity.DeviceLoop;
-import com.shuzhi.lcd.entities.IotLcdStatus;
 import com.shuzhi.lcd.entities.IotLcdStatusTwo;
 import com.shuzhi.led.entities.TStatusDto;
 import com.shuzhi.light.entities.TLoopStateDto;
@@ -73,7 +72,7 @@ public class Devices {
         this.state = tStatusDto.getState();
         this.onoff = this.state;
         this.volume = tStatusDto.getVolume();
-        this.light = tStatusDto.getLighteness();
+        this.light = tStatusDto.getLight();
     }
 
     /**
