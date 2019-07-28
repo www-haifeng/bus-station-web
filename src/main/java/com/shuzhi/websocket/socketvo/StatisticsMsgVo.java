@@ -2,6 +2,8 @@ package com.shuzhi.websocket.socketvo;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @ProjectName: bus-station-web
  * @Package: com.shuzhi.websocket.socketvo
@@ -15,42 +17,48 @@ public class StatisticsMsgVo {
     /**
      * 总数
      */
-    private Integer total;
+    private Integer total = 0;
 
     /**
      * 在线
      */
-    private Integer online;
+    private Integer online = 0;
 
     /**
      * 离线
      */
-    private Integer offline;
+    private Integer offline = 0;
 
     /**
      * 亮灯数
      */
-    private Integer oncount;
+    private Integer oncount = 0;
 
     /**
      * 熄灯数
      */
-    private Integer offcount;
+    private Integer offcount = 0;
 
     /**
      * 本月
      */
-    private float currentmonth;
+    private float currentmonth = 0;
 
     /**
      * 上月
      */
-    private float lastmonth;
+    private float lastmonth = 0;
 
     /**
      * 本年
      */
-    private float thisyear;
+    private float thisyear = 0;
+
+    private List<LcdalarmsVo> lcdalarms;
+
+    private List<LcdalarmsVo> ledalarms;
+
+    private List<LcdalarmsVo> lightalarms;
 
 
     public StatisticsMsgVo(float currentmonth, float lastmonth, float thisyear) {

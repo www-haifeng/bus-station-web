@@ -67,21 +67,6 @@ public class WebSocketController {
     }
 
     /**
-     * 关闭session 从session中移除
-     *
-     * @param sessionId 要关闭的sessionId
-     * @return 操作结果
-     */
-    @RequestMapping("/onClose/{sessionId}")
-    public synchronized Wrapper onClose(@PathVariable String sessionId) {
-        //从集合中将session移除
-        WebSocketServer.SESSION_ID_LIST.removeIf(s -> StringUtils.equals(sessionId,s));
-        return WrapMapper.ok();
-    }
-
-
-
-    /**
      * 拼装简易协议
      *
      * @param messageVo 前端协议
