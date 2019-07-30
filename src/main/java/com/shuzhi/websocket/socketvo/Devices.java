@@ -19,7 +19,7 @@ public class Devices {
     /**
      * 设备id
      */
-    private Integer id;
+    private Long id;
 
     /**
      * 设备类型 1-顶棚照明；2-灯箱照明；3-logo照明；4-LED；5-LCD
@@ -52,7 +52,7 @@ public class Devices {
      * @param iotLcdStatus lcd设备信息
      */
     public Devices(IotLcdStatusTwo iotLcdStatus) {
-        this.id = Integer.valueOf(iotLcdStatus.getId());
+        this.id = Long.valueOf(iotLcdStatus.getId());
         this.type = 5;
         this.state = Integer.valueOf(iotLcdStatus.getStatus());
         this.onoff = this.state;
@@ -67,7 +67,7 @@ public class Devices {
      */
     public Devices(TStatusDto tStatusDto) {
 
-        this.id = Integer.valueOf(tStatusDto.getId());
+        this.id = Long.valueOf(tStatusDto.getId());
         this.type = 4;
         this.state = tStatusDto.getState();
         this.onoff = this.state;
@@ -88,7 +88,7 @@ public class Devices {
         deviceLoopSelect.setLoop(loopStateDto.getLoop());
         DeviceLoop deviceLoop = deviceLoopService.selectOne(deviceLoopSelect);
 
-        this.id = loopStateDto.getId();
+        this.id = Long.valueOf(loopStateDto.getId());
         this.type = Integer.valueOf(deviceLoop.getTypecode());
         this.state = loopStateDto.getState();
         this.onoff = this.state;

@@ -14,9 +14,14 @@ import java.util.List;
 public class Msg {
 
     /**
-     * 命令类型：1-开启；2-关闭；3-重启；4-调光；5-音量
+     * lcd命令类型：1-开启；2-关闭；3-重启；4-调光；5-音量
      */
     private Integer cmdtype;
+
+    /**
+     * led命令类型：1-开启；2-关闭；3-重启
+     */
+    private Integer arg1;
 
     /**
      * 调光值(lcd不能调光)
@@ -42,6 +47,8 @@ public class Msg {
      * led数组 屏id
      */
     private List<String> lights;
+
+
 
 
 }

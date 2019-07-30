@@ -22,12 +22,12 @@ public class Lights {
     /**
      * 公交站id
      */
-    private Long stationid;
+    private Long stationid = 0L;
 
     /**
      * 公交站名称
      */
-    private String stationname;
+    private String stationname = "该设备没有配置站台";
 
     /**
      * 设备名称
@@ -99,7 +99,7 @@ public class Lights {
         StationService stationService = ApplicationContextUtils.get(StationService.class);
         if (deviceStation != null){
             this.stationid = Long.valueOf(deviceStation.getStationid());
-            this.stationname = stationService.selectByPrimaryKey(deviceStation.getStationid()).getStationName();
+            this.stationname = stationService.selectByPrimaryKey(deviceStation.getId()).getStationName();
         }
         //判断这是什么设备
         switch (deviceLoop.getTypecode()){
