@@ -51,9 +51,9 @@ public class DeviceStation extends BaseEntity implements Serializable {
     @Column(name = "device_name")
     private String deviceName;
 
-    public DeviceStation(String id) {
+    public DeviceStation(String deviceDid) {
 
-        this.deviceDid = id;
+        this.deviceDid = deviceDid;
 
     }
 

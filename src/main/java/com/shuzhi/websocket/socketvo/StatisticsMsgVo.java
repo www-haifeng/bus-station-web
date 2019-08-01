@@ -1,6 +1,7 @@
 package com.shuzhi.websocket.socketvo;
 
 import com.shuzhi.led.entities.TStatusDto;
+import com.shuzhi.light.entities.TLoopStateDto;
 import lombok.Data;
 
 import java.util.List;
@@ -94,6 +95,15 @@ public class StatisticsMsgVo {
         this.total = allStatus.size();
         this.online = Math.toIntExact(allStatus.stream().filter(tStatusDto -> tStatusDto.getOnoff() == 1).count());
         this.offline = Math.toIntExact(allStatus.stream().filter(tStatusDto -> tStatusDto.getOnoff() == 0).count());
+
+    }
+    public void addLightNum(List<TLoopStateDto> tLoopStateDtos) {
+
+        this.total = tLoopStateDtos.size();
+        this.online = Math.toIntExact(tLoopStateDtos.stream().filter(tStatusDto -> tStatusDto.getState() == 1).count());
+        this.offline = Math.toIntExact(tLoopStateDtos.stream().filter(tStatusDto -> tStatusDto.getState() == 0).count());
+        this.oncount = online;
+        this.offcount = offline;
 
     }
 }

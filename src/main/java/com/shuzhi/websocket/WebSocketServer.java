@@ -9,6 +9,7 @@ import com.shuzhi.lcd.service.IotLcdsStatusService;
 import com.shuzhi.led.entities.TStatusDto;
 import com.shuzhi.led.service.TStatusService;
 import com.shuzhi.light.entities.StatisticsVo;
+import com.shuzhi.light.entities.TEvent;
 import com.shuzhi.light.entities.TLoopStateDto;
 import com.shuzhi.light.service.LoopStatusServiceApi;
 import com.shuzhi.mapper.DeviceLoopMapper;
@@ -20,6 +21,7 @@ import com.shuzhi.service.StationService;
 import com.shuzhi.websocket.socketvo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -81,6 +83,16 @@ public class WebSocketServer {
      */
     private List<TLoopStateDto> loopStatus;
 
+    /**
+     * 重试次数
+     */
+    @Value("${send.retry}")
+    private int retry;
+
+    /**
+     * 当前重试次数
+     */
+    private int count = 0;
 
     /**
      * 连接建立成功调用的方法
@@ -253,6 +265,7 @@ public class WebSocketServer {
                 messageVo.setMsgcode(202003);
                 messageVo.setMsg(getSums(lights));
                 send(code, JSON.toJSONString(messageVo));
+                //发送单站离线设备信息
 
                 log.info("站台定时任务时间 : {}", messageVo.getTimestamp());
             }
@@ -596,9 +609,20 @@ public class WebSocketServer {
 
                 //推送统计信息
                 StatisticsMsgVo statisticsMsgVo = lightStatis(loopStatus);
-                messageVo.setMsg(statisticsMsgVo);
+                statisticsMsgVo.addLightNum(loopStatus);
+                List<TEvent> event = loopStatusServiceApi.findEvent();
+                LightMsgVo lightMsgVo = new LightMsgVo(statisticsMsgVo, event);
+                messageVo.setMsg(lightMsgVo);
                 messageVo.setMsgcode(203002);
                 send(code, JSON.toJSONString(messageVo));
+
+                //推送离线设备信息
+                messageVo.setMsgcode(203005);
+                OfflineMsg offlineMsg = new OfflineMsg();
+                offlineMsg.offlineLightMsg(loopStatus);
+                messageVo.setMsg(offlineMsg);
+                send(code, JSON.toJSONString(messageVo));
+
                 log.info("照明定时任务时间 : {}", messageVo.getTimestamp());
             }
         }
@@ -663,7 +687,13 @@ public class WebSocketServer {
                 messageVo.setMsgcode(204002);
                 send(code, JSON.toJSONString(messageVo));
 
-                //推送lcd设备统计信息
+                //推送离线设备信息
+                messageVo.setMsgcode(204005);
+                OfflineMsg offlineMsg = new OfflineMsg();
+                offlineMsg.offlineLcdMsg(allStatusByRedis);
+                messageVo.setMsg(offlineMsg);
+                send(code, JSON.toJSONString(messageVo));
+
                 log.info("lcd定时任务时间 : {}", messageVo.getTimestamp());
             }
         }
@@ -748,6 +778,13 @@ public class WebSocketServer {
                 messageVo.setMsgcode(205002);
                 send(code, JSON.toJSONString(messageVo));
 
+                //推送离线设备信息
+                messageVo.setMsgcode(205005);
+                OfflineMsg offlineMsg = new OfflineMsg();
+                offlineMsg.offlineLedMsg(allStatus);
+                messageVo.setMsg(offlineMsg);
+                send(code, JSON.toJSONString(messageVo));
+
                 log.info("led定时任务时间 : {}", messageVo.getTimestamp());
             }
         }
@@ -808,7 +845,7 @@ public class WebSocketServer {
      * @param token   modulecode
      * @param message 要发送的信息
      */
-    public synchronized void send(String token, String message) {
+    public void send(String token, String message) {
 
         if (StringUtils.isNotBlank(token)) {
             //遍历session推送消息到页面
@@ -818,11 +855,19 @@ public class WebSocketServer {
                         try {
                             if (isOnClose(token, session1.getId())) {
                                 session1.getBasicRemote().sendText(message);
+                                count = 0;
                             }
                         } catch (Exception e) {
-                            //将该session关闭
-                            onClose(session1);
-                            log.error("消息推送失败 : {}", e.getMessage());
+                            //重新推送
+                            if (retry != count){
+                                send(token,message);
+                                log.info("消息推送失败,重试第 {} 次", retry + 1);
+                                count++;
+                            }else {
+                                count = 0;
+                                onClose(session1);
+                                log.error("消息推送失败 : {}", e.getMessage());
+                            }
                         }
                     });
                 }

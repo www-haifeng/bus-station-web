@@ -16,7 +16,7 @@ spring:
       max-total: 5                                          # 最大连接数
       max-wait-millis: 200                                  # 等待连接获取的最大超时时间
    rabbitmq:
-     host: 192.168.7.68
+     host: 118.190.55.119
      port: 5672
      username: guest
      password: guest
@@ -56,6 +56,8 @@ send:
   run-time: 20
   #重试次数
   count: 2
+  #websocket推送重试次数
+  retry: 2
   #定时取数据的cron
   led-cron: "*/5 * * * * ?"
   light-cron: "*/5 * * * * ?"

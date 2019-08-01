@@ -92,6 +92,7 @@ public class Lights {
         DeviceStationService deviceStationService = ApplicationContextUtils.get(DeviceStationService.class);
         DeviceLoop deviceLoopSelect = new DeviceLoop();
         deviceLoopSelect.setLoop(tLoopStateDto.getLoop());
+        deviceLoopSelect.setGatewayDid(tLoopStateDto.getGatewayId());
         DeviceLoop deviceLoop = deviceLoopService.selectOne(deviceLoopSelect);
         //查出 对应的公交站id和名称
         DeviceStation deviceStationSelect = new DeviceStation(String.valueOf(deviceLoop.getDeviceDid()));
@@ -106,21 +107,36 @@ public class Lights {
             //灯箱
             case "3" :
                 this.lamphouseid = Long.valueOf(deviceLoop.getDeviceDid());
-                this.lamphouseonoff = tLoopStateDto.getState();
-                this.lamphouseline = Long.valueOf(tLoopStateDto.getState());
-
+                if (tLoopStateDto.getState() == 1){
+                    this.lamphouseonoff = 0;
+                    this.lamphouseline = 0L;
+                }else {
+                    this.lamphouseonoff = 1;
+                    this.lamphouseline = 1L;
+                }
                 break;
             //顶棚
             case "1" :
                 this.platfondid = Long.valueOf(deviceLoop.getDeviceDid());
-                this.platfondline = Long.valueOf(tLoopStateDto.getState());
-                this.platfondonoff = tLoopStateDto.getState();
+                if (tLoopStateDto.getState() == 1){
+                    this.platfondline = 0L;
+                    this.platfondonoff = 0;
+                }else {
+                    this.platfondline = 1L;
+                    this.platfondonoff = 1;
+                }
                 break;
             //log
             case "2" :
                 this.logoid = Long.valueOf(deviceLoop.getDeviceDid());
-                this.logoline = Long.valueOf(tLoopStateDto.getState());
-                this.logoonoff = tLoopStateDto.getState();
+                if (tLoopStateDto.getState() == 1){
+                    this.logoline = 0L;
+                    this.logoonoff = 0;
+                }else {
+                    this.logoline = 1L;
+                    this.logoonoff = 1;
+                }
+
             default:
         }
         this.name = deviceLoop.getDeviceName();

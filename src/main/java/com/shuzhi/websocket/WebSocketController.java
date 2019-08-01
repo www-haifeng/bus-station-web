@@ -114,11 +114,12 @@ public class WebSocketController {
                 data.put("loop", deviceLoop.getLoop());
                 //是否闭合
                 if (msg.getCmdtype() == 1) {
-                    data.put("state", 1);
-                } else {
                     data.put("state", 0);
+                } else {
+                    data.put("state", 1);
                 }
                 simpleProtocolVo.setData(data);
+                simpleProtocolVo.setCmdid(thingsMsgKey.getMsgCode());
                 simpleProtocolVos.add(simpleProtocolVo);
             });
         });
