@@ -101,6 +101,7 @@ public class WebSocketController {
                 SimpleProtocolVo simpleProtocolVo = new SimpleProtocolVo();
                 //通过设备id查出回路和网关id
                 deviceLoopSelect.setDeviceDid(light);
+                deviceLoopSelect.setTypecode(String.valueOf(msg.getLighttype()));
                 DeviceLoop deviceLoop = deviceLoopService.selectOne(deviceLoopSelect);
                 //网关id
                 simpleProtocolVo.setDid(String.valueOf(deviceLoop.getGatewayDid()));

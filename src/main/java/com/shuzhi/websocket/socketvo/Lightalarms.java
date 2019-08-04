@@ -1,5 +1,6 @@
 package com.shuzhi.websocket.socketvo;
 
+import com.shuzhi.lcd.entities.TEventMessage;
 import com.shuzhi.light.entities.TEvent;
 import lombok.Data;
 
@@ -29,11 +30,19 @@ public class Lightalarms {
     private Integer times;
 
 
-    public Lightalarms(Integer count, String createtime, int i) {
+    Lightalarms(Integer count, String createtime, int i) {
 
         this.date = createtime;
         this.order = i;
         this.times = count;
+
+    }
+
+    Lightalarms(TEventMessage tEventMessage) {
+
+        this.date = tEventMessage.getAlarmtime();
+        this.order = tEventMessage.getOrder();
+        this.times = tEventMessage.getTimes();
 
     }
 }

@@ -48,7 +48,25 @@ public class Msg {
      */
     private List<String> lights;
 
+    /**
+     * 照明类型：1-灯箱；2-顶棚；3-logo
+     */
+    private Integer lighttype;
+
+    public void setLighttype(Integer lighttype) {
+
+       switch (lighttype){
+           case 1 :
+               this.lighttype = 3;
+               break;
+           case 2 :
+               this.lighttype = 1;
+               break;
+           case 3 :
+               this.lighttype = 2;
+               break;
+       }
 
 
-
+    }
 }

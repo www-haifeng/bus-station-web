@@ -60,4 +60,15 @@ public class SumsVo {
      */
     private float lcd = 0;
 
+
+    public void setData(SumsVo sumsVo1) {
+        this.led = led + sumsVo1.getLed();
+        this.lcd = lcd + sumsVo1.getLcd();
+        this.logo = logo + sumsVo1.getLogo();
+        this.platfond = platfond + sumsVo1.getPlatfond();
+        this.lamphouse = lamphouse + sumsVo1.getLamphouse();
+        this.thisyear = thisyear + sumsVo1.getThisyear();
+        this.lastmonth = lastmonth + sumsVo1.getLastmonth();
+        this.currentmonth = currentmonth + sumsVo1.getCurrentmonth();
+    }
 }

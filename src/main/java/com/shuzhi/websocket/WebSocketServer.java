@@ -4,15 +4,19 @@ import com.alibaba.fastjson.JSON;
 import com.shuzhi.entity.DeviceLoop;
 import com.shuzhi.entity.DeviceStation;
 import com.shuzhi.entity.MqMessage;
+import com.shuzhi.entity.Station;
 import com.shuzhi.lcd.entities.IotLcdStatusTwo;
 import com.shuzhi.lcd.service.IotLcdsStatusService;
+import com.shuzhi.lcd.service.TEventLcdService;
 import com.shuzhi.led.entities.TStatusDto;
+import com.shuzhi.led.service.TEventLedService;
 import com.shuzhi.led.service.TStatusService;
 import com.shuzhi.light.entities.StatisticsVo;
 import com.shuzhi.light.entities.TEvent;
 import com.shuzhi.light.entities.TLoopStateDto;
 import com.shuzhi.light.service.LoopStatusServiceApi;
 import com.shuzhi.mapper.DeviceLoopMapper;
+import com.shuzhi.mapper.StationMapper;
 import com.shuzhi.rabbitmq.Message;
 import com.shuzhi.service.DeviceLoopService;
 import com.shuzhi.service.DeviceStationService;
@@ -64,6 +68,12 @@ public class WebSocketServer {
 
     private DeviceLoopMapper deviceLoopMapper;
 
+    private TEventLedService tEventLedService;
+
+    private TEventLcdService tEventLcdService;
+
+    private StationMapper stationMapper;
+
     private static Map<String, CopyOnWriteArrayList<Session>> SESSION_MAP = new ConcurrentHashMap<>();
 
     private static Hashtable<String, Integer> sessionCodeMap = new Hashtable<>();
@@ -87,7 +97,7 @@ public class WebSocketServer {
      * 重试次数
      */
     @Value("${send.retry}")
-    private int retry;
+    private Integer retry;
 
     /**
      * 当前重试次数
@@ -98,7 +108,7 @@ public class WebSocketServer {
      * 连接建立成功调用的方法
      */
     @OnOpen
-    public synchronized void onOpen(Session session) {
+    public void onOpen(Session session) {
 
     }
 
@@ -110,7 +120,7 @@ public class WebSocketServer {
      * @param session session
      */
     @OnMessage
-    public synchronized void onMessage(String message, Session session) throws Exception {
+    public void onMessage(String message, Session session) throws Exception {
 
         //获取模块id
         Message message1 = JSON.parseObject(message, Message.class);
@@ -206,8 +216,28 @@ public class WebSocketServer {
                     //调用站台信息
                     platform();
                     break;
+                //用电管理
+                case "electricity":
+                    //调用站台信息
+                    electricity();
+                    break;
                 default:
             }
+        }
+    }
+
+    /**
+     * 拼装并发送用电管理信息
+     */
+    @Scheduled(cron = "${send.electricity-cron}")
+    private void electricity() {
+        //查出led的 moduleCode
+        Integer modulecode = getModuleCode("electricity");
+        String code = String.valueOf(modulecode);
+        if (isOnClose(code)) {
+            MessageVo messageVo = setMessageVo(modulecode);
+            messageVo.setMsgcode(206001);
+
         }
     }
 
@@ -224,53 +254,62 @@ public class WebSocketServer {
             messageVo.setMsgcode(202002);
             List<DevicesMsg> lights = new ArrayList<>();
             //判断是什么设备
+            Optional.ofNullable(deviceStationService).orElseGet(() -> deviceStationService = ApplicationContextUtils.get(DeviceStationService.class));
             Optional.ofNullable(stationService).orElseGet(() -> stationService = ApplicationContextUtils.get(StationService.class));
             //查询所有的公交站
-            DeviceStationService deviceLoopService = ApplicationContextUtils.get(DeviceStationService.class);
-            List<DeviceStation> deviceLoops = deviceLoopService.selectAll();
-            if (deviceLoops != null) {
-                deviceLoops.stream().map(DeviceStation::getStationid).forEach(stationid -> {
-                    DevicesMsg devicesMsg = new DevicesMsg();
-                    devicesMsg.setStationid(stationid);
-                    devicesMsg.setStationname(stationService.selectByPrimaryKey(stationid).getStationName());
+            Optional.ofNullable(stationMapper).orElseGet(() -> stationMapper = ApplicationContextUtils.get(StationMapper.class));
+            List<Station> stations = stationMapper.selectAll();
 
-                    List<Devices> devices = new ArrayList<>();
-                    //添加lcd设备
-                    try {
-                        setLcdDevices(devicesMsg, devices, stationid);
-                    } catch (Exception e) {
-                        log.error("站台管理 获取lcd设备信息失败 : {}", e.getMessage());
-                    }
-                    //添加led设备
-                    try {
-                        setLedDevices(devicesMsg, devices, stationid);
-                    } catch (Exception e) {
-                        log.error("站台管理 获取led设备信息失败 : {}", e.getMessage());
-                    }
-                    //添加照明设备
-                    try {
-                        setLightDevices(devicesMsg, devices, stationid);
-                    } catch (Exception e) {
-                        log.error("站台管理 获取照明设备信息失败 : {}", e.getMessage());
-                    }
-                    lights.add(devicesMsg);
-                });
-                messageVo.setMsg(lights);
-                send(code, JSON.toJSONString(messageVo));
-                //拼装并发送站台统计信息
-                messageVo.setMsgcode(202001);
-                messageVo.setMsg(platformStatis());
-                send(code, JSON.toJSONString(messageVo));
-                //拼装并发送单个站台的信息
-                messageVo.setMsgcode(202003);
-                messageVo.setMsg(getSums(lights));
-                send(code, JSON.toJSONString(messageVo));
-                //发送单站离线设备信息
+            DeviceStation deviceStationSelcet = new DeviceStation();
+            stations.forEach(station -> {
 
-                log.info("站台定时任务时间 : {}", messageVo.getTimestamp());
-            }
+                Integer stationid = station.getId();
+                //查出该公交站下所有的设备
+                deviceStationSelcet.setStationid(stationid);
+                DevicesMsg devicesMsg = new DevicesMsg();
+                devicesMsg.setStationid(stationid);
+                devicesMsg.setStationname(station.getStationName());
+                List<Devices> devices = new ArrayList<>();
+
+                //添加lcd设备
+                try {
+                    setLcdDevices(devicesMsg, devices, stationid);
+                } catch (Exception e) {
+                    log.error("站台管理 获取lcd设备信息失败 : {}", e.getMessage());
+                }
+                //添加led设备
+                try {
+                    setLedDevices(devicesMsg, devices, stationid);
+                } catch (Exception e) {
+                    log.error("站台管理 获取led设备信息失败 : {}", e.getMessage());
+                }
+                //添加照明设备
+                try {
+                    setLightDevices(devicesMsg, devices, stationid);
+                } catch (Exception e) {
+                    log.error("站台管理 获取照明设备信息失败 : {}", e.getMessage());
+                }
+                lights.add(devicesMsg);
+            });
+            messageVo.setMsg(lights);
+            send(code, JSON.toJSONString(messageVo));
+            //拼装并发送站台统计信息
+            messageVo.setMsgcode(202001);
+            messageVo.setMsg(platformStatis());
+            send(code, JSON.toJSONString(messageVo));
+            //拼装并发送单个站台的信息
+            messageVo.setMsgcode(202003);
+            messageVo.setMsg(getSums(lights));
+            send(code, JSON.toJSONString(messageVo));
+            //发送单站离线设备信息
+            messageVo.setMsgcode(202005);
+            messageVo.setMsg(new StationsMsg(lights));
+            send(code, JSON.toJSONString(messageVo));
+
+            log.info("站台定时任务时间 : {}", messageVo.getTimestamp());
         }
     }
+
 
     /**
      * 计算站台设备能耗
@@ -281,8 +320,10 @@ public class WebSocketServer {
     private SumsMsg getSums(List<DevicesMsg> lights) {
 
         Optional.ofNullable(deviceLoopMapper).orElseGet(() -> deviceLoopMapper = ApplicationContextUtils.get(DeviceLoopMapper.class));
+        Optional.ofNullable(stationMapper).orElseGet(() -> stationMapper = ApplicationContextUtils.get(StationMapper.class));
 
         List<SumsVo> sumsVos = new ArrayList<>();
+        List<SumsVo> sumsVoList = new ArrayList<>();
 
         lights.forEach(devicesMsg -> {
             SumsVo sumsVo = new SumsVo();
@@ -300,7 +341,21 @@ public class WebSocketServer {
             }
             sumsVos.add(sumsVo);
         });
-        return new SumsMsg(sumsVos);
+        //遍历所有公交站 将公交站名称相同的 加起来
+        List<Station> stations = stationMapper.selectAll();
+        stations.forEach(station -> {
+            SumsVo sumsVo = new SumsVo();
+            sumsVo.setStationname(station.getStationName());
+            sumsVo.setStationid(station.getId());
+            sumsVos.forEach(sumsVo1 -> {
+                if (station.getId().equals(sumsVo1.getStationid())) {
+                    sumsVo.setData(sumsVo1);
+                }
+            });
+            sumsVoList.add(sumsVo);
+        });
+
+        return new SumsMsg(sumsVoList);
     }
 
     /**
@@ -357,7 +412,7 @@ public class WebSocketServer {
                     break;
                 //lcd
                 case "5":
-                    lcd = lcd + statistics.getActivepowerNow();;
+                    lcd = lcd + statistics.getActivepowerNow();
                     break;
 
                 default:
@@ -405,6 +460,7 @@ public class WebSocketServer {
                 deviceLoopSelect.setDeviceDid(iotLcdStatusTwo.getId());
                 //获得lcd设备的统计信息
                 deviceLoopSelect.setDeviceDid(iotLcdStatusTwo.getId());
+                deviceLoopSelect.setTypecode("5");
                 DeviceLoop deviceLoop = deviceLoopService.selectOne(deviceLoopSelect);
                 if (deviceLoop != null) {
                     statisticsVo.setLoop(deviceLoop.getLoop());
@@ -425,6 +481,7 @@ public class WebSocketServer {
             //查出设备的回路号
             for (TStatusDto status : allStatus) {
                 deviceLoopSelect.setDeviceDid(status.getId());
+                deviceLoopSelect.setTypecode("4");
                 DeviceLoop deviceLoop = deviceLoopService.selectOne(deviceLoopSelect);
                 if (deviceLoop != null) {
                     statisticsVo.setLoop(deviceLoop.getLoop());
@@ -458,6 +515,7 @@ public class WebSocketServer {
         return platformStatisVo;
     }
 
+
     /**
      * 封装照明设备信息
      *
@@ -479,13 +537,19 @@ public class WebSocketServer {
         DeviceStation deviceStationSelect = new DeviceStation();
         loopStatus.forEach(loopStateDto -> {
             //通过回路id查出设备id
-            DeviceLoop deviceLoop = deviceLoopService.selectOne(new DeviceLoop(loopStateDto.getLoop()));
-            deviceStationSelect.setDeviceDid(deviceLoop.getDeviceDid());
-            DeviceStation deviceStation = deviceStationService.selectOne(deviceStationSelect);
-            if (deviceStation != null) {
-                if (stationid.equals(deviceStation.getStationid())) {
-                    Devices device = new Devices(loopStateDto);
-                    devices.add(device);
+            DeviceLoop deviceLoopSelect = new DeviceLoop();
+            deviceLoopSelect.setGatewayDid(loopStateDto.getGatewayId());
+            deviceLoopSelect.setLoop(loopStateDto.getLoop());
+            DeviceLoop deviceLoop = deviceLoopService.selectOne(deviceLoopSelect);
+            if (deviceLoop != null) {
+                deviceStationSelect.setDeviceDid(deviceLoop.getDeviceDid());
+                deviceStationSelect.setTypecode(deviceLoop.getTypecode());
+                DeviceStation deviceStation = deviceStationService.selectOne(deviceStationSelect);
+                if (deviceStation != null) {
+                    if (stationid.equals(deviceStation.getStationid())) {
+                        Devices device = new Devices(loopStateDto);
+                        devices.add(device);
+                    }
                 }
             }
         });
@@ -508,7 +572,7 @@ public class WebSocketServer {
             return allStatus;
         });
         //判断该设备是否在该网关下
-        isInGateway(devicesMsg, devices, stationid);
+        isInGateway(devicesMsg, devices, stationid, "4");
 
     }
 
@@ -531,7 +595,7 @@ public class WebSocketServer {
             return allStatusByRedis;
         });
         //判断该设备是否在该站台下
-        isInGateway(devicesMsg, devices, stationid);
+        isInGateway(devicesMsg, devices, stationid, "5");
     }
 
     /**
@@ -540,19 +604,42 @@ public class WebSocketServer {
      * @param devicesMsg 要封装的设备
      * @param devices    设备
      * @param stationid  公交站id
+     * @param s
      */
-    private void isInGateway(DevicesMsg devicesMsg, List<Devices> devices, Integer stationid) {
-        allStatus.stream().filter(iotLedStatus -> {
-            DeviceStation deviceStation = deviceStationService.selectOne(new DeviceStation(iotLedStatus.getId()));
-            if (deviceStation != null) {
-                return stationid.equals(deviceStation.getStationid());
-            }
-            return false;
-        })
-                .forEach(iotLcdStatus -> {
-                    Devices device = new Devices(iotLcdStatus);
-                    devices.add(device);
-                });
+    @SuppressWarnings("Duplicates")
+    private void isInGateway(DevicesMsg devicesMsg, List<Devices> devices, Integer stationid, String s) {
+        DeviceStation deviceStationSelect = new DeviceStation();
+        if (StringUtils.equals("4", s)) {
+            allStatus.stream().filter(iotLedStatus -> {
+                //查出设备信息
+                deviceStationSelect.setTypecode(s);
+                deviceStationSelect.setDeviceDid(iotLedStatus.getId());
+                DeviceStation deviceStation = deviceStationService.selectOne(deviceStationSelect);
+                //判断是否在该公交站下
+                if (deviceStation != null) {
+                    return stationid.equals(deviceStation.getStationid());
+                }
+                return false;
+            })
+                    .forEach(iotLcdStatus -> {
+                        Devices device = new Devices(iotLcdStatus);
+                        devices.add(device);
+                    });
+        } else {
+            allStatusByRedis.stream().filter(iotLedStatus -> {
+                deviceStationSelect.setTypecode(s);
+                deviceStationSelect.setDeviceDid(iotLedStatus.getId());
+                DeviceStation deviceStation = deviceStationService.selectOne(deviceStationSelect);
+                if (deviceStation != null) {
+                    return stationid.equals(deviceStation.getStationid());
+                }
+                return false;
+            })
+                    .forEach(iotLcdStatus -> {
+                        Devices device = new Devices(iotLcdStatus);
+                        devices.add(device);
+                    });
+        }
         devicesMsg.setDevices(devices);
     }
 
@@ -582,18 +669,20 @@ public class WebSocketServer {
                 List<Lights> logos = new ArrayList<>();
                 loopStatus.forEach(tLoopStateDto -> {
                     //判断这个回路下是什么设备
-                    Lights light = new Lights(tLoopStateDto);
-                    lightsList.add(light);
-
-                    //判断这是什么设备
-                    if (light.getLamphouseid() != null) {
-                        lamphouses.add(light);
-                    }
-                    if (light.getPlatfondid() != null) {
-                        platfonds.add(light);
-                    }
-                    if (light.getLogoid() != null) {
-                        logos.add(light);
+                    DeviceLoop deviceLoop = tLoopStateDtoIsNull(tLoopStateDto);
+                    if (deviceLoop != null) {
+                        Lights light = new Lights(deviceLoop, tLoopStateDto);
+                        lightsList.add(light);
+                        //判断这是什么设备
+                        if (light.getLamphouseid() != null) {
+                            lamphouses.add(light);
+                        }
+                        if (light.getPlatfondid() != null) {
+                            platfonds.add(light);
+                        }
+                        if (light.getLogoid() != null) {
+                            logos.add(light);
+                        }
                     }
                 });
                 LightMsg lightMsg = new LightMsg(lightsList);
@@ -636,19 +725,35 @@ public class WebSocketServer {
      */
     private StatisticsMsgVo lightStatis(List<TLoopStateDto> loopStatus) throws ParseException {
 
-        List<String> dids = new ArrayList<>();
+        List<String> dids1 = new ArrayList<>();
+        List<String> dids2 = new ArrayList<>();
+        List<String> dids3 = new ArrayList<>();
         //取出所有的did
         loopStatus.forEach(loopStateDto -> {
             //通过回路号查询这个是什么设备
             DeviceLoopService deviceLoopService = ApplicationContextUtils.get(DeviceLoopService.class);
             DeviceLoop deviceLoopSelect = new DeviceLoop();
             deviceLoopSelect.setLoop(loopStateDto.getLoop());
+            deviceLoopSelect.setGatewayDid(loopStateDto.getGatewayId());
             DeviceLoop deviceLoop = deviceLoopService.selectOne(deviceLoopSelect);
-            dids.add(String.valueOf(deviceLoop.getDeviceDid()));
-
+            if (deviceLoop != null) {
+                if ("1".equals(deviceLoop.getTypecode())) {
+                    dids1.add(String.valueOf(deviceLoop.getDeviceDid()));
+                }
+                if ("1".equals(deviceLoop.getTypecode())) {
+                    dids2.add(String.valueOf(deviceLoop.getDeviceDid()));
+                }
+                if ("1".equals(deviceLoop.getTypecode())) {
+                    dids3.add(String.valueOf(deviceLoop.getDeviceDid()));
+                }
+            }
         });
         //统计
-        return equipStatis(dids);
+        StatisticsMsgVo statisticsMsgVo1 = equipStatis(dids1, "1");
+        StatisticsMsgVo statisticsMsgVo2 = equipStatis(dids1, "2");
+        StatisticsMsgVo statisticsMsgVo3 = equipStatis(dids1, "3");
+
+        return new StatisticsMsgVo(statisticsMsgVo1, statisticsMsgVo2, statisticsMsgVo3);
     }
 
 
@@ -656,7 +761,7 @@ public class WebSocketServer {
      * lcd首次连接信息 也需要定时向前台推送
      */
     @Scheduled(cron = "${send.lcd-cron}")
-    public void lcd() throws ParseException {
+    public void lcd() {
         //查出led的 moduleCode
         Integer modulecode = getModuleCode("lcd");
         String code = String.valueOf(modulecode);
@@ -665,25 +770,26 @@ public class WebSocketServer {
             MessageVo messageVo = setMessageVo(modulecode);
             //调用接口 获得所有站屏的设备状态
             messageVo.setMsgcode(204001);
+            Optional.ofNullable(tEventLcdService).orElseGet(() -> tEventLcdService = ApplicationContextUtils.get(TEventLcdService.class));
             Optional.ofNullable(iotLcdStatusService).orElseGet(() -> iotLcdStatusService = ApplicationContextUtils.get(IotLcdsStatusService.class));
             this.allStatusByRedis = iotLcdStatusService.findAllStatusByRedis();
             if (allStatusByRedis != null && allStatusByRedis.size() != 0) {
-                Lcds lcds = new Lcds(allStatusByRedis);
-                LcdMsg lcdMsg = new LcdMsg(lcds);
+                LcdMsg lcdMsg = new LcdMsg(allStatusByRedis);
                 messageVo.setMsg(lcdMsg);
                 send(code, JSON.toJSONString(messageVo));
 
                 //推送设备状态 将多余字段设置为 null
                 allStatusByRedis.forEach(iotLcdStatus -> iotLcdStatus.setVolume(null));
-                Lcds lcds2 = new Lcds(allStatusByRedis);
-                LcdMsg lcdMsg2 = new LcdMsg(lcds2);
+                ;
+                LcdMsg lcdMsg2 = new LcdMsg(allStatusByRedis);
                 messageVo.setMsg(lcdMsg2);
                 messageVo.setMsgcode(204004);
                 send(code, JSON.toJSONString(messageVo));
 
                 //推送统计信息
-                StatisticsMsgVo statisticsMsgVo = lcdStatis(allStatusByRedis);
-                messageVo.setMsg(statisticsMsgVo);
+                LightMsgVo lightMsgVo = new LightMsgVo();
+                lightMsgVo.lightMsgVoLcd(allStatusByRedis, tEventLcdService.findCountByTime());
+                messageVo.setMsg(lightMsgVo);
                 messageVo.setMsgcode(204002);
                 send(code, JSON.toJSONString(messageVo));
 
@@ -739,7 +845,7 @@ public class WebSocketServer {
         //取出所有的did
         allStatusByRedis.forEach(iotLcdStatus -> dids.add(iotLcdStatus.getId()));
         //统计
-        return equipStatis(dids);
+        return equipStatis(dids, "5");
     }
 
     /**
@@ -754,12 +860,12 @@ public class WebSocketServer {
             MessageVo messageVo = setMessageVo(modulecode);
             messageVo.setMsgcode(205001);
             //调用接口
+            Optional.ofNullable(tEventLedService).orElseGet(() -> tEventLedService = ApplicationContextUtils.get(TEventLedService.class));
             Optional.ofNullable(tStatusService).orElseGet(() -> tStatusService = ApplicationContextUtils.get(TStatusService.class));
             allStatus = tStatusService.findAllStatusByRedis();
             if (allStatus != null && allStatus.size() != 0) {
                 Leds leds = new Leds(allStatus);
-                LedMsg ledMsg = new LedMsg(leds);
-                messageVo.setMsg(ledMsg);
+                messageVo.setMsg(leds);
                 send(code, JSON.toJSONString(messageVo));
 
                 allStatus.forEach(tStatusDto -> {
@@ -767,15 +873,15 @@ public class WebSocketServer {
                     tStatusDto.setLight(null);
                 });
                 Leds leds2 = new Leds(allStatus);
-                LedMsg ledMsg2 = new LedMsg(leds2);
-                messageVo.setMsg(ledMsg2);
+                messageVo.setMsg(leds2);
                 messageVo.setMsgcode(205004);
                 send(code, JSON.toJSONString(messageVo));
 
                 //推送统计信息
-                StatisticsMsgVo statisticsMsgVo = ledStatis(allStatus);
-                messageVo.setMsg(statisticsMsgVo);
-                messageVo.setMsgcode(205002);
+                LightMsgVo lightMsgVo = new LightMsgVo();
+                lightMsgVo.lightMsgVoLed(allStatus, tEventLedService.findCountByTime());
+                messageVo.setMsg(lightMsgVo);
+                messageVo.setMsgcode(204002);
                 send(code, JSON.toJSONString(messageVo));
 
                 //推送离线设备信息
@@ -802,7 +908,7 @@ public class WebSocketServer {
         //取出所有的did
         allStatus.forEach(tStatusDto -> dids.add(tStatusDto.getDid()));
         //统计
-        StatisticsMsgVo statisticsMsgVo = equipStatis(dids);
+        StatisticsMsgVo statisticsMsgVo = equipStatis(dids, "4");
         statisticsMsgVo.addNum(allStatus);
         return statisticsMsgVo;
 
@@ -859,11 +965,11 @@ public class WebSocketServer {
                             }
                         } catch (Exception e) {
                             //重新推送
-                            if (retry != count){
-                                send(token,message);
-                                log.info("消息推送失败,重试第 {} 次", retry + 1);
+                            if (retry != count) {
+                                send(token, message);
+                                log.info("消息推送失败,重试第 {} 次", count + 1);
                                 count++;
-                            }else {
+                            } else {
                                 count = 0;
                                 onClose(session1);
                                 log.error("消息推送失败 : {}", e.getMessage());
@@ -939,11 +1045,12 @@ public class WebSocketServer {
     /**
      * 提取重复代码
      *
-     * @param dids 设备did
+     * @param dids     设备did
+     * @param typeCode 设备类型
      * @return 统计信息
      * @throws ParseException 时间格式化异常
      */
-    private StatisticsMsgVo equipStatis(List<String> dids) throws ParseException {
+    private StatisticsMsgVo equipStatis(List<String> dids, String typeCode) throws ParseException {
 
         Optional.ofNullable(deviceLoopService).orElseGet(() -> deviceLoopService = ApplicationContextUtils.get(DeviceLoopService.class));
         //遍历通过did查出回路
@@ -959,6 +1066,7 @@ public class WebSocketServer {
         for (String did : dids) {
             if (StringUtils.isNotBlank(did)) {
                 deviceLoopSelect.setDeviceDid(did);
+                deviceLoopSelect.setTypecode(typeCode);
                 DeviceLoop deviceLoop = deviceLoopService.selectOne(deviceLoopSelect);
                 //查出单个设备的统计信息
                 if (deviceLoop != null) {
@@ -974,5 +1082,48 @@ public class WebSocketServer {
             }
         }
         return new StatisticsMsgVo(currentmonth, lastmonth, thisyear, activepowerNow);
+    }
+
+
+    private DeviceLoop tLoopStateDtoIsNull(TLoopStateDto tLoopStateDto) {
+        //通过回路号查询这个是什么设备
+        Optional.ofNullable(deviceLoopService).orElseGet(() -> deviceLoopService = ApplicationContextUtils.get(DeviceLoopService.class));
+        DeviceLoop deviceLoopSelect = new DeviceLoop();
+        deviceLoopSelect.setLoop(tLoopStateDto.getLoop());
+        deviceLoopSelect.setGatewayDid(tLoopStateDto.getGatewayId());
+        DeviceLoop deviceLoop = deviceLoopService.selectOne(deviceLoopSelect);
+        if (deviceLoop != null) {
+            if (StringUtils.equals(deviceLoop.getTypecode(), "1") || StringUtils.equals(deviceLoop.getTypecode(), "2") || StringUtils.equals(deviceLoop.getTypecode(), "3")) {
+                return deviceLoop;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 安公交站整个设备
+     *
+     * @param lights 设备
+     * @return 拼装
+     */
+    private List<DevicesMsg> lightsStation(List<DevicesMsg> lights) {
+
+        Optional.ofNullable(stationMapper).orElseGet(() -> stationMapper = ApplicationContextUtils.get(StationMapper.class));
+        List<DevicesMsg> lightList = new ArrayList<>();
+        //遍历所有公交站 将公交站名称相同的 加起来
+        List<Station> stations = stationMapper.selectAll();
+        stations.forEach(station -> {
+            DevicesMsg devicesMsg = new DevicesMsg();
+            devicesMsg.setStationname(station.getStationName());
+            devicesMsg.setStationid(station.getId());
+            lights.forEach(devicesMsg1 -> {
+                if (station.getId().equals(devicesMsg1.getStationid())) {
+                    devicesMsg.setData(devicesMsg1);
+                }
+            });
+            lightList.add(devicesMsg);
+        });
+        return lightList;
+
     }
 }

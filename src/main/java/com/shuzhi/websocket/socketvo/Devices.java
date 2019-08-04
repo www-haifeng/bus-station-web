@@ -47,6 +47,11 @@ public class Devices {
     private Integer volume;
 
     /**
+     * 时间
+     */
+    private String timestamp;
+
+    /**
      * 封装lcd设备信息
      *
      * @param iotLcdStatus lcd设备信息
@@ -57,6 +62,7 @@ public class Devices {
         this.state = Integer.valueOf(iotLcdStatus.getStatus());
         this.onoff = this.state;
         this.volume = iotLcdStatus.getVolume();
+        this.timestamp = iotLcdStatus.getTimestamp();
 
     }
 
@@ -73,6 +79,7 @@ public class Devices {
         this.onoff = this.state;
         this.volume = tStatusDto.getVolume();
         this.light = tStatusDto.getLight();
+        this.timestamp = tStatusDto.getTimestamp();
     }
 
     /**
@@ -86,12 +93,14 @@ public class Devices {
         DeviceLoopService deviceLoopService = ApplicationContextUtils.get(DeviceLoopService.class);
         DeviceLoop deviceLoopSelect = new DeviceLoop();
         deviceLoopSelect.setLoop(loopStateDto.getLoop());
+        deviceLoopSelect.setGatewayDid(loopStateDto.getGatewayId());
         DeviceLoop deviceLoop = deviceLoopService.selectOne(deviceLoopSelect);
 
         this.id = Long.valueOf(loopStateDto.getId());
         this.type = Integer.valueOf(deviceLoop.getTypecode());
         this.state = loopStateDto.getState();
         this.onoff = this.state;
+        this.timestamp = loopStateDto.getTimestamp();
     }
 
 }

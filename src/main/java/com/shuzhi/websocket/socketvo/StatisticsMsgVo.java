@@ -90,6 +90,14 @@ public class StatisticsMsgVo {
 
     }
 
+    public StatisticsMsgVo(StatisticsMsgVo statisticsMsgVo1, StatisticsMsgVo statisticsMsgVo2, StatisticsMsgVo statisticsMsgVo3) {
+
+        this.setActivepowerNow(statisticsMsgVo1.getActivepowerNow() + statisticsMsgVo2.getActivepowerNow() + statisticsMsgVo3.getActivepowerNow());
+        this.setCurrentmonth(statisticsMsgVo1.getCurrentmonth() + statisticsMsgVo2.getCurrentmonth() + statisticsMsgVo3.getCurrentmonth());
+        this.setLastmonth(statisticsMsgVo1.getLastmonth() + statisticsMsgVo2.getLastmonth() + statisticsMsgVo3.getLastmonth());
+        this.setThisyear(statisticsMsgVo1.getThisyear() + statisticsMsgVo2.getThisyear() + statisticsMsgVo3.getThisyear());
+    }
+
     public void addNum(List<TStatusDto> allStatus) {
 
         this.total = allStatus.size();

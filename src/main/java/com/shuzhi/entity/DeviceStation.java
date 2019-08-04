@@ -1,6 +1,7 @@
 package com.shuzhi.entity;
 
 import com.shuzhi.common.basemapper.BaseEntity;
+import com.shuzhi.led.entities.TStatusDto;
 import lombok.Data;
 
 import lombok.EqualsAndHashCode;
@@ -61,4 +62,5 @@ public class DeviceStation extends BaseEntity implements Serializable {
 
 
     }
+
 }

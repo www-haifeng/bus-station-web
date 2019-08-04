@@ -2,11 +2,12 @@ package com.shuzhi.websocket.socketvo;
 
 import com.shuzhi.entity.DeviceLoop;
 import com.shuzhi.entity.DeviceStation;
+import com.shuzhi.entity.Station;
 import com.shuzhi.lcd.entities.IotLcdStatusTwo;
 import com.shuzhi.led.entities.TStatusDto;
 import com.shuzhi.light.entities.TLoopStateDto;
+import com.shuzhi.mapper.DeviceLoopMapper;
 import com.shuzhi.mapper.DeviceStationMapper;
-import com.shuzhi.service.DeviceLoopService;
 import com.shuzhi.service.DeviceStationService;
 import com.shuzhi.service.StationService;
 import com.shuzhi.websocket.ApplicationContextUtils;
@@ -44,7 +45,7 @@ public class OfflineVo {
     /**
      * 站名称
      */
-    private String name = "此设备没有配置公交站";
+    private String name;
 
     /**
      * 离线时间
@@ -56,45 +57,56 @@ public class OfflineVo {
      */
     private Integer state;
 
-    OfflineVo(TLoopStateDto loopStateDto) {
-        if (loopStateDto.getState() == 1) {
-            //通过回路号查询这个是什么设备
-            DeviceLoopService deviceLoopService = ApplicationContextUtils.get(DeviceLoopService.class);
-            DeviceStationService deviceStationService = ApplicationContextUtils.get(DeviceStationService.class);
-            DeviceLoop deviceLoopSelect = new DeviceLoop();
-            deviceLoopSelect.setLoop(loopStateDto.getLoop());
-            deviceLoopSelect.setGatewayDid(loopStateDto.getGatewayId());
-            DeviceLoop deviceLoop = deviceLoopService.selectOne(deviceLoopSelect);
-            //查出 对应的公交站id和名称
-            DeviceStation deviceStationSelect = new DeviceStation(String.valueOf(deviceLoop.getDeviceDid()));
-            DeviceStation deviceStation = deviceStationService.selectOne(deviceStationSelect);
-            StationService stationService = ApplicationContextUtils.get(StationService.class);
-            if (deviceStation != null) {
-                this.name = stationService.selectByPrimaryKey(deviceStation.getId()).getStationName();
-            }
-            this.id = Long.valueOf(deviceLoop.getDeviceDid());
-            if (loopStateDto.getState() == 1) {
-                if (StringUtils.isBlank(loopStateDto.getTimestamp())) {
-                    this.offlinetime = "未获取到离线时间";
+    /**
+     * 封装照明设备信息的构造方法
+     *
+     * @param deviceLoop   照明设备信息
+     * @param loopStateDto
+     */
+    OfflineVo(DeviceLoop deviceLoop, TLoopStateDto loopStateDto) {
 
+        DeviceStationService deviceStationService = ApplicationContextUtils.get(DeviceStationService.class);
+        //查出 对应的公交站id和名称
+        DeviceStation deviceStationSelect = new DeviceStation();
+        deviceStationSelect.setTypecode(deviceLoop.getTypecode());
+        deviceStationSelect.setDeviceDid(deviceLoop.getDeviceDid());
+        DeviceStation deviceStation = deviceStationService.selectOne(deviceStationSelect);
+        if (deviceStation != null) {
+            StationService stationService = ApplicationContextUtils.get(StationService.class);
+            Station station = stationService.selectByPrimaryKey(deviceStation.getStationid());
+            if (station != null) {
+                this.name = station.getStationName();
+                this.id = Long.valueOf(deviceLoop.getDeviceDid());
+                if (loopStateDto.getState() == 1) {
+                    if (StringUtils.isBlank(loopStateDto.getTimestamp())) {
+                        this.offlinetime = "未获取到离线时间";
+
+                    } else {
+                        String[] split = loopStateDto.getTimestamp().split("\\.");
+                        this.offlinetime = split[0];
+                    }
+                    this.offlinetime = loopStateDto.getTimestamp();
+                    this.state = 0;
                 } else {
-                    String[] split = loopStateDto.getTimestamp().split("\\.");
-                    this.offlinetime = split[0];
+                    this.state = 1;
                 }
-                this.offlinetime = loopStateDto.getTimestamp();
-                this.state = 0;
-            } else {
-                this.state = 1;
             }
         }
     }
 
+
+    /**
+     * 封装个lcd设备的构造方法
+     *
+     * @param iotLcdStatusTwo lcd设备信息
+     */
     OfflineVo(IotLcdStatusTwo iotLcdStatusTwo) {
 
         if ("0".equals(iotLcdStatusTwo.getStatus())) {
             //通过设备号 查出站名
             DeviceStationMapper deviceStationMapper = ApplicationContextUtils.get(DeviceStationMapper.class);
             DeviceStation deviceStationSelect = new DeviceStation(iotLcdStatusTwo.getId());
+            deviceStationSelect.setTypecode("5");
             DeviceStation deviceStation = deviceStationMapper.selectOne(deviceStationSelect);
             if (deviceStation != null) {
                 this.name = deviceStation.getStationName();
@@ -112,11 +124,17 @@ public class OfflineVo {
         }
     }
 
+    /**
+     * 封装led设备的构造方法
+     *
+     * @param tStatusDto led设备信息
+     */
     OfflineVo(TStatusDto tStatusDto) {
         if (tStatusDto.getState() == 0) {
             //通过设备号 查出站名
             DeviceStationMapper deviceStationMapper = ApplicationContextUtils.get(DeviceStationMapper.class);
             DeviceStation deviceStationSelect = new DeviceStation(tStatusDto.getId());
+            deviceStationSelect.setTypecode("4");
             DeviceStation deviceStation = deviceStationMapper.selectOne(deviceStationSelect);
             if (deviceStation != null) {
                 this.name = deviceStation.getStationName();
@@ -132,5 +150,18 @@ public class OfflineVo {
                 }
             }
         }
+    }
+
+    /**
+     * 封装所有设备的构造方法
+     *
+     * @param devices    所有设备信息
+     * @param deviceLoop
+     */
+    OfflineVo(Devices devices, DeviceLoop deviceLoop) {
+        this.id = devices.getId();
+        this.type = Integer.valueOf(deviceLoop.getTypecode());
+        this.offlinetime = devices.getTimestamp();
+        this.state = devices.getState();
     }
 }

@@ -1,6 +1,7 @@
 package com.shuzhi.entity;
 
 import com.shuzhi.common.basemapper.BaseEntity;
+import com.shuzhi.light.entities.TLoopStateDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -55,8 +56,9 @@ private static final long serialVersionUID=1L;
     @Column(name = "gateway_did")
     private String gatewayDid;
 
-    public DeviceLoop(Integer id) {
-        this.loop = id;
+    public DeviceLoop(TLoopStateDto loopStateDto) {
+        this.loop = loopStateDto.getLoop();
+        this.gatewayDid = loopStateDto.getGatewayId();
     }
     public DeviceLoop() {
 

@@ -1,5 +1,8 @@
 package com.shuzhi.websocket.socketvo;
 
+import com.shuzhi.lcd.entities.IotLcdStatusTwo;
+import com.shuzhi.lcd.entities.TEventMessage;
+import com.shuzhi.led.entities.TStatusDto;
 import com.shuzhi.light.entities.TEvent;
 import lombok.Data;
 
@@ -54,12 +57,33 @@ public class LightMsgVo {
         this.offline = statisticsMsgVo.getOffline();
 
         AtomicInteger order = new AtomicInteger(1);
-        event.forEach(tEvent -> {
+        if (event != null){
+            event.forEach(tEvent -> {
+                Lightalarms lightalarm = new Lightalarms(tEvent.getCount(), tEvent.getCreatetime(), order.get());
+                lightalarms.add(lightalarm);
+                order.getAndIncrement();
+            });
+        }
+    }
 
-            Lightalarms lightalarm = new Lightalarms(tEvent.getCount(),tEvent.getCreatetime(),order.get());
-            lightalarms.add(lightalarm);
-            order.getAndIncrement();
-        });
+    public void lightMsgVoLcd(List<IotLcdStatusTwo> allStatusByRedis, List<TEventMessage> countByTime) {
 
+        countByTime.forEach(tEventMessage -> lightalarms.add(new Lightalarms(tEventMessage)));
+        this.offline = Math.toIntExact(allStatusByRedis.stream().filter(iotLcdStatusTwo -> "1".equals(iotLcdStatusTwo.getStatus())).count());
+        this.total = allStatusByRedis.size();
+        this.offline = Math.toIntExact(allStatusByRedis.stream().filter(iotLcdStatusTwo -> "0".equals(iotLcdStatusTwo.getStatus())).count());
+
+    }
+
+    public void lightMsgVoLed(List<TStatusDto> allStatus, List<TEventMessage> countByTime) {
+        if (countByTime != null){
+            countByTime.forEach(tEventMessage -> lightalarms.add(new Lightalarms(tEventMessage)));
+            this.offline = Math.toIntExact(allStatus.stream().filter(tStatusDto -> tStatusDto.getState() == 1).count());
+            this.total = allStatus.size();
+            this.offline = Math.toIntExact(allStatus.stream().filter(tStatusDto -> tStatusDto.getState() == 0).count());
+        }
+    }
+
+    public LightMsgVo() {
     }
 }
