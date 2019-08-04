@@ -40,7 +40,7 @@ public class OfflineVo {
     /**
      * 设备名称
      */
-    private String devecename;
+    private String devicename;
 
     /**
      * 站名称
@@ -138,6 +138,7 @@ public class OfflineVo {
             DeviceStation deviceStation = deviceStationMapper.selectOne(deviceStationSelect);
             if (deviceStation != null) {
                 this.name = deviceStation.getStationName();
+                this.devicename = deviceStation.getDeviceName();
             }
             this.id = Long.valueOf(tStatusDto.getId());
             this.state = tStatusDto.getState();
@@ -162,6 +163,7 @@ public class OfflineVo {
         this.id = devices.getId();
         this.type = Integer.valueOf(deviceLoop.getTypecode());
         this.offlinetime = devices.getTimestamp();
+        this.devicename = deviceLoop.getDeviceName();
         this.state = devices.getState();
     }
 }
