@@ -881,7 +881,7 @@ public class WebSocketServer {
                 LightMsgVo lightMsgVo = new LightMsgVo();
                 lightMsgVo.lightMsgVoLed(allStatus, tEventLedService.findCountByTime());
                 messageVo.setMsg(lightMsgVo);
-                messageVo.setMsgcode(204002);
+                messageVo.setMsgcode(205002);
                 send(code, JSON.toJSONString(messageVo));
 
                 //推送离线设备信息

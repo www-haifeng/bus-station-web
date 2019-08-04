@@ -6,7 +6,6 @@ import com.shuzhi.entity.Station;
 import com.shuzhi.lcd.entities.IotLcdStatusTwo;
 import com.shuzhi.led.entities.TStatusDto;
 import com.shuzhi.light.entities.TLoopStateDto;
-import com.shuzhi.mapper.DeviceLoopMapper;
 import com.shuzhi.mapper.DeviceStationMapper;
 import com.shuzhi.service.DeviceStationService;
 import com.shuzhi.service.StationService;

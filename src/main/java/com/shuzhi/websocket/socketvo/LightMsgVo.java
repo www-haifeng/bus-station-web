@@ -69,7 +69,7 @@ public class LightMsgVo {
     public void lightMsgVoLcd(List<IotLcdStatusTwo> allStatusByRedis, List<TEventMessage> countByTime) {
 
         countByTime.forEach(tEventMessage -> lightalarms.add(new Lightalarms(tEventMessage)));
-        this.offline = Math.toIntExact(allStatusByRedis.stream().filter(iotLcdStatusTwo -> "1".equals(iotLcdStatusTwo.getStatus())).count());
+        this.online = Math.toIntExact(allStatusByRedis.stream().filter(iotLcdStatusTwo -> "1".equals(iotLcdStatusTwo.getStatus())).count());
         this.total = allStatusByRedis.size();
         this.offline = Math.toIntExact(allStatusByRedis.stream().filter(iotLcdStatusTwo -> "0".equals(iotLcdStatusTwo.getStatus())).count());
 
@@ -78,7 +78,7 @@ public class LightMsgVo {
     public void lightMsgVoLed(List<TStatusDto> allStatus, List<TEventMessage> countByTime) {
         if (countByTime != null){
             countByTime.forEach(tEventMessage -> lightalarms.add(new Lightalarms(tEventMessage)));
-            this.offline = Math.toIntExact(allStatus.stream().filter(tStatusDto -> tStatusDto.getState() == 1).count());
+            this.online = Math.toIntExact(allStatus.stream().filter(tStatusDto -> tStatusDto.getState() == 1).count());
             this.total = allStatus.size();
             this.offline = Math.toIntExact(allStatus.stream().filter(tStatusDto -> tStatusDto.getState() == 0).count());
         }
