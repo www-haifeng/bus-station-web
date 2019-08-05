@@ -29,7 +29,7 @@ public class Statistics {
      * @param statisticsVo 回路号和集中控制器号
      * @return 统计结果
      */
-    static StatisticsMsgVo findStatistics(StatisticsVo statisticsVo) throws ParseException {
+    public static StatisticsMsgVo findStatistics(StatisticsVo statisticsVo) throws ParseException {
 
         Optional.ofNullable(loopStatusServiceApi).orElseGet(() -> loopStatusServiceApi = ApplicationContextUtils.get(LoopStatusServiceApi.class));
 

@@ -236,8 +236,20 @@ public class WebSocketServer {
         String code = String.valueOf(modulecode);
         if (isOnClose(code)) {
             MessageVo messageVo = setMessageVo(modulecode);
+            //所有站集中控制器的状态信息
             messageVo.setMsgcode(206001);
-
+            //查出所有的公交站
+            Optional.ofNullable(stationMapper).orElseGet(() -> stationMapper = ApplicationContextUtils.get(StationMapper.class));
+            List<Station> stations = stationMapper.selectAll();
+            //封装所有站集中控制器的状态信息
+            List<Gateways> gateways = new ArrayList<>();
+            stations.forEach(station -> {
+                Gateways gateways1 = new Gateways(station);
+                gateways.add(gateways1);
+            });
+            //推送所有站集中控制器的状态信息
+            messageVo.setMsg(new GatewaysMsg(gateways));
+            send(code, JSON.toJSONString(messageVo));
         }
     }
 
@@ -604,7 +616,7 @@ public class WebSocketServer {
      * @param devicesMsg 要封装的设备
      * @param devices    设备
      * @param stationid  公交站id
-     * @param s
+     * @param s 设备类型
      */
     @SuppressWarnings("Duplicates")
     private void isInGateway(DevicesMsg devicesMsg, List<Devices> devices, Integer stationid, String s) {
@@ -780,7 +792,6 @@ public class WebSocketServer {
 
                 //推送设备状态 将多余字段设置为 null
                 allStatusByRedis.forEach(iotLcdStatus -> iotLcdStatus.setVolume(null));
-                ;
                 LcdMsg lcdMsg2 = new LcdMsg(allStatusByRedis);
                 messageVo.setMsg(lcdMsg2);
                 messageVo.setMsgcode(204004);
@@ -852,7 +863,7 @@ public class WebSocketServer {
      * led首次连接信息 也需要定时向前台推送
      */
     @Scheduled(cron = "${send.led-cron}")
-    public void led() throws ParseException {
+    public void led() {
         //查出led的 moduleCode
         Integer modulecode = getModuleCode("led");
         String code = String.valueOf(modulecode);

@@ -1,10 +1,14 @@
 package com.shuzhi.websocket.socketvo;
 
+import com.shuzhi.entity.DeviceLoop;
 import com.shuzhi.led.entities.TStatusDto;
 import com.shuzhi.light.entities.TLoopStateDto;
+import com.shuzhi.service.DeviceLoopService;
+import com.shuzhi.websocket.ApplicationContextUtils;
 import lombok.Data;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @ProjectName: bus-station-web
@@ -107,9 +111,21 @@ public class StatisticsMsgVo {
     }
     public void addLightNum(List<TLoopStateDto> tLoopStateDtos) {
 
-        this.total = tLoopStateDtos.size();
-        this.online = Math.toIntExact(tLoopStateDtos.stream().filter(tStatusDto -> tStatusDto.getState() == 1).count());
-        this.offline = Math.toIntExact(tLoopStateDtos.stream().filter(tStatusDto -> tStatusDto.getState() == 0).count());
+        //过滤出照明设备
+        DeviceLoopService deviceLoopService = ApplicationContextUtils.get(DeviceLoopService.class);
+        DeviceLoop deviceLoopSelect = new DeviceLoop();
+        List<TLoopStateDto> collect = tLoopStateDtos.stream().filter(loopStateDto -> {
+            deviceLoopSelect.setLoop(loopStateDto.getLoop());
+            deviceLoopSelect.setGatewayDid(loopStateDto.getGatewayId());
+            DeviceLoop deviceLoop = deviceLoopService.selectOne(deviceLoopSelect);
+            //判断这个设备是不是照明设备
+            return "1".equals(deviceLoop.getTypecode()) || "2".equals(deviceLoop.getTypecode()) || "3".equals(deviceLoop.getTypecode());
+        }).collect(Collectors.toList());
+
+
+        this.total = collect.size();
+        this.online = Math.toIntExact(collect.stream().filter(tStatusDto -> tStatusDto.getState() == 1).count());
+        this.offline = Math.toIntExact(collect.stream().filter(tStatusDto -> tStatusDto.getState() == 0).count());
         this.oncount = online;
         this.offcount = offline;
 

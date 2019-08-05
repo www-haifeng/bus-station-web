@@ -39,12 +39,12 @@ public class Devices {
     /**
      * 亮度
      */
-    private Integer light;
+    private Integer light = 0;
 
     /**
      * 音量
      */
-    private Integer volume;
+    private Integer volume = 0;
 
     /**
      * 时间
