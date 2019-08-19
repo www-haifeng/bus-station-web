@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shuzhi.mapper.DictionaryDetailsMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.shuzhi.entity.DictionaryDetails" id="dictionaryDetailsMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="dictionaryId" column="dictionary_id"/>
+        <result property="creationTime" column="creation_time"/>
+    </resultMap>
+    <!--节目发布下拉框-->
+    <select id="getRecordsMenu" resultType="com.shuzhi.entity.DictionaryDetails">
+        select t1.id, t1.name
+        from t_dictionary_details t1
+        where t1.dictionary_id = 1;
+    </select>
+    <!--模板选择下拉框-->
+    <select id="getModelMenu" resultType="com.shuzhi.entity.DictionaryDetails">
+        select t1.id, t1.name
+        from t_dictionary_details t1
+        where t1.dictionary_id = 2;
+    </select>
+    <!--素材目录下拉框-->
+    <select id="getMaterialMenu" resultType="com.shuzhi.entity.DictionaryDetails">
+        select t1.id, t1.name
+        from t_dictionary_details t1
+        where t1.dictionary_id = 3;
+    </select>
+</mapper>

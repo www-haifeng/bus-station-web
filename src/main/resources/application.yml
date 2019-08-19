@@ -2,12 +2,19 @@ server:
   port: 9100
 
 spring:
-   application:
-     name: bus-station-web
-   datasource:
+  mvc:
+    static-path-pattern: /static/**
+    async:
+      request-timeout: 20000
+  #忽略 null
+  jackson:
+    default-property-inclusion: non_null
+  application:
+    name: bus-station-web
+  datasource:
     type: com.alibaba.druid.pool.DruidDataSource            # 当前数据源操作类型
     driver-class-name: org.postgresql.Driver              # mysql驱动包
-    url: jdbc:postgresql://192.168.7.68:5432/bus-station-web?currentSchema=public&autoReconnect=true              # 数据库名称
+    url: jdbc:postgresql://118.190.55.119:5432/bus-station-web?currentSchema=public&autoReconnect=true              # 数据库名称
     username: postgres
     password: 123456
     dbcp2:
@@ -15,21 +22,26 @@ spring:
       initial-size: 5                                       # 初始化连接数
       max-total: 5                                          # 最大连接数
       max-wait-millis: 200                                  # 等待连接获取的最大超时时间
-   rabbitmq:
-     host: 118.190.55.119
-     port: 5672
-     username: guest
-     password: guest
-     listener:
-       simple:
-         acknowledge-mode: manual
-         concurrency: 5 #并发
-         max-concurrency: 10 #最大并发
-     connection-timeout: 15000
-   redis:
-     host: 192.168.7.68
-     port: 6379
-     password:
+  rabbitmq:
+    host: 118.190.55.119
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        acknowledge-mode: manual
+        concurrency: 5 #并发
+        max-concurrency: 10 #最大并发
+    connection-timeout: 15000
+  redis:
+    host: 118.190.55.119
+    port: 6379
+    password:
+  #设置文件最大上传大小
+  http:
+    multipart:
+      max-file-size: 2000MB
+      max-request-size: 2000MB
 feign:
   hystrix:
     enabled: true
@@ -37,7 +49,7 @@ feign:
 eureka:
   client: #客户端注册进eureka服务列表内
     service-url:
-      defaultZone: http://192.168.7.68:7001/eureka/
+      defaultZone: http://118.190.55.119:7001/eureka/
   instance:
     instance-id: bus-station-web9100
     prefer-ip-address: true
@@ -51,6 +63,14 @@ mybatis:
 logging:
   level:
     com.shuzhi.mapper: info
+
+menu:
+  path: /opt/apache-tomcat-8.5.41/webapps/ROOT/resources
+  json-path: /opt/apache-tomcat-8.5.41/webapps/ROOT/resources/data.json
+  http-path: http://118.190.55.119:8080/resources
+  #path: C:\Users\HASEE\Desktop\apache-tomcat-8.5.40\webapps\ROOT\resources
+  #json-path: C:\Users\HASEE\Desktop\apache-tomcat-8.5.40\webapps\ROOT\resources\data.json
+  #http-path: http://192.168.10.144:8080/resources
 
 send:
   #超时时间 单位: 秒

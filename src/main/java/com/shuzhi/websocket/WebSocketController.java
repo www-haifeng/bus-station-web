@@ -101,7 +101,7 @@ public class WebSocketController {
                 SimpleProtocolVo simpleProtocolVo = new SimpleProtocolVo();
                 //通过设备id查出回路和网关id
                 deviceLoopSelect.setDeviceDid(light);
-                deviceLoopSelect.setTypecode(String.valueOf(msg.getLighttype()));
+                deviceLoopSelect.setTypecode(msg.getLighttype());
                 DeviceLoop deviceLoop = deviceLoopService.selectOne(deviceLoopSelect);
                 //网关id
                 simpleProtocolVo.setDid(String.valueOf(deviceLoop.getGatewayDid()));
@@ -166,7 +166,7 @@ public class WebSocketController {
                             break;
                         //音量
                         case 5:
-                            simpleProtocolVo.setCmdid(msgCodeService.findThingsMsgKey("led-tecnon-10006").getMsgCode());
+                            simpleProtocolVo.setCmdid(msgCodeService.findThingsMsgKey("led-tecnon-10004").getMsgCode());
                             hashMap.put("arg1", msg.getVolume());
                             simpleProtocolVo.setData(hashMap);
                             break;
@@ -174,7 +174,7 @@ public class WebSocketController {
                     }
                 } else {
                     //重启
-                    simpleProtocolVo.setCmdid("10005");
+                    simpleProtocolVo.setCmdid(msgCodeService.findThingsMsgKey("led-tecnon-10007").getMsgCode());
                 }
                 simpleProtocolVos.add(simpleProtocolVo);
             });

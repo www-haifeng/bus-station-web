@@ -38,7 +38,7 @@ public class DeviceStation extends BaseEntity implements Serializable {
      * 设备类型编码 1.顶棚照明 2.logo照明 3.站台照明 4.led 5.lcd 6.集中控制器
      */
     @Column(name = "typecode")
-    private String typecode;
+    private Integer typecode;
 
     /**
      * 设备did

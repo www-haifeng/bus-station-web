@@ -17,18 +17,6 @@ public class BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 查询时between的开始时间
-     */
-    @Transient
-    private String startTime;
-
-    /**
-     * 查询时between的结束时间
-     */
-    @Transient
-    private String endTime;
-
-    /**
      * 分页信息 第几页
      */
     @Transient

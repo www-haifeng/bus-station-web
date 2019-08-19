@@ -19,5 +19,11 @@
                  left join t_device_station t2 on t1.device_did = t2.device_did
         where t2.stationid = #{stationId}
     </select>
-
+    <!--返回设备列表-->
+    <select id="getDeviceMenu" resultType="com.shuzhi.entity.DeviceLoop">
+        select t1.id, t1.device_name
+        from t_device_loop t1
+        where t1.typecode = #{id}
+          and t1.group_id is null;
+    </select>
 </mapper>

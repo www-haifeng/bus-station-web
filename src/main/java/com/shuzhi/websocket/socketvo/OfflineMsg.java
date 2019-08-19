@@ -34,7 +34,7 @@ public class OfflineMsg {
                 deviceLoopSelect.setGatewayDid(loopStateDto.getGatewayId());
                 DeviceLoop deviceLoop = deviceLoopService.selectOne(deviceLoopSelect);
                 if (deviceLoop != null) {
-                    if(StringUtils.equals(deviceLoop.getTypecode(), "1") || StringUtils.equals(deviceLoop.getTypecode(), "2") || StringUtils.equals(deviceLoop.getTypecode(), "3")){
+                    if(deviceLoop.getTypecode() == 1 || deviceLoop.getTypecode() == 2 || deviceLoop.getTypecode() == 3){
                         OfflineVo offlineVo = new OfflineVo(deviceLoop, loopStateDto);
                         offlines.add(offlineVo);
                     }

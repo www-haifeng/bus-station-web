@@ -25,4 +25,11 @@ public interface DeviceLoopMapper extends MyBaseMapper<DeviceLoop> {
      */
     List<DeviceLoop> findByStationId(@Param("stationId") Integer stationId);
 
+    /**
+     * 返回设备列表
+     *
+     * @param id 设备类型
+     * @return 设备列表
+     */
+    List<DeviceLoop> getDeviceMenu(@Param("id") Integer id);
 }

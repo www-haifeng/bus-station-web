@@ -18,5 +18,10 @@ public class test {
     public String index(Map<String, Object> map) {
         return "index";
     }
+
+    @RequestMapping(value = "index2")
+    public String index2(Map<String, Object> map) {
+        return "index2";
+    }
 }
 

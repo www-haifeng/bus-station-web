@@ -24,7 +24,7 @@ public class LcdMsg {
         DeviceStation deviceStationSelect = new DeviceStation();
         allStatusByRedis.forEach(iotLcdStatusTwo -> {
             deviceStationSelect.setDeviceDid(iotLcdStatusTwo.getId());
-            deviceStationSelect.setTypecode("5");
+            deviceStationSelect.setTypecode(5);
             DeviceStation deviceStation = deviceStationService.selectOne(deviceStationSelect);
             if (deviceStation != null){
                 iotLcdStatusTwo.setStationid(deviceStation.getStationid());

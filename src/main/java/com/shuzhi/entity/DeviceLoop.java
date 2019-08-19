@@ -30,7 +30,7 @@ private static final long serialVersionUID=1L;
      * 类型编码
      */
     @Column(name = "typecode")
-    private String typecode;
+    private Integer typecode;
         
     /**
      * 设备did
@@ -55,6 +55,14 @@ private static final long serialVersionUID=1L;
      */
     @Column(name = "gateway_did")
     private String gatewayDid;
+
+    /**
+     * 分组id
+     */
+    @Column(name = "group_id")
+    private Integer groupId;
+
+
 
     public DeviceLoop(TLoopStateDto loopStateDto) {
         this.loop = loopStateDto.getLoop();

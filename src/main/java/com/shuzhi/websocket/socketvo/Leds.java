@@ -24,7 +24,7 @@ public class Leds {
         DeviceStation deviceStationSelect = new DeviceStation();
         allStatus.forEach(tStatusDto -> {
             deviceStationSelect.setDeviceDid(tStatusDto.getId());
-            deviceStationSelect.setTypecode("4");
+            deviceStationSelect.setTypecode(4);
             DeviceStation deviceStation = deviceStationService.selectOne(deviceStationSelect);
             if (deviceStation != null){
                 tStatusDto.setStationid(deviceStation.getStationid());

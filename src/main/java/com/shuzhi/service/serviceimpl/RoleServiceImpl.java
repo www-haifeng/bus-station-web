@@ -1,6 +1,8 @@
 package com.shuzhi.service.serviceimpl;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.PageSerializable;
 import com.shuzhi.common.basemapper.BaseServiceImpl;
 import com.shuzhi.common.utils.WrapMapper;
 import com.shuzhi.common.utils.Wrapper;
@@ -82,7 +84,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
         //分页查询
         PageHelper.startPage(role.getPageNum(), role.getPageSize());
         List<Role> select = roleMapper.select(role);
-        return WrapMapper.handleResult(select);
+        return WrapMapper.handleResult(new PageSerializable<>(select));
     }
 
     /**

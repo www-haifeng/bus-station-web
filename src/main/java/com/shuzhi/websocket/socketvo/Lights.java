@@ -106,7 +106,7 @@ public class Lights {
         //判断这是什么设备
         switch (deviceLoop.getTypecode()) {
             //灯箱
-            case "3":
+            case 3:
                 this.lamphouseid = Long.valueOf(deviceLoop.getDeviceDid());
                 if (tLoopStateDto.getState() == 1) {
                     this.lamphouseonoff = 0;
@@ -117,7 +117,7 @@ public class Lights {
                 }
                 break;
             //顶棚
-            case "1":
+            case 1:
                 this.platfondid = Long.valueOf(deviceLoop.getDeviceDid());
                 if (tLoopStateDto.getState() == 1) {
                     this.platfondline = 0L;
@@ -128,7 +128,7 @@ public class Lights {
                 }
                 break;
             //log
-            case "2":
+            case 2:
                 this.logoid = Long.valueOf(deviceLoop.getDeviceDid());
                 if (tLoopStateDto.getState() == 1) {
                     this.logoline = 0L;

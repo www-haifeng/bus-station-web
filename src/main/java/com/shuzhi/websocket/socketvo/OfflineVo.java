@@ -105,7 +105,7 @@ public class OfflineVo {
             //通过设备号 查出站名
             DeviceStationMapper deviceStationMapper = ApplicationContextUtils.get(DeviceStationMapper.class);
             DeviceStation deviceStationSelect = new DeviceStation(iotLcdStatusTwo.getId());
-            deviceStationSelect.setTypecode("5");
+            deviceStationSelect.setTypecode(5);
             DeviceStation deviceStation = deviceStationMapper.selectOne(deviceStationSelect);
             if (deviceStation != null) {
                 this.name = deviceStation.getStationName();
@@ -133,7 +133,7 @@ public class OfflineVo {
             //通过设备号 查出站名
             DeviceStationMapper deviceStationMapper = ApplicationContextUtils.get(DeviceStationMapper.class);
             DeviceStation deviceStationSelect = new DeviceStation(tStatusDto.getId());
-            deviceStationSelect.setTypecode("4");
+            deviceStationSelect.setTypecode(4);
             DeviceStation deviceStation = deviceStationMapper.selectOne(deviceStationSelect);
             if (deviceStation != null) {
                 this.name = deviceStation.getStationName();

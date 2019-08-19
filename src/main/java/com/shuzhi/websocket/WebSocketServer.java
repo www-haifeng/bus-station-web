@@ -263,6 +263,7 @@ public class WebSocketServer {
         String code = String.valueOf(modulecode);
         if (isOnClose(code)) {
             MessageVo messageVo = setMessageVo(modulecode);
+            //所有站设备的状态信息
             messageVo.setMsgcode(202002);
             List<DevicesMsg> lights = new ArrayList<>();
             //判断是什么设备
@@ -407,23 +408,23 @@ public class WebSocketServer {
 
             switch (deviceLoop.getTypecode()) {
                 //顶棚照明
-                case "1":
+                case 1:
                     platfond = platfond + statistics.getActivepowerNow();
                     break;
                 //灯箱照明
-                case "2":
+                case 2:
                     lamphouse = lamphouse + statistics.getActivepowerNow();
                     break;
                 //logo
-                case "3":
+                case 3:
                     logo = logo + statistics.getActivepowerNow();
                     break;
                 //led
-                case "4":
+                case 4:
                     led = led + statistics.getActivepowerNow();
                     break;
                 //lcd
-                case "5":
+                case 5:
                     lcd = lcd + statistics.getActivepowerNow();
                     break;
 
@@ -472,7 +473,7 @@ public class WebSocketServer {
                 deviceLoopSelect.setDeviceDid(iotLcdStatusTwo.getId());
                 //获得lcd设备的统计信息
                 deviceLoopSelect.setDeviceDid(iotLcdStatusTwo.getId());
-                deviceLoopSelect.setTypecode("5");
+                deviceLoopSelect.setTypecode(5);
                 DeviceLoop deviceLoop = deviceLoopService.selectOne(deviceLoopSelect);
                 if (deviceLoop != null) {
                     statisticsVo.setLoop(deviceLoop.getLoop());
@@ -493,7 +494,7 @@ public class WebSocketServer {
             //查出设备的回路号
             for (TStatusDto status : allStatus) {
                 deviceLoopSelect.setDeviceDid(status.getId());
-                deviceLoopSelect.setTypecode("4");
+                deviceLoopSelect.setTypecode(4);
                 DeviceLoop deviceLoop = deviceLoopService.selectOne(deviceLoopSelect);
                 if (deviceLoop != null) {
                     statisticsVo.setLoop(deviceLoop.getLoop());
@@ -624,7 +625,7 @@ public class WebSocketServer {
         if (StringUtils.equals("4", s)) {
             allStatus.stream().filter(iotLedStatus -> {
                 //查出设备信息
-                deviceStationSelect.setTypecode(s);
+                deviceStationSelect.setTypecode(Integer.valueOf(s));
                 deviceStationSelect.setDeviceDid(iotLedStatus.getId());
                 DeviceStation deviceStation = deviceStationService.selectOne(deviceStationSelect);
                 //判断是否在该公交站下
@@ -639,7 +640,7 @@ public class WebSocketServer {
                     });
         } else {
             allStatusByRedis.stream().filter(iotLedStatus -> {
-                deviceStationSelect.setTypecode(s);
+                deviceStationSelect.setTypecode(Integer.valueOf(s));
                 deviceStationSelect.setDeviceDid(iotLedStatus.getId());
                 DeviceStation deviceStation = deviceStationService.selectOne(deviceStationSelect);
                 if (deviceStation != null) {
@@ -665,6 +666,7 @@ public class WebSocketServer {
         String code = String.valueOf(modulecode);
         if (isOnClose(code)) {
             MessageVo messageVo = setMessageVo(modulecode);
+            //所有站照明的状态信息
             messageVo.setMsgcode(203001);
             //调用接口 获取当前照明状态
             Optional.ofNullable(loopStatusServiceApi).orElseGet(() -> loopStatusServiceApi = ApplicationContextUtils.get(LoopStatusServiceApi.class));
@@ -749,21 +751,21 @@ public class WebSocketServer {
             deviceLoopSelect.setGatewayDid(loopStateDto.getGatewayId());
             DeviceLoop deviceLoop = deviceLoopService.selectOne(deviceLoopSelect);
             if (deviceLoop != null) {
-                if ("1".equals(deviceLoop.getTypecode())) {
+                if (1 == deviceLoop.getTypecode()) {
                     dids1.add(String.valueOf(deviceLoop.getDeviceDid()));
                 }
-                if ("1".equals(deviceLoop.getTypecode())) {
+                if (2 == deviceLoop.getTypecode()) {
                     dids2.add(String.valueOf(deviceLoop.getDeviceDid()));
                 }
-                if ("1".equals(deviceLoop.getTypecode())) {
+                if (3 == deviceLoop.getTypecode()) {
                     dids3.add(String.valueOf(deviceLoop.getDeviceDid()));
                 }
             }
         });
         //统计
         StatisticsMsgVo statisticsMsgVo1 = equipStatis(dids1, "1");
-        StatisticsMsgVo statisticsMsgVo2 = equipStatis(dids1, "2");
-        StatisticsMsgVo statisticsMsgVo3 = equipStatis(dids1, "3");
+        StatisticsMsgVo statisticsMsgVo2 = equipStatis(dids2, "2");
+        StatisticsMsgVo statisticsMsgVo3 = equipStatis(dids3, "3");
 
         return new StatisticsMsgVo(statisticsMsgVo1, statisticsMsgVo2, statisticsMsgVo3);
     }
@@ -869,6 +871,7 @@ public class WebSocketServer {
         String code = String.valueOf(modulecode);
         if (isOnClose(code)) {
             MessageVo messageVo = setMessageVo(modulecode);
+            //所有站屏的设备状态
             messageVo.setMsgcode(205001);
             //调用接口
             Optional.ofNullable(tEventLedService).orElseGet(() -> tEventLedService = ApplicationContextUtils.get(TEventLedService.class));
@@ -883,6 +886,7 @@ public class WebSocketServer {
                     tStatusDto.setVolume(null);
                     tStatusDto.setLight(null);
                 });
+                //设备状态
                 Leds leds2 = new Leds(allStatus);
                 messageVo.setMsg(leds2);
                 messageVo.setMsgcode(205004);
@@ -1077,7 +1081,7 @@ public class WebSocketServer {
         for (String did : dids) {
             if (StringUtils.isNotBlank(did)) {
                 deviceLoopSelect.setDeviceDid(did);
-                deviceLoopSelect.setTypecode(typeCode);
+                deviceLoopSelect.setTypecode(Integer.valueOf(typeCode));
                 DeviceLoop deviceLoop = deviceLoopService.selectOne(deviceLoopSelect);
                 //查出单个设备的统计信息
                 if (deviceLoop != null) {
@@ -1104,7 +1108,7 @@ public class WebSocketServer {
         deviceLoopSelect.setGatewayDid(tLoopStateDto.getGatewayId());
         DeviceLoop deviceLoop = deviceLoopService.selectOne(deviceLoopSelect);
         if (deviceLoop != null) {
-            if (StringUtils.equals(deviceLoop.getTypecode(), "1") || StringUtils.equals(deviceLoop.getTypecode(), "2") || StringUtils.equals(deviceLoop.getTypecode(), "3")) {
+            if (deviceLoop.getTypecode() == 1 || deviceLoop.getTypecode() == 2 || deviceLoop.getTypecode() == 3) {
                 return deviceLoop;
             }
         }

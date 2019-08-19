@@ -42,7 +42,7 @@ public class StationsVo {
                 DeviceLoopMapper deviceLoopMapper = ApplicationContextUtils.get(DeviceLoopMapper.class);
                 DeviceLoop deviceLoopSelect = new DeviceLoop();
                 deviceLoopSelect.setDeviceDid(String.valueOf(devices.getId()));
-                deviceLoopSelect.setTypecode(String.valueOf(devices.getType()));
+                deviceLoopSelect.setTypecode(devices.getType());
                 DeviceLoop deviceLoop = deviceLoopMapper.selectOne(deviceLoopSelect);
                 if (deviceLoop != null) {
                     OfflineVo offlineVo = new OfflineVo(devices, deviceLoop);

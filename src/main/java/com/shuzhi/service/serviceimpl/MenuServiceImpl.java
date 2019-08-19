@@ -46,10 +46,10 @@ public class MenuServiceImpl extends BaseServiceImpl<Menu> implements MenuServic
     @Override
     public Wrapper saveMenu(Menu menu) {
         //验证参数
-       return Optional.ofNullable(validation().check(menu)).orElseGet(() -> {
-           //如果是一级目录 把父id设置为0
-           menu.setParentMenu(Optional.ofNullable(menu.getParentMenu()).orElse(0));
-           return WrapMapper.handleResult(menuMapper.insertSelective(menu));
+        return Optional.ofNullable(validation().check(menu)).orElseGet(() -> {
+            //如果是一级目录 把父id设置为0
+            menu.setParentMenu(Optional.ofNullable(menu.getParentMenu()).orElse(0));
+            return WrapMapper.handleResult(menuMapper.insertSelective(menu));
         });
     }
 
@@ -99,14 +99,14 @@ public class MenuServiceImpl extends BaseServiceImpl<Menu> implements MenuServic
     @Override
     public Wrapper updateMenu(Menu menu) {
         //验证参数
-       return Optional.ofNullable(validation().check(menu)).orElseGet(() -> WrapMapper.handleResult(menuMapper.updateByPrimaryKey(menu)));
+        return Optional.ofNullable(validation().check(menu)).orElseGet(() -> WrapMapper.handleResult(menuMapper.updateByPrimaryKey(menu)));
     }
 
     /**
      * 通过id查出目录的详细信息
      *
-     * @return 查询结果
      * @param menuId 目录ID
+     * @return 查询结果
      */
     @Override
     public Wrapper findById(Integer menuId) {
@@ -163,22 +163,22 @@ public class MenuServiceImpl extends BaseServiceImpl<Menu> implements MenuServic
             }
             menuSelect.setUrl(menu.getUrl());
             if (menuMapper.select(menuSelect) != null) {
-                WrapMapper.wrap(MENU_ERROR_2.getCode(), MENU_ERROR_2.getMsg());
+                return WrapMapper.wrap(MENU_ERROR_2.getCode(), MENU_ERROR_2.getMsg());
             }
             //验证名称
             if (StringUtils.isBlank(menu.getUrlName())) {
-                WrapMapper.wrap(MENU_ERROR_3.getCode(), MENU_ERROR_3.getMsg());
+                return WrapMapper.wrap(MENU_ERROR_3.getCode(), MENU_ERROR_3.getMsg());
             }
             menuSelect.setUrl(null);
             menuSelect.setUrlName(menu.getUrlName());
             if (menuMapper.select(menuSelect) != null) {
-                WrapMapper.wrap(MENU_ERROR_4.getCode(), MENU_ERROR_4.getMsg());
+                return WrapMapper.wrap(MENU_ERROR_4.getCode(), MENU_ERROR_4.getMsg());
             }
 
             //验证要更新的目录是否还存在
             if (menu.getUrlId() != null) {
                 if (menuMapper.selectByPrimaryKey(menu.getUrlId()) == null) {
-                    WrapMapper.wrap(MENU_ERROR_6.getCode(), MENU_ERROR_6.getMsg());
+                    return WrapMapper.wrap(MENU_ERROR_6.getCode(), MENU_ERROR_6.getMsg());
                 }
             }
             return null;

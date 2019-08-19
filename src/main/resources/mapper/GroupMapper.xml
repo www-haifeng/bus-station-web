@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shuzhi.mapper.GroupMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.shuzhi.entity.Group" id="groupMap">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="deviceName" column="device_name"/>
+        <result property="creationTime" column="creation_time"/>
+        <result property="deviceType" column="device_type"/>
+        <result property="showRecordsId" column="show_records_id"/>
+        <collection property="deviceLoops" ofType="com.shuzhi.entity.DeviceLoop">
+            <id property="id" column="id"/>
+            <result property="deviceName" column="device_name"/>
+        </collection>
+    </resultMap>
+    <!--通过分组id查询分组信息-->
+    <select id="findById" resultType="com.shuzhi.entity.DeviceLoop">
+        select  t2.id, t2.device_name
+        from t_group t1
+                 left join t_device_loop t2 on t1.id = t2.group_id
+        where t1.id = #{id}
+          and t2.typecode = #{deviceType}
+    </select>
+    <!--分组名称下拉框-->
+    <select id="getGroupMenu" resultType="com.shuzhi.entity.Group">
+        select id, name from t_group;
+    </select>
+
+</mapper>

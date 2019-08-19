@@ -1,11 +1,10 @@
-package com.shuzhi.serviceimpl;
+package com.shuzhi.service.serviceimpl;
 
 import org.springframework.stereotype.Service;
 
 import com.shuzhi.entity.Station;
 import com.shuzhi.service.StationService;
 import com.shuzhi.common.basemapper.BaseServiceImpl;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
