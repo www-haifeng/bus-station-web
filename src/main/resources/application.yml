@@ -1,7 +1,9 @@
+
 server:
   port: 9100
-
 spring:
+  profiles:
+    active: dev
   mvc:
     static-path-pattern: /static/**
     async:
@@ -14,7 +16,7 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource            # 当前数据源操作类型
     driver-class-name: org.postgresql.Driver              # mysql驱动包
-    url: jdbc:postgresql://118.190.55.119:5432/bus-station-web?currentSchema=public&autoReconnect=true              # 数据库名称
+   # url: jdbc:postgresql://192.168.7.68:5432/bus-station-web?currentSchema=public&autoReconnect=true              # 数据库名称
     username: postgres
     password: 123456
     dbcp2:
@@ -23,7 +25,7 @@ spring:
       max-total: 5                                          # 最大连接数
       max-wait-millis: 200                                  # 等待连接获取的最大超时时间
   rabbitmq:
-    host: 118.190.55.119
+  #  host: 118.190.216.41
     port: 5672
     username: guest
     password: guest
@@ -34,7 +36,7 @@ spring:
         max-concurrency: 10 #最大并发
     connection-timeout: 15000
   redis:
-    host: 118.190.55.119
+ #   host: 118.190.216.41
     port: 6379
     password:
   #设置文件最大上传大小
@@ -42,6 +44,7 @@ spring:
     multipart:
       max-file-size: 2000MB
       max-request-size: 2000MB
+
 feign:
   hystrix:
     enabled: true
@@ -49,7 +52,7 @@ feign:
 eureka:
   client: #客户端注册进eureka服务列表内
     service-url:
-      defaultZone: http://118.190.55.119:7001/eureka/
+      defaultZone: http://118.190.216.41:7001/eureka/
   instance:
     instance-id: bus-station-web9100
     prefer-ip-address: true
@@ -64,12 +67,12 @@ logging:
   level:
     com.shuzhi.mapper: info
 
-menu:
-  path: /opt/apache-tomcat-8.5.41/webapps/ROOT/resources
-  json-path: /opt/apache-tomcat-8.5.41/webapps/ROOT/resources/data.json
-  http-path: http://118.190.55.119:8080/resources
-  #path: C:\Users\HASEE\Desktop\apache-tomcat-8.5.40\webapps\ROOT\resources
-  #json-path: C:\Users\HASEE\Desktop\apache-tomcat-8.5.40\webapps\ROOT\resources\data.json
+#menu:
+  #path: /opt/apache-tomcat-8.5.41/webapps/ROOT/resources
+  #json-path: /opt/apache-tomcat-8.5.41/webapps/ROOT/resources/data.json
+  #http-path: http://118.190.216.41:8080/resources
+ # path: C:\Users\HASEE\Desktop\apache-tomcat-8.5.40\webapps\ROOT\resources
+ # json-path: C:\Users\HASEE\Desktop\apache-tomcat-8.5.40\webapps\ROOT\resources\data.json
   #http-path: http://192.168.10.144:8080/resources
 
 send:
@@ -85,3 +88,35 @@ send:
   lcd-cron: "*/5 * * * * ?"
   platform-cron: "*/5 * * * * ?"
   electricity-cron: "*/5 * * * * ?"
+
+---
+spring:
+  profiles: dev
+  datasource:
+      url: jdbc:postgresql://118.190.55.119:5432/bus-station-web?currentSchema=public&autoReconnect=true              # 数据库名称                                  # 等待连接获取的最大超时时间
+  rabbitmq:
+      host: 118.190.55.119
+  redis:
+      host: 118.190.55.119
+
+menu:
+ path: /opt/apache-tomcat-8.5.41/webapps/ROOT/resources
+ json-path: /opt/apache-tomcat-8.5.41/webapps/ROOT/resources/data.json
+ http-path: http://118.190.216.41:8080/resources
+
+
+---
+spring:
+  profiles: test
+  datasource:
+    url: jdbc:postgresql://192.168.7.68:5432/bus-station-web?currentSchema=public&autoReconnect=true              # 数据库名称                                  # 等待连接获取的最大超时时间
+  rabbitmq:
+      host: 118.190.55.119
+  redis:
+      host: 118.190.55.119
+menu:
+  path: C:\Users\HASEE\Desktop\apache-tomcat-8.5.40\webapps\ROOT\resources
+  json-path: C:\Users\HASEE\Desktop\apache-tomcat-8.5.40\webapps\ROOT\resources\data.json
+  http-path: http://192.168.10.144:8080/resources
+
+

@@ -42,11 +42,25 @@ private static final long serialVersionUID=1L;
      */
     @Column(name = "station_lat")
     private String stationLat;
+
+    /**
+     * 站台纬度
+     */
+    @Column(name = "station_highly")
+    private String stationHighly;
+
+    /**
+     * 1是上行2是下行
+     */
+    @Column(name = "is_upside")
+    private String isUpside;
         
     /**
      * 站台描述
      */
     @Column(name = "describe")
     private String describe;
-    
+
+    @Transient
+    private Integer stationId;
 }

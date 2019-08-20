@@ -51,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 //注册可以请求不拦截
                 .antMatchers("/websocket/**","/registered","/index","/websocket","/websocket/onClose/**"
-                                    ,"/materialMenu/**","/material/**","/dictionaryDetails/**","/showRecords/**","/group/**","/static/**").permitAll().anyRequest().authenticated()
+                                    ,"/materialMenu/**","/material/**","/dictionaryDetails/**","/showRecords/**","/group/**","/static/**","/index2","/bus/**").permitAll().anyRequest().authenticated()
                 .and()
                 .formLogin()
                 //登录路径

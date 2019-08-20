@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>led</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: calc(100/1920*100vw);
+        }
+
+        ul {
+            list-style: none
+        }
+
+        .led-wrap {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-size: 0.2rem;
+        }
+
+
+        /* 轮播 */
+        .carousel-wrap {
+            margin: 0 auto;
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .carousel-wrap ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 99999999px;
+            height: 100vh;
+        }
+
+        .carousel-wrap li {
+            float: left;
+            width: 100vw;
+            height: 100%;
+        }
+
+        .carousel-wrap li img {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 文字 */
+        #webTicker {
+            font-size: 0.4rem !important;
+        }
+
+        .text-wrap {
+            width: 100%;
+        }
+
+        .carousel-wrap,
+        .text-wrap,
+        .video-wrap,
+        .environment-wrap {
+            display: none;
+
+        }
+
+        .carousel-wrap.active,
+        .text-wrap.active,
+        .video-wrap.active,
+        .environment-wrap.active {
+            display: block;
+
+        }
+
+        /* 环境监测 */
+        .environment-wrap {
+            background: #040D2E;
+            color: #fff;
+            font-size: 0.13rem;
+        }
+
+        .envi-title {
+            height: 50px;
+            line-height: 50px;
+            padding: 0 5px;
+        }
+
+        .envi-list {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            width: 136px;
+            height: 290px;
+        }
+
+        .envi-list>li {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            width: 45%;
+            height: 20%;
+            background: #0D1B48;
+        }
+
+        .envi-list>li div:nth-child(1) span {
+            color: #0088FE;
+            font-size: 0.2rem;
+        }
+    </style>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery.webticker/3.0.0/jquery.webticker.min.js"></script>
+</head>
+
+<body>
+    <div class="led-wrap">
+        <div class="text-wrap">
+            <ul id="webTicker"></ul>
+        </div>
+
+        <div class="carousel-wrap">
+            <ul id="carousel" style="width: 1000%;height: 100%;" class="draw-wrap"> </ul>
+        </div>
+
+        <div class="video-wrap">
+            <video id="video" src="video/mov_bbb.mp4" autoplay="autoplay" width="136" height="340" muted="muted"></video>
+        </div>
+
+        <div class="environment-wrap"></div>
+        <!-- <div style="position: fixed;right:0;top:30%;">
+            <div id="sudu">10s</div>
+            <div>
+                <button onclick="apiTimeChange(-1000)">轮训时间-1s</button>
+                <button onclick="apiTimeChange(+1000)">轮训时间+1s</button>
+                <button onclick="apiTimeChange()">默认10s</button>
+            </div>
+            <div style="margin-top: 10px">
+                <button onclick="goPage(1)">文字</button>
+                <button onclick="goPage(2)">轮播</button>
+                <button onclick="goPage(3)">视频</button>
+                <button onclick="goPage(4)">环境监测</button>
+            </div>
+        </div> -->
+    </div>
+    <script src="./static/js/main.js"></script>
+</body>
+</html>
